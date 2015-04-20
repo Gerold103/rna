@@ -13,7 +13,7 @@ namespace hsql {
 
 
 typedef enum {
-	kStmtError, // Unused
+	kStmtError,
 	kStmtSelect,
 	kStmtImport,
 	kStmtInsert,

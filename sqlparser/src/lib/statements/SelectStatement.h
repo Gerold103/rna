@@ -17,8 +17,6 @@ namespace hsql {
 /**
  * @struct OrderDescription
  * @brief Description of the order by clause within a select statement
- * 
- * TODO: hold multiple expressions to be sorted by
  */
 typedef enum {
 	kOrderAsc,

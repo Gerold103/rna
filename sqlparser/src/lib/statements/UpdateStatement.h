@@ -44,7 +44,6 @@ struct UpdateStatement : SQLStatement {
 		delete where;
 	}
 
-	// TODO: switch to char* instead of TableRef
 	TableRef* table;
 	std::vector<UpdateClause*>* updates;
 	Expr* where;

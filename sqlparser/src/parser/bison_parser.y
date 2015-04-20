@@ -484,13 +484,13 @@ set_operator:
 	;
 
 select_clause:
-		{ std::cout << "select_clause" << std::endl; } SELECT opt_distinct select_list from_clause opt_where opt_group {
+		SELECT opt_distinct select_list from_clause opt_where opt_group {
 			$$ = new SelectStatement();
-			$$->select_distinct = $3;
-			$$->select_list = $4;
-			$$->from_table = $5;
-			$$->where_clause = $6;
-			$$->group_by = $7;
+			$$->select_distinct = $2;
+			$$->select_list = $3;
+			$$->from_table = $4;
+			$$->where_clause = $5;
+			$$->group_by = $6;
 		}
 	;
 

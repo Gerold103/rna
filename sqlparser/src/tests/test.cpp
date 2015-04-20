@@ -3,9 +3,6 @@
 
 
 class TestsManager {
-	// Note: static initialization fiasco
-	// http://www.parashift.com/c++-faq-lite/static-init-order.html
-	// http://www.parashift.com/c++-faq-lite/static-init-order-on-first-use.html
 public:
 	static std::vector<std::string>& test_names() {
 		static std::vector<std::string>* test_names = new std::vector<std::string>;

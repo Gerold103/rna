@@ -43,7 +43,7 @@ struct ColumnDefinition {
 struct CreateStatement : SQLStatement {
 	enum CreateType {
 		kTable,
-		kTableFromTbl, // Hyrise file format
+		kTableFromTbl,
 	};
 
 	CreateStatement(CreateType type) :

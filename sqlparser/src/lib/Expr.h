@@ -29,8 +29,6 @@ typedef struct Expr Expr;
 /** 
  * @class Expr
  * @brief Represents SQL expressions (i.e. literals, operators, column_refs)
- *
- * TODO: When destructing a placeholder expression, we might need to alter the placeholder_list
  */
 struct Expr {
 	/**
@@ -74,8 +72,6 @@ struct Expr {
 		database(""),
 		alias("") {};
 
-	// Interesting side-effect:
-	// Making the destructor virtual used to cause segmentation faults
 	~Expr();
 	
 	ExprType type;
@@ -154,10 +150,6 @@ struct Expr {
 	static Expr* makePlaceholder(int id);
 };
 
-// Zero initializes an Expr object and assigns it to a space in the heap
-// For Hyrise we still had to put in the explicit NULL constructor
-// http://www.ex-parrot.com/~chris/random/initialise.html
-// Unused
 #define ALLOC_EXPR(var, type) 		\
 	Expr* var;						\
 	do {							\

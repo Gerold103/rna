@@ -15,7 +15,7 @@ namespace hsql {
 struct ImportStatement : SQLStatement {
 	enum ImportType {
 		kImportCSV,
-		kImportTbl, // Hyrise file format
+		kImportTbl,
 	};
 
 
