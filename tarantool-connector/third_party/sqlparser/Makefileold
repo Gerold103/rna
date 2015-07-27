@@ -1,0 +1,43 @@
+BUILD_DIR = ./build
+BIN_DIR = ./bin
+
+CFLAGS2=-I./build/ -std=c++11
+
+SRC = $(wildcard $(BUILD_DIR)/*.cpp)
+OBJ = $(addprefix $(BUILD_DIR)/,$(notdir $(SRC:.cpp=.o)))
+
+test: FORCE
+	@echo "Compiling..."
+	#@make clean -C src/ >/dev/null || exit 1
+	#@make tests -C src/ >/dev/null || exit 1
+	@make my_test -C src/ >/dev/null || exit 1
+	#@make grammar_test -C src/ >/dev/null || exit 1
+	#@echo "Running tests:"
+	#@./bin/grammar_test -f "src/tests/valid_queries.sql"
+	#@./bin/tests
+	@./bin/my_test
+
+my_test: FORCE
+	@make my_test -C src/ >/dev/null || exit 1
+	@./bin/my_test
+
+docs: FORCE
+	doxygen docs/doxy.conf
+
+library_sql_parser: $(OBJ)
+	@echo $(CFLAGS2)
+	@echo $(OBJ)
+	echo 'in library_sql_parser'
+
+$(BUILD_DIR)/%.o: $(BUILD_DIR )/%.cpp
+	echo 'Compiling '
+	echo $<
+	echo $@
+	g++ $(CFLAGS2) -c -o $@ $<
+
+
+prepare:
+	mkdir -p $(BIN_DIR)
+
+
+FORCE:

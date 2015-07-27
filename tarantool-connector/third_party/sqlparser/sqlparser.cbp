@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+   <FileVersion major="1" minor="6" />
+   <Project>
+      <Option title="sqlparser" />
+      <Option makefile_is_custom="1" />
+      <Option compiler="gcc" />
+      <Option virtualFolders="CMake Files\;" />
+      <Build>
+      <Target title="all">
+         <Option working_dir="/home/gerold103/sql-tarantool/sqlparser" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/gerold103/sql-tarantool/sqlparser/Makefile&quot;  VERBOSE=1 all" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/gerold103/sql-tarantool/sqlparser/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/gerold103/sql-tarantool/sqlparser/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/gerold103/sql-tarantool/sqlparser/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="rebuild_cache">
+         <Option working_dir="/home/gerold103/sql-tarantool/sqlparser" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/gerold103/sql-tarantool/sqlparser/Makefile&quot;  VERBOSE=1 rebuild_cache" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/gerold103/sql-tarantool/sqlparser/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/gerold103/sql-tarantool/sqlparser/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/gerold103/sql-tarantool/sqlparser/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="sqlparser">
+         <Option output="/home/gerold103/sql-tarantool/sqlparser/libsqlparser.a" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="/home/gerold103/sql-tarantool/sqlparser" />
+         <Option object_output="./" />
+         <Option type="2" />
+         <Option compiler="gcc" />
+         <Compiler>
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/gerold103/sql-tarantool/sqlparser/Makefile&quot;  VERBOSE=1 sqlparser" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/gerold103/sql-tarantool/sqlparser/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/gerold103/sql-tarantool/sqlparser/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/gerold103/sql-tarantool/sqlparser/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="sqlparser/fast">
+         <Option output="/home/gerold103/sql-tarantool/sqlparser/libsqlparser.a" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="/home/gerold103/sql-tarantool/sqlparser" />
+         <Option object_output="./" />
+         <Option type="2" />
+         <Option compiler="gcc" />
+         <Compiler>
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/gerold103/sql-tarantool/sqlparser/Makefile&quot;  VERBOSE=1 sqlparser/fast" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/gerold103/sql-tarantool/sqlparser/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/gerold103/sql-tarantool/sqlparser/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/gerold103/sql-tarantool/sqlparser/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      </Build>
+      <Unit filename="/home/gerold103/sql-tarantool/sqlparser/build/Expr.cpp">
+      </Unit>
+      <Unit filename="/home/gerold103/sql-tarantool/sqlparser/build/SQLParser.cpp">
+      </Unit>
+      <Unit filename="/home/gerold103/sql-tarantool/sqlparser/build/SelectStatement.cpp">
+      </Unit>
+      <Unit filename="/home/gerold103/sql-tarantool/sqlparser/build/Table.cpp">
+      </Unit>
+      <Unit filename="/home/gerold103/sql-tarantool/sqlparser/build/bison_parser.cpp">
+      </Unit>
+      <Unit filename="/home/gerold103/sql-tarantool/sqlparser/build/flex_lexer.cpp">
+      </Unit>
+      <Unit filename="/home/gerold103/sql-tarantool/sqlparser/build/sqlhelper.cpp">
+      </Unit>
+      <Unit filename="/home/gerold103/sql-tarantool/sqlparser/build/CreateStatement.h">
+      </Unit>
+      <Unit filename="/home/gerold103/sql-tarantool/sqlparser/build/DeleteStatement.h">
+      </Unit>
+      <Unit filename="/home/gerold103/sql-tarantool/sqlparser/build/DropStatement.h">
+      </Unit>
+      <Unit filename="/home/gerold103/sql-tarantool/sqlparser/build/ExecuteStatement.h">
+      </Unit>
+      <Unit filename="/home/gerold103/sql-tarantool/sqlparser/build/Expr.h">
+      </Unit>
+      <Unit filename="/home/gerold103/sql-tarantool/sqlparser/build/ImportStatement.h">
+      </Unit>
+      <Unit filename="/home/gerold103/sql-tarantool/sqlparser/build/InsertStatement.h">
+      </Unit>
+      <Unit filename="/home/gerold103/sql-tarantool/sqlparser/build/PrepareStatement.h">
+      </Unit>
+      <Unit filename="/home/gerold103/sql-tarantool/sqlparser/build/SQLParser.h">
+      </Unit>
+      <Unit filename="/home/gerold103/sql-tarantool/sqlparser/build/SQLStatement.h">
+      </Unit>
+      <Unit filename="/home/gerold103/sql-tarantool/sqlparser/build/SelectStatement.h">
+      </Unit>
+      <Unit filename="/home/gerold103/sql-tarantool/sqlparser/build/Table.h">
+      </Unit>
+      <Unit filename="/home/gerold103/sql-tarantool/sqlparser/build/UpdateStatement.h">
+      </Unit>
+      <Unit filename="/home/gerold103/sql-tarantool/sqlparser/build/astnode.h">
+      </Unit>
+      <Unit filename="/home/gerold103/sql-tarantool/sqlparser/build/bison_parser.h">
+      </Unit>
+      <Unit filename="/home/gerold103/sql-tarantool/sqlparser/build/flex_lexer.h">
+      </Unit>
+      <Unit filename="/home/gerold103/sql-tarantool/sqlparser/build/parser_typedef.h">
+      </Unit>
+      <Unit filename="/home/gerold103/sql-tarantool/sqlparser/build/sqlhelper.h">
+      </Unit>
+      <Unit filename="/home/gerold103/sql-tarantool/sqlparser/build/sqllib.h">
+      </Unit>
+      <Unit filename="/home/gerold103/sql-tarantool/sqlparser/CMakeLists.txt">
+          <Option virtualFolder="CMake Files\" />
+      </Unit>
+   </Project>
+</CodeBlocks_project_file>
