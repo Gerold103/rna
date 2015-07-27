@@ -6,14 +6,14 @@ InsertMaker::InsertMaker(InsertStatement *_statement) : SQLMaker(), statement(_s
 	Logger::LogObject(DEBUG, *statement);
 }
 
-bool InsertMaker::MakeInsert()
+MValue InsertMaker::MakeInsert()
 {
 	last_error.clear();
 	std::string table_name = statement->GetName();
 	int space_id = schm.GetSpaceIDByString(table_name);
 	if (space_id == -1) {
 		last_error = "InsertMaker::MakeInsert(): space with name '" + table_name + "' was not found in schema";
-		return false;
+		return MValue(false);
 	}
 
 	LogFL(DEBUG) << "InsertMaker::MakeInsert(): space name = " << table_name << ", id =  " << space_id << "\n";
@@ -25,7 +25,7 @@ bool InsertMaker::MakeInsert()
 	if (values == NULL) {
 		last_error = "InsertMaker::MakeInsert(): attempt to insert empty tuple";
 		LogFL(DEBUG) << last_error << "\n";
-		return false;
+		return MValue(false);
 	}
 	size_t values_size = values->size();
 
@@ -55,7 +55,7 @@ bool InsertMaker::MakeInsert()
 					default: {
 						last_error = "InsertMaker::MakeInsert(): expr with type = " + ExprTypeToString(values->at(i)->GetType()) + " can't be added to insert";
 						LogFL(DEBUG) << last_error << "\n";
-						return false;
+						return MValue(false);
 					}
 				}
 			}
@@ -67,12 +67,13 @@ bool InsertMaker::MakeInsert()
 					default: {
 						last_error = "InsertMaker::MakeInsert(): type of value = " + FieldTypeToString(space_format[i].second) + " can't be added to request\n";
 						LogFL(DEBUG) << last_error << "\n";
-						return false;
+						return MValue(false);
 					}
 				}
 			}
 		} else {
 			LogFL(DEBUG) << "InsertMaker::MakeInsert(): cols != null\n";
+			if (statement->GetColumns()->size() != statement->GetValues()->size()) return MValue(false);
 			for (size_t i = 0, size = space_format.size(); i < size; ++i) {
 				LogFL(DEBUG) << "InsertMaker::MakeInsert(): i = " << i << "\n";
 				std::string &col_name = space_format[i].first;
@@ -94,7 +95,7 @@ bool InsertMaker::MakeInsert()
 						default: {
 							last_error = "InsertMaker::MakeInsert(): type of value = " + ExprTypeToString(val->GetType()) + " can't be added to request";
 							LogFL(DEBUG) << last_error << "\n";
-							return false;
+							return MValue(false);
 						}
 					}
 					continue;
@@ -105,7 +106,7 @@ bool InsertMaker::MakeInsert()
 					default: {
 						last_error = "InsertMaker::MakeInsert(): type of value = " + FieldTypeToString(space_format[i].second) + " can't be added to request";
 						LogFL(DEBUG) << last_error << "\n";
-						return false;
+						return MValue(false);
 					}
 				}
 			}
@@ -115,7 +116,7 @@ bool InsertMaker::MakeInsert()
 			if (msg_size > MSG_MAX_SIZE) {
 				last_error = "max create message size was reached ¯\\_(ツ)_/¯";
 				LogFL(DEBUG) << "InsertMaker::MakeInsert(): max create message size was reached ¯\\_(ツ)_/¯\n";
-				return false;
+				return MValue(false);
 			}
 			msg_size *= 2;
 			request.reset(new TP(DataStructure(msg_size)));
@@ -130,19 +131,19 @@ bool InsertMaker::MakeInsert()
 	if (resp.GetState() == -1) {
 		last_error = "failed to parse response";
 		LogFL(DEBUG) << "InsertMaker::MakeInsert(): failed to parse response\n";
-		return false;
+		return MValue(false);
 	}
 	if (resp.GetCode() != 0) {
 		std::stringstream tmp;
 		tmp << "InsertMaker::MakeInsert(): server respond: " << resp.GetCode() << ", " << resp.GetError();
 		last_error = tmp.str();
 		LogFL(DEBUG) << last_error << "\n";
-		return false;
+		return MValue(false);
 	} else {
 		LogFL(DEBUG) << "InsertMaker::MakeInsert(): succes receive\n";
 	}
 
 	MValue obj = MValue::FromMSGPack(resp.GetData());
 	LogFL(DEBUG) << "InsertMaker::MakeInsert(): mvalue = " << obj << "\n";
-	return true;
+	return obj;
 }

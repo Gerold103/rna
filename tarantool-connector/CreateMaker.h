@@ -12,7 +12,7 @@ private:
 public:
 	CreateMaker(CreateStatement *_statement);
 
-	bool MakeCreate();
+	MValue MakeCreate();
 };
 
 #endif

@@ -306,7 +306,6 @@ void TP::AddCreateSpace(const std::string &name)
 {
 	if (!is_valid) return;
 	std::string function("return ({box.schema.space.create(\"" + name + "\")})[2]");
-	std::cout << "'" << function << "'" << std::endl;
 	this->AddEval(function);
 }
 

@@ -12,7 +12,7 @@ private:
 public:
 	DropMaker(DropStatement *_statement);
 
-	bool MakeDrop();
+	MValue MakeDrop();
 };
 
 #endif

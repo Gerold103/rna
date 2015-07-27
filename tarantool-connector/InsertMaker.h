@@ -12,7 +12,7 @@ private:
 public:
 	InsertMaker(InsertStatement *_statement);
 
-	bool MakeInsert();
+	MValue MakeInsert();
 };
 
 #endif

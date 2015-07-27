@@ -6,7 +6,7 @@ CreateMaker::CreateMaker(CreateStatement *_statement) : SQLMaker(), statement(_s
 	Logger::LogObject(DEBUG, *statement);
 }
 
-bool CreateMaker::MakeCreate() {
+MValue CreateMaker::MakeCreate() {
 	last_error.clear();
 	std::string table_name = statement->GetTableName();
 	LogFL(DEBUG) << "CreateMaker::MakeCreate(): space name = " << table_name << "\n";
@@ -21,7 +21,7 @@ bool CreateMaker::MakeCreate() {
 			if (msg_size > MSG_MAX_SIZE) {
 				last_error = "max create message size was reached ¯\\_(ツ)_/¯";
 				LogFL(DEBUG) << "CreateMaker::MakeCreate(): max create message size was reached ¯\\_(ツ)_/¯\n";
-				return false;
+				return MValue(false);
 			}
 			msg_size *= 2;
 			request.reset(new TP(DataStructure(msg_size)));
@@ -35,14 +35,14 @@ bool CreateMaker::MakeCreate() {
 	if (resp.GetState() == -1) {
 		last_error = "failed to parse response";
 		LogFL(DEBUG) << "CreateMaker::MakeCreate(): failed to parse response\n";
-		return false;
+		return MValue(false);
 	}
 	if (resp.GetCode() != 0) {
 		std::stringstream tmp;
 		tmp << "CreateMaker::MakeCreate(): server respond: " << resp.GetCode() << ", " << resp.GetError();
 		last_error = tmp.str();
 		LogFL(DEBUG) << last_error << "\n";
-		return false;
+		return MValue(false);
 	} else {
 		LogFL(DEBUG) << "CreateMaker::MakeCreate(): succes receive\n";
 	}
@@ -54,24 +54,24 @@ bool CreateMaker::MakeCreate() {
 		tmp << "CreateMaker::MakeCreate(): result isn't array = " << obj;
 		last_error = tmp.str();
 		LogFL(DEBUG) << "CreateMaker::MakeCreate(): result isn't array = " << obj << "\n";
-		return false;
+		return MValue(false);
 	}
 	if (obj.GetArray().empty()) {
 		last_error = "CreateMaker::MakeCreate(): returned array is empty";
 		LogFL(DEBUG) << "CreateMaker::MakeCreate(): returned array is empty\n";
-		return false;
+		return MValue(false);
 	}
 	if (obj.GetArray()[0].GetType() != TP_STR) {
 		last_error = "CreateMaker::MakeCreate(): type of result is not string";
 		LogFL(DEBUG) << last_error << "\n";
-		return false;
+		return MValue(false);
 	}
 	if (obj.GetArray()[0].GetStr() != "created") {
 		std::stringstream tmp;
 		tmp << "CreateMaker::MakeCreate(): space wasn't created, result = " << obj;
 		last_error = tmp.str();
 		LogFL(DEBUG) << "CreateMaker::MakeCreate(): space wasn't created, result = " << obj << "\n";
-		return false;
+		return MValue(false);
 	}
 
 
@@ -92,7 +92,7 @@ bool CreateMaker::MakeCreate() {
 				break;
 			default:
 				LogFL(DEBUG) << "CreateMaker::MakeCreate(): error in column datatype\n";
-				return false;
+				return MValue(false);
 		}
 		columns.push_back(new_col);
 	}
@@ -106,7 +106,7 @@ bool CreateMaker::MakeCreate() {
 			if (msg_size > MSG_MAX_SIZE) {
 				last_error = "max create message size was reached ¯\\_(ツ)_/¯";
 				LogFL(DEBUG) << "CreateMaker::MakeCreate(): max create message size was reached ¯\\_(ツ)_/¯\n";
-				return false;
+				return MValue(false);
 			}
 			msg_size *= 2;
 			request.reset(new TP(DataStructure(msg_size)));
@@ -120,14 +120,14 @@ bool CreateMaker::MakeCreate() {
 	if (resp.GetState() == -1) {
 		last_error = "failed to parse response";
 		LogFL(DEBUG) << "CreateMaker::MakeCreate(): failed to parse response\n";
-		return false;
+		return MValue(false);
 	}
 	if (resp.GetCode() != 0) {
 		std::stringstream tmp;
 		tmp << "CreateMaker::MakeCreate(): server respond: " << resp.GetCode() << ", " << resp.GetError();
 		last_error = tmp.str();
 		LogFL(DEBUG) << last_error << "\n";
-		return false;
+		return MValue(false);
 	} else {
 		LogFL(DEBUG) << "CreateMaker::MakeCreate(): succes receive\n";
 	}
@@ -159,7 +159,7 @@ bool CreateMaker::MakeCreate() {
 					}
 					if (k == sizek - 1) {
 						LogFL(DEBUG) << "CreateMaker::MakeCreate(): column with name " << col_names[j] << " wasn't found\n";
-						return false;
+						return MValue(false);
 					}
 				}
 			}
@@ -183,7 +183,7 @@ bool CreateMaker::MakeCreate() {
 				}
 				default: {
 					LogFL(DEBUG) << "CreateMaker::MakeCreate(): unknown index type\n";
-					return false;
+					return MValue(false);
 				}
 			}
 
@@ -194,7 +194,7 @@ bool CreateMaker::MakeCreate() {
 				if (msg_size > MSG_MAX_SIZE) {
 					last_error = "max create message size was reached ¯\\_(ツ)_/¯";
 					LogFL(DEBUG) << "CreateMaker::MakeCreate(): max create message size was reached ¯\\_(ツ)_/¯\n";
-					return false;
+					return MValue(false);
 				}
 				msg_size *= 2;
 				request.reset(new TP(DataStructure(msg_size)));
@@ -207,14 +207,14 @@ bool CreateMaker::MakeCreate() {
 		if (resp.GetState() == -1) {
 			last_error = "failed to parse response";
 			LogFL(DEBUG) << "CreateMaker::MakeCreate(): failed to parse response\n";
-			return false;
+			return MValue(false);
 		}
 		if (resp.GetCode() != 0) {
 			std::stringstream tmp;
 			tmp << "CreateMaker::MakeCreate(): server respond: " << resp.GetCode() << ", " << resp.GetError();
 			last_error = tmp.str();
 			LogFL(DEBUG) << last_error << "\n";
-			return false;
+			return MValue(false);
 		} else {
 			LogFL(DEBUG) << "CreateMaker::MakeCreate(): succes receive\n";
 		}
@@ -223,5 +223,5 @@ bool CreateMaker::MakeCreate() {
 		LogFL(DEBUG) << "CreateMaker::MakeCreate(): mvalue = " << obj << "\n";
 	}
 
-	return true;
+	return MValue(true);
 }

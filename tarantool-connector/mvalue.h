@@ -105,7 +105,7 @@ public:
 //~~~~~~~~ S e t   m e t h o d s ~~~~~~~~
 
 	template<> inline bool MValue::SetValue(const uint &val) 	{ _new_val_type(TP_UINT); val_uint = val; return true; }
-	template<> inline bool MValue::SetValue(const int &val)	{ _new_val_type(TP_INT); val_int = val; return true; }
+	template<> inline bool MValue::SetValue(const int &val)		{ _new_val_type(TP_INT); val_int = val; return true; }
 	template<> inline bool MValue::SetValue(const bool &val)	{ _new_val_type(TP_BOOL); val_bool = val; return true; }
 	template<> inline bool MValue::SetValue(const float &val)	{ _new_val_type(TP_FLOAT); val_float = val; return true; }
 	template<> inline bool MValue::SetValue(const double &val)	{ _new_val_type(TP_DOUBLE); val_dbl = val; return true; }

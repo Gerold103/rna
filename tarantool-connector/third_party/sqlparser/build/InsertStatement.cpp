@@ -33,6 +33,7 @@ const Expr *InsertStatement::GetValueByColumn(const std::string &col_name)
 	if (cols == NULL) return NULL;
 	for (size_t i = 0, size = cols->size(); i < size; ++i) {
 		if (cols->at(i) == col_name) {
+			if (this->GetValues()->size() <= i) return NULL;
 			return this->GetValues()->at(i);
 		}
 	}

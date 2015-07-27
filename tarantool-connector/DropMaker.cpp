@@ -6,7 +6,7 @@
 
 DropMaker::DropMaker(DropStatement *_statement) : statement(_statement) { Logger::LogObject(DEBUG, *statement); }
 
-bool DropMaker::MakeDrop()
+MValue DropMaker::MakeDrop()
 {
 	last_error.clear();
 	std::string table_name = statement->GetName();
@@ -21,7 +21,7 @@ bool DropMaker::MakeDrop()
 			if (msg_size > MSG_MAX_SIZE) {
 				last_error = "max create message size was reached ¯\\_(ツ)_/¯";
 				LogFL(DEBUG) << "DropMaker::MakeDrop(): max create message size was reached ¯\\_(ツ)_/¯\n";
-				return false;
+				return MValue(false);
 			}
 			msg_size *= 2;
 			request.reset(new TP(DataStructure(msg_size)));
@@ -35,14 +35,14 @@ bool DropMaker::MakeDrop()
 	if (resp.GetState() == -1) {
 		last_error = "failed to parse response";
 		LogFL(DEBUG) << "DropMaker::MakeDrop(): failed to parse response\n";
-		return false;
+		return MValue(false);
 	}
 	if (resp.GetCode() != 0) {
 		std::stringstream tmp;
 		tmp << "DropMaker::MakeDrop():  server respond: " << resp.GetCode() << ", " << resp.GetError();
 		last_error = tmp.str();
 		LogFL(DEBUG) << last_error << "\n";
-		return false;
+		return MValue(false);
 	} else {
 		LogFL(DEBUG) << "DropMaker::MakeDrop(): succes receive\n";
 	}
@@ -50,5 +50,5 @@ bool DropMaker::MakeDrop()
 	MValue obj = MValue::FromMSGPack(resp.GetData());
 	LogFL(DEBUG) << "DropMaker::MakeDrop(): mvalue = " << obj << "\n";
 
-	return true;
+	return obj;
 }

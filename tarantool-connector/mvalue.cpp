@@ -361,6 +361,7 @@ std::ostream &operator<<(std::ostream &stream, const MValueMap &ob)
 
 bool operator==(const MValue &left, const MValue &right)
 {
+	if ((left.GetType() == TP_BOOL) && (right.GetType() == TP_BOOL)) return left.GetBool() == right.GetBool();
 	return (!(left < right)) && (!(left > right));
 }
 
