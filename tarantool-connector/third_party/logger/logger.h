@@ -16,7 +16,7 @@ class Logger;
 //--------L O G   S T R E A M-------
 
 enum LogTypes {
-    DEBUG, INFO, WARNING, ERROR, NOTE, RESULT
+    DEBUG, INFO, WARNING, ERROR, NOTE, RESULT, TEST
 };
 
 /*--------LogStreamer--------

@@ -106,7 +106,7 @@ LogStreamer Logger::Log(LogTypes tp)
 bool Logger::CheckLogType(LogTypes lt)
 {
     return (lt == LogTypes::DEBUG) || (lt == LogTypes::INFO) || (lt == LogTypes::WARNING) ||
-            (lt == LogTypes::ERROR) || (lt == LogTypes::NOTE) || (lt == LogTypes::RESULT);
+            (lt == LogTypes::ERROR) || (lt == LogTypes::NOTE) || (lt == LogTypes::RESULT) || (lt == LogTypes::TEST);
 }
 
 std::string Logger::LogTypeToString(LogTypes tp)
@@ -124,6 +124,8 @@ std::string Logger::LogTypeToString(LogTypes tp)
         return std::string("[ NOTE  ]");
     case LogTypes::RESULT:
         return std::string("[RESULT ]");
+    case LogTypes::TEST:
+        return std::string("[ TEST  ]");
     default:
         return std::string();
     }

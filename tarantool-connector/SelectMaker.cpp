@@ -10,12 +10,11 @@ SelectMaker::SelectMaker(SelectStatement *_statement) : SQLMaker(), statement(_s
 			Expr *tmp = statement->select_list->at(i);
 			if (tmp->alias.length() > 0) {
 				aliases.insert(std::make_pair(tmp->alias, i));
-				std::cout << "alias: " << tmp->alias << ", i = " << i << std::endl;
 			}
 			switch(tmp->GetType()) {
 				case ExprType::kExprColumnRef: {
 					aliases.insert(std::make_pair(tmp->GetRealName(), i));
-					std::cout << "alias: " << tmp->GetRealName() << ", i = " << i << std::endl;
+					break;
 				}
 				default: continue;
 			}
@@ -42,11 +41,8 @@ MValue CalculateFromTupleAndExpr(Expr *expr, const TupleObj &tuple, const TupleO
 					LogFL(DEBUG) << "CalculateFromTupleAndExpr(): column with name \"" << expr->GetRealName() << "\" was not found\n";
 					return MValue();
 				}
-				std::cout << "num = -1: " << tmp->first << ", " << tmp->second << std::endl;
-				std::cout << tuple[tmp->second] << std::endl;
 				return tuple[tmp->second];
 			}
-			std::cout << "num = " << num << ", orig.tpl: " << original_tuple << std::endl;
 			return original_tuple[num];
 		}
 		case ExprType::kExprOperator: {
@@ -190,8 +186,6 @@ SpaceObject SelectMaker::MakeOneTable()
 			}
 		}
 
-		std::cout << "processed_tuples: " << processed_tuples << std::endl << "next_tuples: " << next_tuples << std::endl;
-
 		if (statement->where_clause != NULL) {
 			for (int i = static_cast<int>(processed_tuples.Size()) - 1; i >= 0; --i) {
 				try {
@@ -206,14 +200,10 @@ SpaceObject SelectMaker::MakeOneTable()
 			}
 		}
 
-		LogFL(DEBUG) << "after cycle\n";
 		res.PushBack(processed_tuples);
-
 		offset += MSG_START_RECS_COUNT;
 		next_tuples = NextSpacePart(space_id, index, offset, limit);
-		LogFL(DEBUG) << "after new tuples\n";
 	}
-	LogFL(DEBUG) << "after while\n";
 
 	if (statement->select_list != NULL) {
 		for (int i = 0, size = static_cast<int>(statement->select_list->size()); i < size; ++i) {

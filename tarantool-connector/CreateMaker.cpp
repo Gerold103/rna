@@ -177,6 +177,7 @@ MValue CreateMaker::MakeCreate() {
 					break;
 				}
 				case ColumnDefinition::INDEX: {
+					options.insert(std::make_pair(MValue("unique"), MValue(false)));
 					index_name += "index";
 					LogFL(DEBUG) << "CreateMaker::MakeCreate(): index added\n";
 					break;

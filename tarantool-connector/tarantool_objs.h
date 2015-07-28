@@ -51,10 +51,13 @@ public:
 
 	TupleObj(const MValueVector &_values);
 
+	TupleObj(const MValue &source);
+
 	//~~~~~~~~ G e t   M e t h o d s ~~~~~~~~
 
 	const MValueVector &GetValues() const;
 	size_t Size() const;
+	MValue ToMValue() const;
 
 	//~~~~~~~~ S e t   m e t h o d s ~~~~~~~~
 
@@ -70,6 +73,8 @@ public:
 	const MValue &operator[](int id) const;
 
 	TupleObj operator+(const TupleObj &right) const;
+
+	bool operator==(const TupleObj &ob);
 
 	//~~~~~~~~ O t h e r ~~~~~~~~
 
@@ -91,6 +96,8 @@ public:
 
 	SpaceObject(const std::vector<TupleObj> &_tuples);
 
+	SpaceObject(const MValue &source);
+
 	//~~~~~~~~ G e t   M e t h o d s ~~~~~~~~
 
 	const std::vector<TupleObj> &GetTuples() const;
@@ -99,6 +106,8 @@ public:
 	size_t Size() const;
 
 	size_t NamesCount() const;
+
+	MValue ToMValue() const;
 
 	//~~~~~~~~ S e t   m e t h o d s ~~~~~~~~
 
@@ -119,6 +128,7 @@ public:
 	//~~~~~~~~ O p e r a t o r s ~~~~~~~~
 
 	const TupleObj &operator[](int id) const;
+	bool operator==(const SpaceObject &ob);
 
 	//~~~~~~~~ O t h e r ~~~~~~~~
 

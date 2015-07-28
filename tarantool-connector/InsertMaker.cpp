@@ -73,7 +73,11 @@ MValue InsertMaker::MakeInsert()
 			}
 		} else {
 			LogFL(DEBUG) << "InsertMaker::MakeInsert(): cols != null\n";
-			if (statement->GetColumns()->size() != statement->GetValues()->size()) return MValue(false);
+			if (statement->GetColumns()->size() != statement->GetValues()->size()) {
+				last_error = "InsertMaker::MakeInsert(): count of columns and values are not equal";
+				LogFL(DEBUG) << last_error << "\n";
+				return MValue(false);
+			}
 			for (size_t i = 0, size = space_format.size(); i < size; ++i) {
 				LogFL(DEBUG) << "InsertMaker::MakeInsert(): i = " << i << "\n";
 				std::string &col_name = space_format[i].first;

@@ -18,6 +18,35 @@ TupleObj::TupleObj() : TarantoolObject(TUPLE_OBJ) { }
 
 TupleObj::TupleObj(const MValueVector &_values) : TarantoolObject(TUPLE_OBJ), values(_values) { }
 
+TupleObj::TupleObj(const MValue &source) : TarantoolObject(TUPLE_OBJ)
+{
+	switch(source.GetType()) {
+		case TP_ARRAY: {
+			values = source.GetArray();
+			return;
+		}
+		case TP_MAP: {
+			error = "TupleObj::TupleObj(): MValue type is map";
+			LogFL(DEBUG) << error << "\n";
+			return;
+		}
+		case TP_EXT: {
+			error = "TupleObj::TupleObj(): MValue type is ext";
+			LogFL(DEBUG) << error << "\n";
+			return;
+		}
+		case TP_DEFAULT: {
+			error = "TupleObj::TupleObj(): MValue type is default";
+			LogFL(DEBUG) << error << "\n";
+			return;
+		}
+		default: {
+			values.push_back(source);
+			return;
+		}
+	}
+}
+
 //~~~~~~~~ G e t   M e t h o d s ~~~~~~~~
 
 const MValueVector &TupleObj::GetValues() const
@@ -28,6 +57,11 @@ const MValueVector &TupleObj::GetValues() const
 size_t TupleObj::Size() const
 {
 	return values.size();
+}
+
+MValue TupleObj::ToMValue() const
+{
+	return MValue(values);
 }
 
 //~~~~~~~~ S e t   m e t h o d s ~~~~~~~~
@@ -90,6 +124,18 @@ TupleObj TupleObj::operator+(const TupleObj &right) const
 	return res;
 }
 
+bool TupleObj::operator==(const TupleObj &ob)
+{
+	if (this->Size() != ob.Size()) return false;
+	for (size_t i = 0, size = ob.Size(); i < size; ++i) {
+		try {
+			if (values[i] != ob[i]) return false;
+		}
+		catch(...) { return false; }
+	}
+	return true;
+}
+
 //~~~~~~~~ O t h e r ~~~~~~~~
 
 void TupleObj::Remove(int id)
@@ -104,6 +150,19 @@ void TupleObj::Remove(int id)
 SpaceObject::SpaceObject() : TarantoolObject(SPACE_OBJ) { }
 
 SpaceObject::SpaceObject(const std::vector<TupleObj> &_tuples) : TarantoolObject(SPACE_OBJ), tuples(_tuples) { }
+
+SpaceObject::SpaceObject(const MValue &source) : TarantoolObject(SPACE_OBJ)
+{
+	if (source.GetType() != TP_ARRAY) {
+		error = "SpaceObject::SpaceObject(): type of MValue is not array";
+		LogFL(DEBUG) << error << "\n";
+		return;
+	}
+	const MValueVector &vec = source.GetArray();
+	for (size_t i = 0, size = vec.size(); i < size; ++i) {
+		tuples.push_back(TupleObj(vec[i]));
+	}
+}
 
 //~~~~~~~~ G e t   M e t h o d s ~~~~~~~~
 
@@ -125,6 +184,15 @@ size_t SpaceObject::Size() const
 size_t SpaceObject::NamesCount() const
 {
 	return names.size();
+}
+
+MValue SpaceObject::ToMValue() const
+{
+	MValueVector res;
+	for (size_t i = 0, size = tuples.size(); i < size; ++i) {
+		res.push_back(tuples[i].ToMValue());
+	}
+	return MValue(res);
 }
 
 //~~~~~~~~ S e t   m e t h o d s ~~~~~~~~
@@ -211,6 +279,25 @@ const TupleObj &SpaceObject::operator[](int id) const
 {
 	if ((id < 0) || (id > static_cast<int>(tuples.size()))) throw std::string("SpaceObject::operator[]: index is out of range, i = ") + std::to_string(id);
 	return tuples[id];
+}
+
+bool SpaceObject::operator==(const SpaceObject &ob)
+{
+	if (this->Size() != ob.Size()) return false;
+	SpaceObject tmp(ob);
+	bool res = true;
+	for (int i = static_cast<int>(this->Size()) - 1; i >= 0; --i) {
+		for (int j = static_cast<int>(tmp.Size()) - 1; j >= 0; --j) {
+			if (tuples[i] == tmp[j]) {
+				tmp.Remove(j);
+				break;
+			}
+			if (j == 0) res = false;
+		}
+		if (!res) return false;
+	}
+	if (tmp.Size()) return false;
+	return true;
 }
 
 //~~~~~~~~ O t h e r ~~~~~~~~
