@@ -10,7 +10,7 @@ private:
 	CreateStatement *statement;
 
 public:
-	CreateMaker(CreateStatement *_statement);
+	CreateMaker(Session &ses_, TarantoolInfo &tinfo_, CreateStatement *_statement);
 
 	MValue MakeCreate();
 };

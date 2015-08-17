@@ -10,7 +10,7 @@ private:
 	InsertStatement *statement;
 
 public:
-	InsertMaker(InsertStatement *_statement);
+	InsertMaker(Session &ses_, TarantoolInfo &tinfo_, InsertStatement *_statement);
 
 	MValue MakeInsert();
 };

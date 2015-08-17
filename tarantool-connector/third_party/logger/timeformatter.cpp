@@ -6,7 +6,7 @@
 
 bool TimeSettings::CheckTimeFormat(TimeFormat tf)
 {
-    return (tf == TimeFormat::HourMinSec) || (tf == TimeFormat::DayMonYear_HourMinSec);
+    return (tf == TimeFormat::HourMinSec) || (tf == TimeFormat::DayMonYear_HourMinSec) || (tf == TimeFormat::NoTime);
 }
 
 std::shared_ptr<TimeFormatter> TimeFormatter::CreateFormatter(TimeFormat tf)
@@ -29,6 +29,19 @@ std::shared_ptr<TimeFormatter> TimeFormatter::CreateFormatter(TimeFormat tf)
     case TimeFormat::DayMonYear_HourMinSec:
         try {
             result.reset(new TFDateAndTime());
+        }
+        catch (std::bad_alloc)
+        {
+            throw;
+        }
+        catch (...)
+        {
+            throw std::runtime_error("TimeFormatter::CreateFormatter: unknown error.");
+        }
+        return result;
+    case TimeFormat::NoTime:
+        try {
+            result.reset(new TFNoTime());
         }
         catch (std::bad_alloc)
         {
@@ -98,3 +111,9 @@ TimeFormatter::~TimeFormatter() { }
     }
 
     TFDateAndTime::~TFDateAndTime() { }
+
+//--------N O   T I M E--------
+
+    std::string TFNoTime::ToString() { return ""; }
+
+    TFNoTime::~TFNoTime() { }

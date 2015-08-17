@@ -25,23 +25,32 @@ using namespace hsql;
 
 class SQLMaker {
 protected:
-	Session ses;
-	TarantoolSchema schm;
-	bool is_connected;
-
+	Session *ses;
+	TarantoolInfo *tinfo;
 	std::string last_error;
+
 public:
-	SQLMaker();
+	SQLMaker(Session &ses_, TarantoolInfo &tinfo_);
 
 	bool MakeEval(const std::string &function);
 
-	bool IsConnected() const;
 	std::string Error() const;
-
-	TPResponse SendRequest(TP_p &request);
 
 	virtual ~SQLMaker();
 };
 
+
+//~~~~~~~~~~~~~~~~~~~~~~~~ S Q L   C O N D I T I O N ~~~~~~~~~~~~~~~~~~~~~~~~
+
+struct SQLCondition {
+public:
+	tp_iterator_type type;
+	std::string column;
+	MValue value;
+
+	SQLCondition(const std::string column_, const MValue &value_, tp_iterator_type type_ = TP_ITERATOR_EQ);
+	SQLCondition();
+	SQLCondition(const Expr *condition);
+};
 
 #endif

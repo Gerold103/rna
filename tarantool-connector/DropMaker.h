@@ -10,7 +10,7 @@ private:
 	DropStatement *statement;
 
 public:
-	DropMaker(DropStatement *_statement);
+	DropMaker(Session &ses_, TarantoolInfo &tinfo_, DropStatement *_statement);
 
 	MValue MakeDrop();
 };

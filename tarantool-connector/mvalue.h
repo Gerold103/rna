@@ -33,19 +33,21 @@ private:
 	std::shared_ptr<void> val_obj;
 
 	tp_type val_type;
+	mutable bool debug_mode;
 
 	void _new_val_type(tp_type new_type) { val_obj = nullptr; val_type = new_type; }
 
 	template<class T> void _reset_val_obj(const T &val) { val_obj.reset(new T(val)); }
 
 public:
+
 	//~~~~~~~~ C o n s t r u c t o r s ~~~~~~~~
 
 	MValue();
 
 	MValue(const char *val);
 	
-	template<class T> MValue(const T &val) { SetValue(val); }
+	template<class T> MValue(const T &val) : debug_mode(false) { SetValue(val); }
 
 	//~~~~~~~~ S e t   m e t h o d s ~~~~~~~~
 
@@ -55,7 +57,11 @@ public:
 
 	bool SetValue();
 
+	void SetDebug(bool f) const;
+
 	//~~~~~~~~ G e t   M e t h o d s ~~~~~~~~
+
+	bool GetDebugMode() const;
 
 	tp_type GetType() const;
 
@@ -83,6 +89,10 @@ public:
 
 	bool IsNumber() const;
 	bool IsString() const;
+
+	//~~~~~~~~ O p e r a t o r s ~~~~~~~~
+
+	const MValue &operator[](int id) const;
 
 	//~~~~~~~~ F a b r i c a l   m e t h o d s ~~~~~~~~
 

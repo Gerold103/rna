@@ -67,7 +67,7 @@ enum tp_iterator_type {
 	TP_ITERATOR_BITS_ANY_SET,
 	TP_ITERATOR_BITS_ALL_NON_SET,
 	TP_ITERATOR_OVERLAPS,
-	TP_ITERATOR_NEIGHBOR
+	TP_ITERATOR_NEIGHBOR,
 };
 
 typedef char *(*tp_reserve)(struct tp *p, size_t req, size_t *size);

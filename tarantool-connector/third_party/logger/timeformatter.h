@@ -9,7 +9,7 @@
 
 namespace TimeSettings {
     enum TimeFormat {
-        HourMinSec, DayMonYear_HourMinSec
+        HourMinSec, DayMonYear_HourMinSec, NoTime
     };
     bool CheckTimeFormat(TimeFormat tf);
 }
@@ -39,6 +39,15 @@ public:
         public:
             virtual std::string ToString();
             virtual ~TFDateAndTime();
+        };
+
+    //--------N O   T I M E--------
+
+        class TFNoTime : public TimeFormatter
+        {
+        public:
+            virtual std::string ToString();
+            virtual ~TFNoTime();
         };
 
 #endif // TIMEFORMATTER_H

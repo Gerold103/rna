@@ -3,13 +3,19 @@
 #include <cinttypes>
 #include <cctype>
 #include <iostream>
+#include "mvalue.h"
+#include "tp_wrap.h"
 
 #include "tarantool_schema_.h"
 extern "C" {
 	#include "msgpuck/msgpuck.h"
 }
 
-std::string FieldTypeToString(FieldType tp)
+SpacePart::SpacePart() : type(FT_OTHER) { }
+
+namespace Convert {
+
+std::string ToString(FieldType tp)
 {
 	switch(tp) {
 		case FT_NUM: return "FT_NUM";
@@ -19,7 +25,7 @@ std::string FieldTypeToString(FieldType tp)
 	}
 }
 
-//~~~~~~~~~~~~~~~~~~~~~~~~S C H E M A   K E Y~~~~~~~~~~~~~~~~~~~~~~~~
+}
 
 std::ostream &operator<<(std::ostream &stream, FieldType tp)
 {
@@ -36,6 +42,323 @@ std::ostream &operator<<(std::ostream &stream, FieldType tp)
 		default:
 			stream << "DEFAULT";
 			return stream;
+	}
+}
+
+//~~~~~~~~~~~~~~~~~~~~~~~~ T A R A N T O O L   B A S E   I N F O ~~~~~~~~~~~~~~~~~~~~~~~~
+
+TarantoolBaseInfo::TarantoolBaseInfo(int id_, const std::string &name_) : id(id_), name(name_) { }
+
+const std::string &TarantoolBaseInfo::Name() const
+{
+	return name;
+}
+
+int TarantoolBaseInfo::ID() const
+{
+	return id;
+}
+
+//~~~~~~~~~~~~~~~~~~~~~~~~ T A R A N T O O L   I N D E X   I N F O ~~~~~~~~~~~~~~~~~~~~~~~~
+
+TarantoolIndexInfo::TarantoolIndexInfo(int id_, const std::string &name_, IndexType type_, bool unique_, int space_id_)
+	: TarantoolBaseInfo(id_, name_), type(type_), unique(unique_), space_id(space_id_) { }
+
+const std::vector<SpacePart> &TarantoolIndexInfo::Parts() const
+{
+	return index_parts;
+}
+
+namespace Convert {
+	std::string ToString(TarantoolIndexInfo::IndexType tp)
+	{
+		switch(tp) {
+			case TarantoolIndexInfo::HASH: return "HASH";
+			case TarantoolIndexInfo::TREE: return "TREE";
+			case TarantoolIndexInfo::BITSET: return "BITSET";
+			case TarantoolIndexInfo::RTREE: return "RTREE";
+			default: return "undefined";
+		}
+	}
+}
+
+//~~~~~~~~~~~~~~~~~~~~~~~~ T A R A N T O O L   S P A C E   I N F O ~~~~~~~~~~~~~~~~~~~~~~~~
+
+TarantoolSpaceInfo::TarantoolSpaceInfo(int id_, const std::string &name_, int owner_, const std::string &engine_, const std::string &flags_)
+	: TarantoolBaseInfo(id_, name_), owner(owner_), engine(engine_), flags(flags_) { }
+
+const SpacePart *TarantoolSpaceInfo::ColumnBy(int number) const
+{
+	if ((number >= static_cast<int>(space_parts.size())) || (number < 0)) return nullptr;
+	return &(space_parts[number]);
+}
+
+const SpacePart *TarantoolSpaceInfo::ColumnBy(const std::string &name_) const
+{
+	for (size_t i = 0, size = space_parts.size(); i < size; ++i) {
+		if (space_parts[i].name == name_) {
+			return &(space_parts[i]);
+		}
+	}
+	return nullptr;
+}
+
+int TarantoolSpaceInfo::ColumnNumber(const std::string &name_) const
+{
+	for (size_t i = 0, size = space_parts.size(); i < size; ++i) {
+		if (space_parts[i].name == name_) {
+			return i;
+		}
+	}
+	return -1;
+}
+
+const TarantoolIndexInfo *TarantoolSpaceInfo::IndexBy(int number) const
+{
+	auto it = indices_and_ids.find(number);
+	if (it == indices_and_ids.end()) return nullptr;
+	return it->second;
+}
+
+const TarantoolIndexInfo *TarantoolSpaceInfo::IndexBy(const std::string &name_) const
+{
+	auto it = indices_and_names.find(name);
+	if (it == indices_and_names.end()) return nullptr;
+	return it->second;
+}
+
+const std::vector<std::shared_ptr<TarantoolIndexInfo> > TarantoolSpaceInfo::Indices() const
+{
+	return infos;
+}
+
+//~~~~~~~~~~~~~~~~~~~~~~~~ T A R A N T O O L   I N F O ~~~~~~~~~~~~~~~~~~~~~~~~
+
+bool TarantoolInfo::_add_spaces_(const DataStructure &data)
+{
+	spaces_and_names.clear();
+	spaces_and_ids.clear();
+	infos.clear();
+
+	MValue t = MValue::FromMSGPack(data);
+	if (t.GetType() != TP_ARRAY) {
+		LogFL(DEBUG) << "TarantoolInfo::_add_spaces_(): data must be array\n";
+		return false;
+	}
+	const MValueVector &spaces = t.GetArray();
+
+	for (auto it = spaces.begin(); it != spaces.end(); ++it) {
+		if (it->GetType() != TP_ARRAY) {
+			LogFL(DEBUG) << "TarantoolInfo::_add_spaces_(): space tuple must be array\n";
+			return false;
+		}
+		const MValueVector &cur_space = it->GetArray();
+		int id = cur_space[0].GetUint();
+		int owner = cur_space[1].GetUint();
+		std::string name = cur_space[2].GetStr();
+		std::string engine = cur_space[3].GetStr();
+		//skip part count
+		std::string flags = cur_space[5].GetStr();
+
+		std::shared_ptr<TarantoolSpaceInfo> space_info(new TarantoolSpaceInfo(id, name, owner, engine, flags));
+
+		const MValueVector &columns = cur_space[6].GetArray();
+		for (int i = 0, size = columns.size(); i < size; ++i) {
+			const MValueMap &cur_part = columns[i].GetMap();
+			SpacePart tmp;
+			tmp.name = cur_part.at(MValue("name")).GetStr();
+			tmp.type = (cur_part.at(MValue("type")) == MValue("str")) ? FT_STR : FT_NUM;
+			space_info->space_parts.push_back(tmp);
+		}
+
+		infos.push_back(space_info);
+		spaces_and_ids.insert(std::make_pair(id, space_info.get()));
+		spaces_and_names.insert(std::make_pair(name, space_info.get()));
+	}
+	return true;
+}
+
+bool TarantoolInfo::_add_indices_(const DataStructure &data)
+{
+	MValue t = MValue::FromMSGPack(data);
+	if (t.GetType() != TP_ARRAY) {
+		LogFL(DEBUG) << "TarantoolInfo::_add_indices_(): data must be array\n";
+		return false;
+	}
+	const MValueVector &indices = t.GetArray();
+
+	for (auto it = indices.begin(); it != indices.end(); ++it) {
+		if (it->GetType() != TP_ARRAY) {
+			LogFL(DEBUG) << "TarantoolInfo::_add_indices_(): index tuple must be array\n";
+			return false;
+		}
+		const MValueVector &cur_index = it->GetArray();
+		int space_id = cur_index[0].GetUint();
+		int iid = cur_index[1].GetUint();
+		std::string name = cur_index[2].GetStr();
+		TarantoolIndexInfo::IndexType type = TarantoolIndexInfo::TREE;
+		{
+			std::string _type = cur_index[3].GetStr();
+			std::transform(_type.begin(), _type.end(), _type.begin(), ::tolower);
+			if (_type == "hash") {
+				type = TarantoolIndexInfo::HASH;
+			} else if (_type == "bitset") {
+				type = TarantoolIndexInfo::BITSET;
+			} else if (_type == "rtree") {
+				type = TarantoolIndexInfo::RTREE;
+			} else if (_type != "tree") {
+				LogFL(DEBUG) << "TarantoolInfo::_add_indices_(): error with reading type of index\n";
+				return false;
+			}
+		}
+		bool unique = !!cur_index[4].GetUint();
+		int part_count = cur_index[5].GetUint();
+		TarantoolSpaceInfo *space = this->_space_by(space_id);
+		std::shared_ptr<TarantoolIndexInfo> index(new TarantoolIndexInfo(iid, name, type, unique, space_id));
+		for (int i = 0; i < part_count * 2; i += 2) {
+			index->index_parts.push_back(*(space->ColumnBy(cur_index[6 + i].GetUint())));
+		}
+		space->infos.push_back(index);
+		space->indices_and_ids.insert(std::make_pair(iid, index.get()));
+		space->indices_and_names.insert(std::make_pair(name, index.get()));
+	}
+	return true;
+}
+
+DataStructure internal_execute_select(TP_p &request, int _space_id, Session &ses)
+{
+	request->AddSelect(_space_id, 0, 0, TP_ITERATOR_ALL, UINT32_MAX);
+	request->ReserveKeyParts();
+
+	int ss = ses.Send(*request);
+	if (ss < 0) {
+		LogFL(DEBUG) << "internal_execute_select(): error while sending request was occured, return = "<< ss << "\n";
+		return DataStructure();
+	}
+
+	ss = ses.Sync();
+	if (ss < 0) {
+		LogFL(DEBUG) << "internal_execute_select(): error while syncing sesson was occured, return = " << ss << "\n";
+		return DataStructure();
+	}
+
+	//------------------------ R E P L Y ------------------------
+
+	DataStructure response_buffer(FIRST_PACK_PART_SIZE);
+	ssize_t len = ses.Receive(response_buffer);
+	ses.Sync();
+	if (len < FIRST_PACK_PART_SIZE) {
+		LogFL(DEBUG) << "internal_execute_select(): length of receive less than 5 = " << len << "\n";
+		return DataStructure();
+	}
+	if (mp_typeof(*response_buffer.Data()) != MP_UINT) {
+		LogFL(DEBUG) << "internal_execute_select(): bad reply length type = "  << mp_typeof(*response_buffer.Data()) << "\n";
+		return DataStructure();
+	}
+	uint32_t body = tp_get_uint(response_buffer.Data());
+
+	response_buffer.Resize(FIRST_PACK_PART_SIZE + body);
+	len = ses.Receive(response_buffer, FIRST_PACK_PART_SIZE);
+	ses.Sync();
+	if (len < body) {
+		LogFL(DEBUG) << "internal_execute_select(): receive failed, len = " << len << "\n";
+		return DataStructure();
+	}
+	TPResponse resp(response_buffer);
+	if (resp.GetState() == -1) {
+		LogFL(DEBUG) <<"internal_execute_select(): failed to parse response\n";
+		return DataStructure();
+	}
+	if (resp.GetCode() != 0) {
+		LogFL(DEBUG) << "internal_execute_select(): server respond: " << resp.GetCode() << ", " << resp.GetError() << "\n";
+		return DataStructure();
+	}
+	return resp.GetData();
+}
+
+TarantoolInfo::TarantoolInfo(Session &ses, int _space_id) : session(&ses), service_space(_space_id)
+{
+	size_t msg_size = 128;
+	size_t msg_max_size = 1048576;
+
+	TP_p request(new TP(DataStructure(msg_size)));
+	DataStructure res = internal_execute_select(request, _space_id, ses);
+
+	if (!this->_add_spaces_(res)) {
+		LogFL(DEBUG) << "TarantoolInfo::TarantoolInfo(): error with adding spaces\n";
+		return;
+	}
+
+	_space_id = this->SpaceBy("_index")->ID();
+
+	request.reset(new TP(DataStructure(msg_size)));
+	res = internal_execute_select(request, _space_id, ses);
+
+	if (!this->_add_indices_(res)) {
+		LogFL(DEBUG) << "TarantoolInfo::TarantoolInfo(): error with adding indices\n";
+		return;
+	}
+}
+
+TarantoolSpaceInfo *TarantoolInfo::_space_by(const std::string &name)
+{
+	auto it = spaces_and_names.find(name);
+	if (it == spaces_and_names.end()) return nullptr;
+	return it->second;
+}
+
+TarantoolSpaceInfo *TarantoolInfo::_space_by(int id)
+{
+	auto it = spaces_and_ids.find(id);
+	if (it == spaces_and_ids.end()) return nullptr;
+	return it->second;
+}
+
+const TarantoolSpaceInfo *TarantoolInfo::SpaceBy(const std::string &name) const
+{
+	auto it = spaces_and_names.find(name);
+	if (it == spaces_and_names.end()) return nullptr;
+	return it->second;
+}
+
+const TarantoolSpaceInfo *TarantoolInfo::SpaceBy(int id) const
+{
+	auto it = spaces_and_ids.find(id);
+	if (it == spaces_and_ids.end()) return nullptr;
+	return it->second;
+}
+
+const std::vector<SpacePart> &TarantoolInfo::SpaceFormat(int id) const
+{
+	return this->SpaceBy(id)->space_parts;
+}
+
+const std::vector<SpacePart> &TarantoolInfo::SpaceFormat(const std::string &name) const
+{
+	return this->SpaceBy(name)->space_parts;
+}
+
+void TarantoolInfo::Update()
+{
+	size_t msg_size = 128;
+	size_t msg_max_size = 1048576;
+
+	TP_p request(new TP(DataStructure(msg_size)));
+	DataStructure res = internal_execute_select(request, service_space, *session);
+
+	if (!this->_add_spaces_(res)) {
+		LogFL(DEBUG) << "TarantoolInfo::Update(): error with adding spaces\n";
+		return;
+	}
+
+	int tmp = this->SpaceBy("_index")->ID();
+
+	request.reset(new TP(DataStructure(msg_size)));
+	res = internal_execute_select(request, tmp, *session);
+
+	if (!this->_add_indices_(res)) {
+		LogFL(DEBUG) << "TarantoolInfo::Update(): error with adding indices\n";
+		return;
 	}
 }
 
@@ -212,15 +535,15 @@ TarantoolSchema::TarantoolSchema(Session &ses, int number)
 {
 	//------------------------ R E Q U E S T ------------------------
 
-	TP request(DataStructure(1024));
-	request.AddSelect(number, 0, 0, TP_ITERATOR_ALL, UINT32_MAX);
-	request.ReserveKeyParts();
-	if (request.Used() > 1024) {
+	TP_p request(new TP(DataStructure(1024)));
+	request->AddSelect(number, 0, 0, TP_ITERATOR_ALL, UINT32_MAX);
+	request->ReserveKeyParts();
+	if (request->Used() > 1024) {
 		LogFL(DEBUG) << "TarantoolSchema::TarantoolSchema(): used more than was allocated;\n";
 		return;
 	}
 
-	int ss = ses.Send(request);
+	int ss = ses.Send(*request);
 	if (ss < 0) {
 		LogFL(DEBUG) << "TarantoolSchema::TarantoolSchema(): error while sending request was occured, return = "<< ss << "\n";
 		return;
@@ -231,7 +554,6 @@ TarantoolSchema::TarantoolSchema(Session &ses, int number)
 		LogFL(DEBUG) << "TarantoolSchema::TarantoolSchema(): error while syncing sesson was occured, return = " << ss << "\n";
 		return;
 	}
-	LogFL(DEBUG) << "TarantoolSchema::TarantoolSchema(): sended = " << ss << "\n";
 
 	//------------------------ R E P L Y ------------------------
 
@@ -247,11 +569,9 @@ TarantoolSchema::TarantoolSchema(Session &ses, int number)
 		return;
 	}
 	uint32_t body = tp_get_uint(response_buffer.Data());
-	LogFL(DEBUG) << "TarantoolSchema::TarantoolSchema(): body length = " << body << "\n";
 
 	response_buffer.Resize(FIRST_PACK_PART_SIZE + body);
 	len = ses.Receive(response_buffer, FIRST_PACK_PART_SIZE);
-	LogFL(DEBUG) << "TarantoolSchema::TarantoolSchema(): received = " << len << "\n";
 	ses.Sync();
 	if (len < body) {
 		LogFL(DEBUG) << "TarantoolSchema::TarantoolSchema(): receive failed, len = " << len << "\n";
@@ -264,15 +584,72 @@ TarantoolSchema::TarantoolSchema(Session &ses, int number)
 	}
 	if (resp.GetCode() != 0) {
 		LogFL(DEBUG) << "TarantoolSchema::TarantoolSchema(): server respond: " << resp.GetCode() << ", " << resp.GetError() << "\n";
-	} else {
-		LogFL(DEBUG) << "TarantoolSchema::TarantoolSchema(): succes receive\n";
 	}
 	try {
-		LogFL(DEBUG) << "TarantoolSchema::TarantoolSchema(): add spaces res = " << this->AddSpaces(resp.GetData()) << "\n";
+		this->AddSpaces(resp.GetData());
 	} catch(std::string msg)
 	{
 		LogFL(DEBUG) << "TarantoolSchema::TarantoolSchema(): error: " << msg << "\n";
 	}
+
+	//------------------------ R E Q U E S T ------------------------
+
+	request.reset(new TP(DataStructure(1024)));
+	number = this->GetSpaceIDByString("_index");
+	request->AddSelect(number, 0, 0, TP_ITERATOR_ALL, UINT32_MAX);
+	request->ReserveKeyParts();
+	if (request->Used() > 1024) {
+		LogFL(DEBUG) << "TarantoolSchema::TarantoolSchema(): used more than was allocated;\n";
+		return;
+	}
+
+	ss = ses.Send(*request);
+	if (ss < 0) {
+		LogFL(DEBUG) << "TarantoolSchema::TarantoolSchema(): error while sending request was occured, return = "<< ss << "\n";
+		return;
+	}
+
+	ss = ses.Sync();
+	if (ss < 0) {
+		LogFL(DEBUG) << "TarantoolSchema::TarantoolSchema(): error while syncing sesson was occured, return = " << ss << "\n";
+		return;
+	}
+
+	//------------------------ R E P L Y ------------------------
+
+	response_buffer = DataStructure(FIRST_PACK_PART_SIZE);
+	len = ses.Receive(response_buffer);
+	ses.Sync();
+	if (len < FIRST_PACK_PART_SIZE) {
+		LogFL(DEBUG) << "TarantoolSchema::TarantoolSchema(): length of receive less than 5 = " << len << "\n";
+		return;
+	}
+	if (mp_typeof(*response_buffer.Data()) != MP_UINT) {
+		LogFL(DEBUG) << "TarantoolSchema::TarantoolSchema(): bad reply length type = "  << mp_typeof(*response_buffer.Data()) << "\n";
+		return;
+	}
+	body = tp_get_uint(response_buffer.Data());
+
+	response_buffer.Resize(FIRST_PACK_PART_SIZE + body);
+	len = ses.Receive(response_buffer, FIRST_PACK_PART_SIZE);
+	ses.Sync();
+	if (len < body) {
+		LogFL(DEBUG) << "TarantoolSchema::TarantoolSchema(): receive failed, len = " << len << "\n";
+		return;
+	}
+	resp = TPResponse(response_buffer);
+	if (resp.GetState() == -1) {
+		LogFL(DEBUG) <<"TarantoolSchema::TarantoolSchema(): failed to parse response\n";
+		return;
+	}
+	if (resp.GetCode() != 0) {
+		LogFL(DEBUG) << "TarantoolSchema::TarantoolSchema(): server respond: " << resp.GetCode() << ", " << resp.GetError() << "\n";
+	}
+	
+
+	MValue indices = MValue::FromMSGPack(resp.GetData());
+
+	this->AddIndices(indices);
 }
 
 //~~~~Set methods
@@ -293,16 +670,32 @@ int TarantoolSchema::AddSpaces(const DataStructure &data)
 	return 0;
 }
 
-int TarantoolSchema::AddIndices(const DataStructure &data)
+int TarantoolSchema::AddIndices(const MValue &data)
 {
-	const char *tuple = data.Data();
-	if (mp_check(&tuple, tuple + data.Size())) return -1;
-	tuple = data.Data();
-	if (mp_typeof(*tuple) != MP_ARRAY) return -1;
-	uint32_t space_count = mp_decode_array(&tuple);
-	while (space_count-- > 0) {
-		if (this->add_index(&tuple))
-			return -1;
+	const MValueVector &indices = data.GetArray();
+	for (size_t i = 0, size = indices.size(); i < size; ++i) {
+		uint32_t space_number = indices[i][0].GetUint();
+
+		SchemaKey space_key(space_number);
+		if (spaces.find(space_key) == spaces.end()) return -1;
+		SchemaSpaceValue &space = spaces[space_key];
+
+		SchemaIndexValue index_string;
+		index_string.number = indices[i][1].GetUint();
+		index_string.name = indices[i][2].GetStr();
+		size_t part_count = indices[i][5].GetUint();
+		for (size_t j = 0; j < part_count * 2; j += 2) {
+			SchemaFieldValue val;
+			val.number = indices[i][6 + j].GetUint();
+			val.field_type = ((indices[i][6 + j + 1].GetStr()[0] == 'S') ? FT_STR : FT_NUM);
+			index_string.index_parts.push_back(val);
+		}
+
+		SchemaIndexValue index_number = index_string;
+		index_string.key.SetStrVal(index_string.name);
+		index_number.key.SetUInt32Val(index_number.number);
+		space.indices.insert(std::make_pair(index_string.key, index_string));
+		space.indices.insert(std::make_pair(index_number.key, index_number));
 	}
 	return 0;
 }
@@ -352,6 +745,36 @@ std::vector<std::pair<std::string, FieldType> > TarantoolSchema::GetSpaceFormat(
 		res.push_back(std::make_pair(space.schema_list[i].name, space.schema_list[i].field_type));
 	}
 	return res;
+}
+
+//vector of indices. First in pair - index name, second - index columns
+std::vector<std::pair<std::string, std::vector<std::string> > > TarantoolSchema::GetIndexFormat(int space_id) const
+{
+	std::vector<std::pair<std::string, std::vector<std::string> > > res;
+	SchemaKey space_key(space_id);
+	auto it = spaces.find(space_key);
+	if (it == spaces.end()) return res;
+	SchemaSpaceValue space = it->second;
+
+	for (auto it = space.indices.begin(); it != space.indices.end(); ++it) {
+		const SchemaIndexValue &index = it->second;
+		std::string index_name = it->second.name;
+		std::vector<std::string> index_parts;
+		for (size_t i = 0, size = index.index_parts.size(); i < size; ++i) {
+			index_parts.push_back(this->GetNameByColNumber(space_id, index.index_parts[i].number));
+		}
+		res.push_back(std::make_pair(index_name, index_parts));
+	}
+	return res;
+}
+
+std::vector<std::string> TarantoolSchema::GetIndexFormat(int space_id, const std::string &index_name) const
+{
+	auto index_format = this->GetIndexFormat(space_id);
+	for (size_t i = 0, size = index_format.size(); i < size; ++i) {
+		if (index_format[i].first == index_name) return index_format[i].second;
+	}
+	return std::vector<std::string>();
 }
 
 std::string TarantoolSchema::GetNameByColNumber(int space_id, int col_number) const

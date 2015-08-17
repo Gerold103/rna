@@ -37,7 +37,7 @@ OFStreamOwner::~OFStreamOwner() { stream.close(); }
 //Static Members
 
 std::shared_ptr<TimeFormatter> Logger::tformatter(
-        TimeFormatter::CreateFormatter(TimeSettings::TimeFormat::HourMinSec));
+        TimeFormatter::CreateFormatter(TimeSettings::TimeFormat::NoTime));
 
 std::map<LogTypes, std::shared_ptr<StreamSaver> > Logger::StreamsMap;
 

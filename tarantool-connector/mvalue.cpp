@@ -2,9 +2,9 @@
 
 //~~~~~~~~ C o n s t r u c t o r s ~~~~~~~~
 
-MValue::MValue() : val_type(TP_DEFAULT) { }
+MValue::MValue() : val_type(TP_DEFAULT), debug_mode(false) { }
 
-MValue::MValue(const char *val)
+MValue::MValue(const char *val) : debug_mode(false)
 {
 	SetValue(val);
 }
@@ -19,7 +19,32 @@ bool MValue::SetValue(const char *val)
 
 bool MValue::SetValue() { _new_val_type(TP_NIL); return true; }
 
+void MValue::SetDebug(bool f) const
+{
+	debug_mode = f;
+	switch(this->GetType()) {
+		case TP_ARRAY: {
+			const MValueVector &tmp = this->GetArray();
+			for (size_t i = 0, size = tmp.size(); i < size; ++i) {
+				tmp[i].SetDebug(f);
+			}
+			return;
+		}
+		case TP_MAP: {
+			const MValueMap &tmp = this->GetMap();
+			for (auto it = tmp.begin(); it != tmp.end(); ++it) {
+				it->first.SetDebug(f);
+				it->second.SetDebug(f);
+			}
+			return;
+		}
+		default: return;
+	}
+}
+
 //~~~~~~~~ G e t   M e t h o d s ~~~~~~~~
+
+bool MValue::GetDebugMode() const { return debug_mode; }
 
 tp_type MValue::GetType() const { return val_type; }
 
@@ -122,6 +147,8 @@ const MValueMap &MValue::GetMap() const {
 	_get_val_(MValueMap, TP_MAP);
 }
 
+#undef _get_val_
+
 bool MValue::IsNumber() const
 {
 	return (GetType() == TP_INT) || (GetType() == TP_UINT) || (GetType() == TP_FLOAT) || (GetType() == TP_DOUBLE);
@@ -132,7 +159,16 @@ bool MValue::IsString() const
 	return (GetType() == TP_STR);
 }
 
-#undef _get_val_
+//~~~~~~~~ O p e r a t o r s ~~~~~~~~
+
+const MValue &MValue::operator[](int id) const
+{
+	if (this->GetType() != TP_ARRAY) {
+		throw std::string("MValue::operator[](): MValue is not TP_ARRAY");
+	}
+	if ((this->GetArray().size() <= id) || (id < 0)) throw std::string("MValue::operator[](): out of range exception");
+	return this->GetArray()[id];
+}
 
 //~~~~~~~~ F a b r i c a l   m e t h o d s ~~~~~~~~
 
@@ -140,22 +176,18 @@ MValue MValue::FromMSGPack(const char **data)
 {
 	const char *tuple = *data;
 	mp_type type = mp_typeof(*tuple);
-	LogFL(DEBUG) << " MValue::FromMSGPack(): type = " << ToString(static_cast<tp_type>(type)) << ", value = \n";
 	switch(type) {
 		case MP_NIL:
 			mp_decode_nil(&tuple);
-			LogFL(DEBUG) << "nil\n";
 			*data = tuple;
 			return MValue(DataStructure());
 		case MP_UINT: {
 			uint val = mp_decode_uint(&tuple);
-			LogFL(DEBUG) << val << "\n";
 			*data = tuple;
 			return MValue(val);
 		}
 		case MP_INT: {
 			int val = mp_decode_int(&tuple);
-			LogFL(DEBUG) << val << "\n";
 			*data = tuple;
 			return MValue(val);
 		}
@@ -163,32 +195,27 @@ MValue MValue::FromMSGPack(const char **data)
 			uint32_t tmp_len = 0;
 			const char *tmp_str = mp_decode_str(&tuple, &tmp_len);
 			std::string val(tmp_str, tmp_len);
-			LogFL(DEBUG) << "\"" << val << "\"\n";
 			*data = tuple;
 			return MValue(val);
 		}
 		case MP_BIN: {
 			uint32_t tmp_len = 0;
 			const char *tmp_bin = mp_decode_bin(&tuple, &tmp_len);
-			LogFL(DEBUG) << "bin\n";
 			*data = tuple;
 			return MValue(DataStructure(tmp_bin, tmp_len));
 		}
 		case MP_BOOL: {
 			bool val = mp_decode_bool(&tuple);
-			LogFL(DEBUG) << val << "\n";
 			*data = tuple;
 			return MValue(val);
 		}
 		case MP_FLOAT: {
 			float val = mp_decode_float(&tuple);
-			LogFL(DEBUG) << val << "\n";
 			*data = tuple;
 			return MValue(val);
 		}
 		case MP_DOUBLE: {
 			double val = mp_decode_double(&tuple);
-			LogFL(DEBUG) << val << "\n";
 			*data = tuple;
 			return MValue(val);
 		}
@@ -197,32 +224,27 @@ MValue MValue::FromMSGPack(const char **data)
 
 		case MP_ARRAY: {
 			uint32_t size = mp_decode_array(&tuple);
-			LogFL(DEBUG) << "MValue::FromMSGPack(): size of array = " << size << "\n";
 			MValueVector val;
 			for (uint32_t i = 0; i < size; ++i) {
 				val.push_back(MValue::FromMSGPack(&tuple));
 			}
-			LogFL(DEBUG) << "MValue::FromMSGPack(): array created\n";
 			*data = tuple;
 			return MValue(val);
 		}
 
 		case MP_MAP: {
 			uint32_t size = mp_decode_map(&tuple);
-			LogFL(DEBUG) << "MValue::FromMSGPack(): sizeof map = " << size << "\n";
 			MValueMap val;
 			for (uint32_t i = 0; i < size; ++i) {
 				MValue key = MValue::FromMSGPack(&tuple);
 				MValue value = MValue::FromMSGPack(&tuple);
 				val.insert(std::make_pair(key, value));
 			}
-			LogFL(DEBUG) << "MValue::FromMSGPack(): map created\n";
 			*data = tuple;
 			return MValue(val);
 		}
 		
 		default:
-			LogFL(DEBUG) << "MValue::FromMSGPack(): default type, = " << ToString(static_cast<tp_type>(type)) << "\n";
 			*data = tuple;
 			return MValue(DataStructure());
 	}
@@ -232,48 +254,39 @@ MValue MValue::FromMSGPack(const DataStructure &data)
 {
 	const char *tuple = data.Data();
 	mp_type type = mp_typeof(*tuple);
-	LogFL(DEBUG) << " MValue::FromMSGPack(): type = " << ToString(static_cast<tp_type>(type)) << ", value = \n";
 	switch(type) {
 		case MP_NIL:
 			mp_decode_nil(&tuple);
-			LogFL(DEBUG) << "nil\n";
 			return MValue(DataStructure());
 		case MP_UINT: {
 			uint val = mp_decode_uint(&tuple);
-			LogFL(DEBUG) << val << "\n";
 			return MValue(val);
 		}
 		case MP_INT: {
 			int val = mp_decode_int(&tuple);
-			LogFL(DEBUG) << val << "\n";
 			return MValue(val);
 		}
 		case MP_STR: {
 			uint32_t tmp_len = 0;
 			const char *tmp_str = mp_decode_str(&tuple, &tmp_len);
 			std::string val(tmp_str, tmp_len);
-			LogFL(DEBUG) << "\"" << val << "\"\n";
 			return MValue(val);
 		}
 		case MP_BIN: {
 			uint32_t tmp_len = 0;
 			const char *tmp_bin = mp_decode_bin(&tuple, &tmp_len);
-			LogFL(DEBUG) << "bin\n";
 			return MValue(DataStructure(tmp_bin, tmp_len));
 		}
 		case MP_BOOL: {
 			bool val = mp_decode_bool(&tuple);
-			LogFL(DEBUG) << val << "\n";
 			return MValue(val);
 		}
 		case MP_FLOAT: {
 			float val = mp_decode_float(&tuple);
-			LogFL(DEBUG) << val << "\n";
 			return MValue(val);
 		}
 		case MP_DOUBLE: {
 			double val = mp_decode_double(&tuple);
-			LogFL(DEBUG) << val << "\n";
 			return MValue(val);
 		}
 
@@ -281,30 +294,25 @@ MValue MValue::FromMSGPack(const DataStructure &data)
 
 		case MP_ARRAY: {
 			uint32_t size = mp_decode_array(&tuple);
-			LogFL(DEBUG) << "MValue::FromMSGPack(): size of array = " << size << "\n";
 			MValueVector val;
 			for (uint32_t i = 0; i < size; ++i) {
 				val.push_back(MValue::FromMSGPack(&tuple));
 			}
-			LogFL(DEBUG) << "MValue::FromMSGPack(): array created\n";
 			return MValue(val);
 		}
 
 		case MP_MAP: {
 			uint32_t size = mp_decode_map(&tuple);
-			LogFL(DEBUG) << "MValue::FromMSGPack(): sizeof map = " << size << "\n";
 			MValueMap val;
 			for (uint32_t i = 0; i < size; ++i) {
 				MValue key = MValue::FromMSGPack(&tuple);
 				MValue value = MValue::FromMSGPack(&tuple);
 				val.insert(std::make_pair(key, value));
 			}
-			LogFL(DEBUG) << "MValue::FromMSGPack(): map created\n";
 			return MValue(val);
 		}
 		
 		default:
-			LogFL(DEBUG) << "MValue::FromMSGPack(): default type, = " << ToString(static_cast<tp_type>(type)) << "\n";
 			return MValue(DataStructure());
 	}
 }
@@ -313,6 +321,7 @@ MValue MValue::FromMSGPack(const DataStructure &data)
 
 std::ostream &operator<<(std::ostream &stream, const MValue &ob)
 {
+	if (ob.GetDebugMode()) stream << "type = " << Convert::ToString(ob.GetType()) << ": ";
 	switch (ob.GetType()) {
 		case TP_NIL: stream << "nil"; break;
 		case TP_UINT: stream << ob.GetUint(); break;
@@ -331,7 +340,7 @@ std::ostream &operator<<(std::ostream &stream, const MValue &ob)
 
 std::ostream &VarDump(std::ostream &stream, const MValue &ob)
 {
-	stream << "tp_type: " << ToString(ob.GetType()) << "; value = " << ob;
+	stream << "tp_type: " << Convert::ToString(ob.GetType()) << "; value = " << ob;
 	return stream;
 }
 
@@ -445,7 +454,7 @@ bool operator<(const MValue &left, const MValue &right)
 {
 	if ((left.GetType() == TP_NIL) || (left.GetType() == TP_ARRAY) || (left.GetType() == TP_MAP) || (left.GetType() == TP_BIN) || (left.GetType() == TP_BOOL) || 
 		(right.GetType() == TP_NIL) || (right.GetType() == TP_ARRAY) || (right.GetType() == TP_MAP) || (right.GetType() == TP_BIN) || (right.GetType() == TP_BOOL)) {
-		LogFL(DEBUG) << "operator<(Mvalue): uncomparable types. left = " << ToString(left.GetType()) << ", right = " << ToString(right.GetType()) << "\n";
+		LogFL(DEBUG) << "operator<(Mvalue): uncomparable types. left = " << Convert::ToString(left.GetType()) << ", right = " << Convert::ToString(right.GetType()) << "\n";
 		throw MakeDbgStr("operator<(Mvalue): uncomparable types");
 	}
 	switch (left.GetType()) {

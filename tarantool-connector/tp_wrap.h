@@ -17,6 +17,8 @@ extern "C" {
 #define MSG_HEADER_SIZE 5
 #define TP_p std::shared_ptr<TP>
 
+class TPResponse;
+
 //~~~~~~~~~~~~~~~~~~~~~~~~ T P ~~~~~~~~~~~~~~~~~~~~~~~~
 
 class TP {
@@ -73,6 +75,7 @@ public:
 	void AddBool(bool val);
 	void AddFloat(float num);
 	void AddDouble(double num);
+	void AddMValue(const MValue &val);
 
 	void AddValue(uint64_t num) { this->AddUint(num); }
 	void AddValue(int64_t num) { this->AddInt(num); }
@@ -102,6 +105,8 @@ private:
 	int connect_state;
 public:
 	Session();
+	Session(int port);
+	Session(int port, const std::string &address);
 
 	int Connect();
 	int GetConnectState() const;
@@ -112,6 +117,8 @@ public:
 
 	ssize_t Send(DataStructure &data);
 	ssize_t Send(TP &data);
+	TPResponse SendRequest(TP_p &request);
+
 	ssize_t Receive(DataStructure &data, int from = 0, int strict = 1);
 
 	int SessionSet(enum tbsesopt o, ...);

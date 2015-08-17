@@ -7,6 +7,19 @@ Session::Session()  : connect_state(-1)
 	tb_sesinit(&base_ses);
 }
 
+Session::Session(int port)
+{
+	tb_sesinit(&base_ses);
+	tb_sesset(&base_ses, TB_PORT, port);
+}
+
+Session::Session(int port, const std::string &address)
+{
+	tb_sesinit(&base_ses);
+	tb_sesset(&base_ses, TB_PORT, port);
+	tb_sesset(&base_ses, TB_HOST, address.c_str());
+}
+
 int Session::Connect()
 {
 	connect_state = tb_sesconnect(&base_ses);
@@ -42,6 +55,39 @@ ssize_t Session::Send(TP &data)
 {
 	if (!data.IsValid()) return 0;
 	return tb_sessend(&base_ses, data.GetBuf(), data.Used());
+}
+
+TPResponse Session::SendRequest(TP_p &request)
+{
+	int ss = this->Send(*request);
+	if (ss < 0) {
+		LogFL(DEBUG) << "Session::SendRequest(): error while sending request was occured, return = " << ss << "\n";
+		return TPResponse();
+	}
+	ss = this->Sync();
+	if (ss < 0) {
+		LogFL(DEBUG) << "Session::SendRequest(): error while syncing sesson was occured, return = " << ss << "\n";
+		return TPResponse();
+	}
+
+	DataStructure response_buffer(MSG_HEADER_SIZE);
+	int len = this->Receive(response_buffer);
+	if (len < MSG_HEADER_SIZE) {
+		LogFL(DEBUG) << "Session::SendRequest(): length of receive less than header size = " << len << "\n";
+		return TPResponse();
+	}
+	if (mp_typeof(*response_buffer.Data()) != MP_UINT) {
+		LogFL(DEBUG) << "Session::SendRequest(): bad reply length type = " << ((int)(mp_typeof(*response_buffer.Data()))) << "\n";
+		return TPResponse();
+	}
+	int body = tp_get_uint(response_buffer.Data());
+	response_buffer.Resize(MSG_HEADER_SIZE + body);
+	len = this->Receive(response_buffer, MSG_HEADER_SIZE);
+	if (len < body) {
+		LogFL(DEBUG) << "Session::SendRequest(): receiving body failed, len = " << len << "\n";
+		return TPResponse();
+	}
+	return TPResponse(response_buffer);
 }
 
 ssize_t Session::Receive(DataStructure &data, int from, int strict)
@@ -94,15 +140,28 @@ Session::~Session()
 
 //~~~~~~~~~~~~~~~~~~~~~~~~ T P ~~~~~~~~~~~~~~~~~~~~~~~~
 
+char *_reserve_(struct tp *p, size_t req, size_t *size)
+{
+	DataStructure *tmp = reinterpret_cast<DataStructure *>(p->obj);
+	*size = tp_size(p) * 2;
+	while (*size < tp_unused(p) + req) {
+		*size *= 2;
+	}
+
+	tmp->Resize(*size);
+	return tmp->Data();
+}
+
 TP::TP(const DataStructure &buf, tp_reserve reserve, void *obj) : source(buf), is_valid(true)
 {
-	tp_init(&base_tp, source.Data(), source.Size(), reserve, obj);
+	tp_init(&base_tp, source.Data(), source.Size(), _reserve_, (&source));
 }
 
 TP::TP() : is_valid(false) { }
 
 char *TP::GetBuf()
-{	if (!is_valid) return NULL;
+{	
+	if (!is_valid) return NULL;
 	return tp_buf(&base_tp);
 }
 
@@ -147,6 +206,9 @@ void TP::AddSelect(uint32_t space, uint32_t index, uint32_t offset, enum tp_iter
 {
 	if (!is_valid) return;
 	tp_select(&base_tp, space, index, offset, iter, limit);
+	// if (this->Used() > source.Size()) {
+
+	// }
 }
 
 void TP::AddInsert(uint32_t space)
@@ -290,6 +352,62 @@ void TP::AddDouble(double num)
 	tp_encode_double(&base_tp, num);
 }
 
+void TP::AddMValue(const MValue &val)
+{
+	switch(val.GetType()) {
+		case TP_NIL: {
+			this->AddNil();
+			return;
+		}
+		case TP_UINT: {
+			this->AddUint(val.GetUint());
+			return;
+		}
+		case TP_INT: {
+			this->AddInt(val.GetInt());
+			return;
+		}
+		case TP_STR: {
+			this->AddString(val.GetStr());
+			return;
+		}
+		case TP_BIN: {
+			this->AddBinary(val.GetBin());
+			return;
+		}
+		case TP_BOOL: {
+			this->AddBool(val.GetBool());
+			return;
+		}
+		case TP_FLOAT: {
+			this->AddFloat(val.GetFloat());
+			return;
+		}
+		case TP_DOUBLE: {
+			this->AddDouble(val.GetDouble());
+			return;
+		}
+		case TP_ARRAY: {
+			const MValueVector &arr = val.GetArray();
+			this->ReserveArray(arr.size());
+			for (size_t i = 0, size = arr.size(); i < size; ++i) {
+				this->AddMValue(arr[i]);
+			}
+			return;
+		}
+		case TP_MAP: {
+			const MValueMap &tmap = val.GetMap();
+			this->ReserveMap(tmap.size());
+			for (auto it = tmap.begin(); it != tmap.end(); ++it) {
+				this->AddMValue(it->first);
+				this->AddMValue(it->second);
+			}
+			return;
+		}
+		default: return;
+	}
+}
+
 void TP::SetRequestID(uint32_t reqid)
 {
 	if (!is_valid) return;
@@ -375,7 +493,6 @@ void TP::AddCreateIndex(const std::string &space_name, const std::string &index_
 		function << "}, ";
 	}
 	function << "}))";
-	LogFL(DEBUG) << "TP::AddCreateIndex(): function = " << function.str() << "\n";
 	this->AddEval(function.str());
 }
 
@@ -388,7 +505,6 @@ void TP::AddSpaceFormat(const std::string &space_name, const std::vector<std::pa
 		function << "format[" << i + 1 << "] = {name='" << cols[i].first << "', type='" << cols[i].second << "'}\n"; 
 	}
 	function << "return (box.space." << space_name << ":format(format))";
-	LogFL(DEBUG) << "TP::AddSpaceFormat(): function = " << function.str() << "\n";
 	this->AddEval(function.str());
 }
 
@@ -396,7 +512,6 @@ void TP::AddDropSpace(const std::string &name)
 {
 	std::string function;
 	function = "return (box.space." + name + ":drop{})";
-	LogFL(DEBUG) << "TP::AddDropSpace(): function = " << function << "\n";
 	this->AddEval(function);
 }
 
