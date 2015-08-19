@@ -1,0 +1,766 @@
+error: В соединении отказано (errno: 111)
+error: В соединении отказано (errno: 111)
+error: В соединении отказано (errno: 111)
+error: В соединении отказано (errno: 111)
+error: В соединении отказано (errno: 111)
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Found box.lua in /home/gerold103/sql-tarantool/tarantool-connector/test/var
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Starting instance...
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: mkdir /home/gerold103/sql-tarantool/tarantool-connector/test/var/box
+2015-07-29 20:26:50.861 [4791] main/101/tarantoolctl C> version 1.6.5-274-gf84ad58
+2015-07-29 20:26:50.861 [4791] main/101/tarantoolctl C> log level 5
+2015-07-29 20:26:50.861 [4791] main/101/tarantoolctl I> mapping 107374184 bytes for a shared arena...
+2015-07-29 20:26:50.896 [4791] main/101/tarantoolctl I> initializing an empty data directory
+2015-07-29 20:26:50.954 [4794] snap/101/dumper I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-07-29 20:26:50.955 [4794] snap/101/dumper I> saving snapshot `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-07-29 20:26:50.986 [4794] snap/101/dumper I> done
+2015-07-29 20:26:50.988 [4791] main/101/tarantoolctl I> binary: started
+2015-07-29 20:26:50.988 [4791] main/101/tarantoolctl I> binary: bound to 127.0.0.1:6631
+2015-07-29 20:26:50.994 [4791] main/101/tarantoolctl I> ready to accept requests
+2015-07-29 20:26:50.994 [4791] main/101/box I> Run console at /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-07-29 20:26:50.994 [4791] main/103/console/unix/:/home/gerold103 I> started
+2015-07-29 20:26:50.994 [4791] main/104/console/unix/:/home/gerold103 I> started
+2015-07-29 20:26:50.994 [4791] main C> entering the event loop
+2015-07-29 20:26:50.995 [4791] main/105/console/unix/: I> client unix/: connected
+2015-07-29 20:26:50.997 [4791] main/105/console/unix/: I> client unix/: disconnected
+2015-07-29 20:26:51.088 [4791] main C> got signal 15 - Terminated
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Found box.lua in /home/gerold103/sql-tarantool/tarantool-connector/test/var
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Starting instance...
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: mkdir /home/gerold103/sql-tarantool/tarantool-connector/test/var/box
+2015-07-29 20:27:50.150 [4985] main/101/tarantoolctl C> version 1.6.5-274-gf84ad58
+2015-07-29 20:27:50.150 [4985] main/101/tarantoolctl C> log level 5
+2015-07-29 20:27:50.150 [4985] main/101/tarantoolctl I> mapping 107374184 bytes for a shared arena...
+2015-07-29 20:27:50.173 [4985] main/101/tarantoolctl I> initializing an empty data directory
+2015-07-29 20:27:50.224 [4988] snap/101/dumper I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-07-29 20:27:50.224 [4988] snap/101/dumper I> saving snapshot `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-07-29 20:27:50.259 [4988] snap/101/dumper I> done
+2015-07-29 20:27:50.260 [4985] main/101/tarantoolctl I> binary: started
+2015-07-29 20:27:50.261 [4985] main/101/tarantoolctl I> binary: bound to 127.0.0.1:4994
+2015-07-29 20:27:50.262 [4985] main/101/tarantoolctl I> ready to accept requests
+2015-07-29 20:27:50.262 [4985] main/101/box I> Run console at /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-07-29 20:27:50.262 [4985] main/101/box I> tcp_server: remove dead UNIX socket: /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-07-29 20:27:50.262 [4985] main/103/console/unix/:/home/gerold103 I> started
+2015-07-29 20:27:50.263 [4985] main/104/console/unix/:/home/gerold103 I> started
+2015-07-29 20:27:50.263 [4985] main C> entering the event loop
+2015-07-29 20:27:50.263 [4985] main/105/console/unix/: I> client unix/: connected
+2015-07-29 20:27:50.265 [4985] main/105/console/unix/: I> client unix/: disconnected
+2015-07-29 20:27:50.496 [4985] main C> got signal 15 - Terminated
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Found box.lua in /home/gerold103/sql-tarantool/tarantool-connector/test/var
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Starting instance...
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: mkdir /home/gerold103/sql-tarantool/tarantool-connector/test/var/box
+2015-07-29 20:28:11.677 [5024] main/101/tarantoolctl C> version 1.6.5-274-gf84ad58
+2015-07-29 20:28:11.677 [5024] main/101/tarantoolctl C> log level 5
+2015-07-29 20:28:11.677 [5024] main/101/tarantoolctl I> mapping 107374184 bytes for a shared arena...
+2015-07-29 20:28:11.702 [5024] main/101/tarantoolctl I> initializing an empty data directory
+2015-07-29 20:28:11.750 [5027] snap/101/dumper I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-07-29 20:28:11.750 [5027] snap/101/dumper I> saving snapshot `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-07-29 20:28:11.767 [5027] snap/101/dumper I> done
+2015-07-29 20:28:11.768 [5024] main/101/tarantoolctl I> binary: started
+2015-07-29 20:28:11.768 [5024] main/101/tarantoolctl I> binary: bound to 127.0.0.1:8753
+2015-07-29 20:28:11.770 [5024] main/101/tarantoolctl I> ready to accept requests
+2015-07-29 20:28:11.770 [5024] main/101/box I> Run console at /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-07-29 20:28:11.771 [5024] main/101/box I> tcp_server: remove dead UNIX socket: /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-07-29 20:28:11.771 [5024] main/103/console/unix/:/home/gerold103 I> started
+2015-07-29 20:28:11.771 [5024] main/104/console/unix/:/home/gerold103 I> started
+2015-07-29 20:28:11.771 [5024] main C> entering the event loop
+2015-07-29 20:28:11.772 [5024] main/105/console/unix/: I> client unix/: connected
+2015-07-29 20:28:11.774 [5024] main/105/console/unix/: I> client unix/: disconnected
+2015-07-29 20:28:11.956 [5024] main C> got signal 15 - Terminated
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Found box.lua in /home/gerold103/sql-tarantool/tarantool-connector/test/var
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Starting instance...
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: mkdir /home/gerold103/sql-tarantool/tarantool-connector/test/var/box
+2015-07-29 20:29:13.690 [5179] main/101/tarantoolctl C> version 1.6.5-274-gf84ad58
+2015-07-29 20:29:13.690 [5179] main/101/tarantoolctl C> log level 5
+2015-07-29 20:29:13.690 [5179] main/101/tarantoolctl I> mapping 107374184 bytes for a shared arena...
+2015-07-29 20:29:13.722 [5179] main/101/tarantoolctl I> initializing an empty data directory
+2015-07-29 20:29:13.778 [5182] snap/101/dumper I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-07-29 20:29:13.778 [5182] snap/101/dumper I> saving snapshot `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-07-29 20:29:13.799 [5182] snap/101/dumper I> done
+2015-07-29 20:29:13.800 [5179] main/101/tarantoolctl I> binary: started
+2015-07-29 20:29:13.800 [5179] main/101/tarantoolctl I> binary: bound to 127.0.0.1:6663
+2015-07-29 20:29:13.801 [5179] main/101/tarantoolctl I> ready to accept requests
+2015-07-29 20:29:13.801 [5179] main/101/box I> Run console at /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-07-29 20:29:13.801 [5179] main/101/box I> tcp_server: remove dead UNIX socket: /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-07-29 20:29:13.801 [5179] main/103/console/unix/:/home/gerold103 I> started
+2015-07-29 20:29:13.802 [5179] main/104/console/unix/:/home/gerold103 I> started
+2015-07-29 20:29:13.802 [5179] main C> entering the event loop
+2015-07-29 20:29:13.804 [5179] main/105/console/unix/: I> client unix/: connected
+2015-07-29 20:29:13.806 [5179] main/105/console/unix/: I> client unix/: disconnected
+2015-07-29 20:29:14.010 [5179] main C> got signal 15 - Terminated
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Found box.lua in /home/gerold103/sql-tarantool/tarantool-connector/test/var
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Starting instance...
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: mkdir /home/gerold103/sql-tarantool/tarantool-connector/test/var/box
+2015-07-29 20:34:02.076 [5245] main/101/tarantoolctl C> version 1.6.5-274-gf84ad58
+2015-07-29 20:34:02.076 [5245] main/101/tarantoolctl C> log level 5
+2015-07-29 20:34:02.076 [5245] main/101/tarantoolctl I> mapping 107374184 bytes for a shared arena...
+2015-07-29 20:34:02.105 [5245] main/101/tarantoolctl I> initializing an empty data directory
+2015-07-29 20:34:02.172 [5248] snap/101/dumper I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-07-29 20:34:02.172 [5248] snap/101/dumper I> saving snapshot `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-07-29 20:34:02.189 [5248] snap/101/dumper I> done
+2015-07-29 20:34:02.190 [5245] main/101/tarantoolctl I> binary: started
+2015-07-29 20:34:02.191 [5245] main/101/tarantoolctl I> binary: bound to 127.0.0.1:4512
+2015-07-29 20:34:02.197 [5245] main/101/tarantoolctl I> ready to accept requests
+2015-07-29 20:34:02.197 [5245] main/101/box I> Run console at /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-07-29 20:34:02.198 [5245] main/101/box I> tcp_server: remove dead UNIX socket: /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-07-29 20:34:02.198 [5245] main/103/console/unix/:/home/gerold103 I> started
+2015-07-29 20:34:02.198 [5245] main/104/console/unix/:/home/gerold103 I> started
+2015-07-29 20:34:02.198 [5245] main C> entering the event loop
+2015-07-29 20:34:02.199 [5245] main/105/console/unix/: I> client unix/: connected
+2015-07-29 20:34:02.201 [5245] main/105/console/unix/: I> client unix/: disconnected
+2015-07-29 20:34:02.415 [5245] main C> got signal 15 - Terminated
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Found box.lua in /home/gerold103/sql-tarantool/tarantool-connector/test/var
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Starting instance...
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: mkdir /home/gerold103/sql-tarantool/tarantool-connector/test/var/box
+2015-07-29 21:00:31.995 [5335] main/101/tarantoolctl C> version 1.6.5-274-gf84ad58
+2015-07-29 21:00:31.995 [5335] main/101/tarantoolctl C> log level 5
+2015-07-29 21:00:31.995 [5335] main/101/tarantoolctl I> mapping 107374184 bytes for a shared arena...
+2015-07-29 21:00:32.005 [5335] main/101/tarantoolctl I> initializing an empty data directory
+2015-07-29 21:00:32.072 [5338] snap/101/dumper I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-07-29 21:00:32.072 [5338] snap/101/dumper I> saving snapshot `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-07-29 21:00:32.076 [5338] snap/101/dumper I> done
+2015-07-29 21:00:32.077 [5335] main/101/tarantoolctl I> binary: started
+2015-07-29 21:00:32.077 [5335] main/101/tarantoolctl I> binary: bound to 127.0.0.1:6221
+2015-07-29 21:00:32.083 [5335] main/101/tarantoolctl I> ready to accept requests
+2015-07-29 21:00:32.083 [5335] main/101/box I> Run console at /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-07-29 21:00:32.084 [5335] main/101/box I> tcp_server: remove dead UNIX socket: /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-07-29 21:00:32.084 [5335] main/103/console/unix/:/home/gerold103 I> started
+2015-07-29 21:00:32.084 [5335] main/104/console/unix/:/home/gerold103 I> started
+2015-07-29 21:00:32.084 [5335] main C> entering the event loop
+2015-07-29 21:00:32.085 [5335] main/105/console/unix/: I> client unix/: connected
+2015-07-29 21:00:32.089 [5335] main/105/console/unix/: I> client unix/: disconnected
+2015-07-29 21:00:32.281 [5335] main C> got signal 15 - Terminated
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Found box.lua in /home/gerold103/sql-tarantool/tarantool-connector/test/var
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Starting instance...
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: mkdir /home/gerold103/sql-tarantool/tarantool-connector/test/var/box
+2015-07-29 21:01:28.048 [5575] main/101/tarantoolctl C> version 1.6.5-274-gf84ad58
+2015-07-29 21:01:28.048 [5575] main/101/tarantoolctl C> log level 5
+2015-07-29 21:01:28.048 [5575] main/101/tarantoolctl I> mapping 107374184 bytes for a shared arena...
+2015-07-29 21:01:28.052 [5575] main/101/tarantoolctl I> initializing an empty data directory
+2015-07-29 21:01:28.122 [5578] snap/101/dumper I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-07-29 21:01:28.123 [5578] snap/101/dumper I> saving snapshot `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-07-29 21:01:28.137 [5578] snap/101/dumper I> done
+2015-07-29 21:01:28.138 [5575] main/101/tarantoolctl I> binary: started
+2015-07-29 21:01:28.138 [5575] main/101/tarantoolctl I> binary: bound to 127.0.0.1:8270
+2015-07-29 21:01:28.139 [5575] main/101/tarantoolctl I> ready to accept requests
+2015-07-29 21:01:28.139 [5575] main/101/box I> Run console at /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-07-29 21:01:28.140 [5575] main/101/box I> tcp_server: remove dead UNIX socket: /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-07-29 21:01:28.140 [5575] main/103/console/unix/:/home/gerold103 I> started
+2015-07-29 21:01:28.140 [5575] main/104/console/unix/:/home/gerold103 I> started
+2015-07-29 21:01:28.140 [5575] main C> entering the event loop
+2015-07-29 21:01:28.142 [5575] main/105/console/unix/: I> client unix/: connected
+2015-07-29 21:01:28.149 [5575] main/105/console/unix/: I> client unix/: disconnected
+2015-07-29 21:01:28.415 [5575] main C> got signal 15 - Terminated
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Found box.lua in /home/gerold103/sql-tarantool/tarantool-connector/test/var
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Starting instance...
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: mkdir /home/gerold103/sql-tarantool/tarantool-connector/test/var/box
+2015-07-29 21:01:43.874 [5638] main/101/tarantoolctl C> version 1.6.5-274-gf84ad58
+2015-07-29 21:01:43.875 [5638] main/101/tarantoolctl C> log level 5
+2015-07-29 21:01:43.876 [5638] main/101/tarantoolctl I> mapping 107374184 bytes for a shared arena...
+2015-07-29 21:01:43.883 [5638] main/101/tarantoolctl I> initializing an empty data directory
+2015-07-29 21:01:43.909 [5641] snap/101/dumper I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-07-29 21:01:43.909 [5641] snap/101/dumper I> saving snapshot `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-07-29 21:01:43.917 [5641] snap/101/dumper I> done
+2015-07-29 21:01:43.921 [5638] main/101/tarantoolctl I> binary: started
+2015-07-29 21:01:43.921 [5638] main/101/tarantoolctl I> binary: bound to 127.0.0.1:8816
+2015-07-29 21:01:43.925 [5638] main/101/tarantoolctl I> ready to accept requests
+2015-07-29 21:01:43.925 [5638] main/101/box I> Run console at /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-07-29 21:01:43.926 [5638] main/101/box I> tcp_server: remove dead UNIX socket: /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-07-29 21:01:43.926 [5638] main/103/console/unix/:/home/gerold103 I> started
+2015-07-29 21:01:43.926 [5638] main/104/console/unix/:/home/gerold103 I> started
+2015-07-29 21:01:43.926 [5638] main C> entering the event loop
+2015-07-29 21:01:43.928 [5638] main/105/console/unix/: I> client unix/: connected
+2015-07-29 21:01:43.930 [5638] main/105/console/unix/: I> client unix/: disconnected
+2015-07-29 21:01:43.969 [5638] main C> got signal 15 - Terminated
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Found box.lua in /home/gerold103/sql-tarantool/tarantool-connector/test/var
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Starting instance...
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: mkdir /home/gerold103/sql-tarantool/tarantool-connector/test/var/box
+2015-07-29 21:03:39.020 [5727] main/101/tarantoolctl C> version 1.6.5-274-gf84ad58
+2015-07-29 21:03:39.020 [5727] main/101/tarantoolctl C> log level 5
+2015-07-29 21:03:39.021 [5727] main/101/tarantoolctl I> mapping 107374184 bytes for a shared arena...
+2015-07-29 21:03:39.042 [5727] main/101/tarantoolctl I> initializing an empty data directory
+2015-07-29 21:03:39.088 [5730] snap/101/dumper I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-07-29 21:03:39.088 [5730] snap/101/dumper I> saving snapshot `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-07-29 21:03:39.098 [5730] snap/101/dumper I> done
+2015-07-29 21:03:39.099 [5727] main/101/tarantoolctl I> binary: started
+2015-07-29 21:03:39.099 [5727] main/101/tarantoolctl I> binary: bound to 127.0.0.1:7541
+2015-07-29 21:03:39.100 [5727] main/101/tarantoolctl I> ready to accept requests
+2015-07-29 21:03:39.100 [5727] main/101/box I> Run console at /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-07-29 21:03:39.100 [5727] main/101/box I> tcp_server: remove dead UNIX socket: /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-07-29 21:03:39.100 [5727] main/103/console/unix/:/home/gerold103 I> started
+2015-07-29 21:03:39.100 [5727] main/104/console/unix/:/home/gerold103 I> started
+2015-07-29 21:03:39.100 [5727] main C> entering the event loop
+2015-07-29 21:03:39.101 [5727] main/105/console/unix/: I> client unix/: connected
+2015-07-29 21:03:39.107 [5727] main/105/console/unix/: I> client unix/: disconnected
+2015-07-29 21:03:39.121 [5727] main C> got signal 15 - Terminated
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Found box.lua in /home/gerold103/sql-tarantool/tarantool-connector/test/var
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Starting instance...
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: mkdir /home/gerold103/sql-tarantool/tarantool-connector/test/var/box
+2015-07-29 21:03:52.250 [5788] main/101/tarantoolctl C> version 1.6.5-274-gf84ad58
+2015-07-29 21:03:52.250 [5788] main/101/tarantoolctl C> log level 5
+2015-07-29 21:03:52.250 [5788] main/101/tarantoolctl I> mapping 107374184 bytes for a shared arena...
+2015-07-29 21:03:52.279 [5788] main/101/tarantoolctl I> initializing an empty data directory
+2015-07-29 21:03:52.329 [5791] snap/101/dumper I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-07-29 21:03:52.329 [5791] snap/101/dumper I> saving snapshot `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-07-29 21:03:52.346 [5791] snap/101/dumper I> done
+2015-07-29 21:03:52.347 [5788] main/101/tarantoolctl I> binary: started
+2015-07-29 21:03:52.348 [5788] main/101/tarantoolctl I> binary: bound to 127.0.0.1:4082
+2015-07-29 21:03:52.353 [5788] main/101/tarantoolctl I> ready to accept requests
+2015-07-29 21:03:52.353 [5788] main/101/box I> Run console at /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-07-29 21:03:52.353 [5788] main/101/box I> tcp_server: remove dead UNIX socket: /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-07-29 21:03:52.354 [5788] main/103/console/unix/:/home/gerold103 I> started
+2015-07-29 21:03:52.354 [5788] main/104/console/unix/:/home/gerold103 I> started
+2015-07-29 21:03:52.354 [5788] main C> entering the event loop
+2015-07-29 21:03:52.356 [5788] main/105/console/unix/: I> client unix/: connected
+2015-07-29 21:03:52.358 [5788] main/105/console/unix/: I> client unix/: disconnected
+2015-07-29 21:04:19.580 [5788] main C> got signal 15 - Terminated
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Found box.lua in /home/gerold103/sql-tarantool/tarantool-connector/test/var
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Starting instance...
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: mkdir /home/gerold103/sql-tarantool/tarantool-connector/test/var/box
+2015-07-29 21:06:09.021 [5978] main/101/tarantoolctl C> version 1.6.5-274-gf84ad58
+2015-07-29 21:06:09.021 [5978] main/101/tarantoolctl C> log level 5
+2015-07-29 21:06:09.022 [5978] main/101/tarantoolctl I> mapping 107374184 bytes for a shared arena...
+2015-07-29 21:06:09.064 [5978] main/101/tarantoolctl I> initializing an empty data directory
+2015-07-29 21:06:09.121 [5981] snap/101/dumper I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-07-29 21:06:09.121 [5981] snap/101/dumper I> saving snapshot `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-07-29 21:06:09.136 [5981] snap/101/dumper I> done
+2015-07-29 21:06:09.138 [5978] main/101/tarantoolctl I> binary: started
+2015-07-29 21:06:09.138 [5978] main/101/tarantoolctl I> binary: bound to 127.0.0.1:4835
+2015-07-29 21:06:09.140 [5978] main/101/tarantoolctl I> ready to accept requests
+2015-07-29 21:06:09.140 [5978] main/101/box I> Run console at /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-07-29 21:06:09.140 [5978] main/101/box I> tcp_server: remove dead UNIX socket: /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-07-29 21:06:09.141 [5978] main/103/console/unix/:/home/gerold103 I> started
+2015-07-29 21:06:09.141 [5978] main/104/console/unix/:/home/gerold103 I> started
+2015-07-29 21:06:09.141 [5978] wal I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.xlog.inprogress'
+2015-07-29 21:06:09.145 [5978] main C> entering the event loop
+2015-07-29 21:06:09.147 [5978] main/105/console/unix/: I> client unix/: connected
+2015-07-29 21:06:09.152 [5978] main/105/console/unix/: I> client unix/: disconnected
+2015-07-29 21:06:13.241 [5978] main C> got signal 15 - Terminated
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Found box.lua in /home/gerold103/sql-tarantool/tarantool-connector/test/var
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Starting instance...
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: mkdir /home/gerold103/sql-tarantool/tarantool-connector/test/var/box
+2015-07-29 21:08:13.969 [6236] main/101/tarantoolctl C> version 1.6.5-274-gf84ad58
+2015-07-29 21:08:13.970 [6236] main/101/tarantoolctl C> log level 5
+2015-07-29 21:08:13.970 [6236] main/101/tarantoolctl I> mapping 107374184 bytes for a shared arena...
+2015-07-29 21:08:13.975 [6236] main/101/tarantoolctl I> initializing an empty data directory
+2015-07-29 21:08:14.008 [6239] snap/101/dumper I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-07-29 21:08:14.009 [6239] snap/101/dumper I> saving snapshot `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-07-29 21:08:14.025 [6239] snap/101/dumper I> done
+2015-07-29 21:08:14.026 [6236] main/101/tarantoolctl I> binary: started
+2015-07-29 21:08:14.026 [6236] main/101/tarantoolctl I> binary: bound to 127.0.0.1:4750
+2015-07-29 21:08:14.030 [6236] main/101/tarantoolctl I> ready to accept requests
+2015-07-29 21:08:14.031 [6236] main/101/box I> Run console at /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-07-29 21:08:14.031 [6236] main/101/box I> tcp_server: remove dead UNIX socket: /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-07-29 21:08:14.032 [6236] main/103/console/unix/:/home/gerold103 I> started
+2015-07-29 21:08:14.032 [6236] main/104/console/unix/:/home/gerold103 I> started
+2015-07-29 21:08:14.032 [6236] wal I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.xlog.inprogress'
+2015-07-29 21:08:14.034 [6236] main C> entering the event loop
+2015-07-29 21:08:14.035 [6236] main/105/console/unix/: I> client unix/: connected
+2015-07-29 21:08:14.045 [6236] main/105/console/unix/: I> client unix/: disconnected
+2015-07-29 21:08:14.067 [6236] main C> got signal 15 - Terminated
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Found box.lua in /home/gerold103/sql-tarantool/tarantool-connector/test/var
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Starting instance...
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: mkdir /home/gerold103/sql-tarantool/tarantool-connector/test/var/box
+2015-07-29 21:08:27.399 [6293] main/101/tarantoolctl C> version 1.6.5-274-gf84ad58
+2015-07-29 21:08:27.399 [6293] main/101/tarantoolctl C> log level 5
+2015-07-29 21:08:27.399 [6293] main/101/tarantoolctl I> mapping 107374184 bytes for a shared arena...
+2015-07-29 21:08:27.400 [6293] main/101/tarantoolctl I> initializing an empty data directory
+2015-07-29 21:08:27.443 [6299] snap/101/dumper I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-07-29 21:08:27.443 [6299] snap/101/dumper I> saving snapshot `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-07-29 21:08:27.451 [6299] snap/101/dumper I> done
+2015-07-29 21:08:27.454 [6293] main/101/tarantoolctl I> binary: started
+2015-07-29 21:08:27.454 [6293] main/101/tarantoolctl I> binary: bound to 127.0.0.1:3695
+2015-07-29 21:08:27.461 [6293] main/101/tarantoolctl I> ready to accept requests
+2015-07-29 21:08:27.462 [6293] main/101/box I> Run console at /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-07-29 21:08:27.463 [6293] main/101/box I> tcp_server: remove dead UNIX socket: /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-07-29 21:08:27.463 [6293] main/103/console/unix/:/home/gerold103 I> started
+2015-07-29 21:08:27.463 [6293] main/104/console/unix/:/home/gerold103 I> started
+2015-07-29 21:08:27.463 [6293] wal I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.xlog.inprogress'
+2015-07-29 21:08:27.471 [6293] main C> entering the event loop
+2015-07-29 21:08:27.471 [6293] main/105/console/unix/: I> client unix/: connected
+2015-07-29 21:08:27.473 [6293] main/105/console/unix/: I> client unix/: disconnected
+2015-07-29 21:08:27.500 [6293] main C> got signal 15 - Terminated
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Found box.lua in /home/gerold103/sql-tarantool/tarantool-connector/test/var
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Starting instance...
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: mkdir /home/gerold103/sql-tarantool/tarantool-connector/test/var/box
+2015-07-29 21:15:25.558 [6527] main/101/tarantoolctl C> version 1.6.5-274-gf84ad58
+2015-07-29 21:15:25.558 [6527] main/101/tarantoolctl C> log level 5
+2015-07-29 21:15:25.558 [6527] main/101/tarantoolctl I> mapping 107374184 bytes for a shared arena...
+2015-07-29 21:15:25.591 [6527] main/101/tarantoolctl I> initializing an empty data directory
+2015-07-29 21:15:25.653 [6530] snap/101/dumper I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-07-29 21:15:25.654 [6530] snap/101/dumper I> saving snapshot `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-07-29 21:15:25.664 [6530] snap/101/dumper I> done
+2015-07-29 21:15:25.665 [6527] main/101/tarantoolctl I> binary: started
+2015-07-29 21:15:25.666 [6527] main/101/tarantoolctl I> binary: bound to 127.0.0.1:4329
+2015-07-29 21:15:25.667 [6527] main/101/tarantoolctl I> ready to accept requests
+2015-07-29 21:15:25.667 [6527] main/101/box I> Run console at /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-07-29 21:15:25.667 [6527] main/101/box I> tcp_server: remove dead UNIX socket: /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-07-29 21:15:25.668 [6527] main/103/console/unix/:/home/gerold103 I> started
+2015-07-29 21:15:25.668 [6527] main/104/console/unix/:/home/gerold103 I> started
+2015-07-29 21:15:25.668 [6527] wal I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.xlog.inprogress'
+2015-07-29 21:15:25.672 [6527] main C> entering the event loop
+2015-07-29 21:15:25.673 [6527] main/105/console/unix/: I> client unix/: connected
+2015-07-29 21:15:25.674 [6527] main/105/console/unix/: I> client unix/: disconnected
+2015-07-29 21:15:25.686 [6527] main C> got signal 15 - Terminated
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Found box.lua in /home/gerold103/sql-tarantool/tarantool-connector/test/var
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Starting instance...
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: mkdir /home/gerold103/sql-tarantool/tarantool-connector/test/var/box
+2015-07-29 21:15:39.540 [6597] main/101/tarantoolctl C> version 1.6.5-274-gf84ad58
+2015-07-29 21:15:39.540 [6597] main/101/tarantoolctl C> log level 5
+2015-07-29 21:15:39.541 [6597] main/101/tarantoolctl I> mapping 107374184 bytes for a shared arena...
+2015-07-29 21:15:39.547 [6597] main/101/tarantoolctl I> initializing an empty data directory
+2015-07-29 21:15:39.557 [6600] snap/101/dumper I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-07-29 21:15:39.557 [6600] snap/101/dumper I> saving snapshot `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-07-29 21:15:39.580 [6600] snap/101/dumper I> done
+2015-07-29 21:15:39.580 [6597] main/101/tarantoolctl I> binary: started
+2015-07-29 21:15:39.581 [6597] main/101/tarantoolctl I> binary: bound to 127.0.0.1:6008
+2015-07-29 21:15:39.582 [6597] main/101/tarantoolctl I> ready to accept requests
+2015-07-29 21:15:39.582 [6597] main/101/box I> Run console at /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-07-29 21:15:39.583 [6597] main/101/box I> tcp_server: remove dead UNIX socket: /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-07-29 21:15:39.583 [6597] main/103/console/unix/:/home/gerold103 I> started
+2015-07-29 21:15:39.583 [6597] main/104/console/unix/:/home/gerold103 I> started
+2015-07-29 21:15:39.583 [6597] wal I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.xlog.inprogress'
+2015-07-29 21:15:39.586 [6597] main C> entering the event loop
+2015-07-29 21:15:39.588 [6597] main/105/console/unix/: I> client unix/: connected
+2015-07-29 21:15:39.596 [6597] main/105/console/unix/: I> client unix/: disconnected
+2015-07-29 21:15:39.628 [6597] main C> got signal 15 - Terminated
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Found box.lua in /home/gerold103/sql-tarantool/tarantool-connector/test/var
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Starting instance...
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: mkdir /home/gerold103/sql-tarantool/tarantool-connector/test/var/box
+2015-07-29 21:15:52.664 [6651] main/101/tarantoolctl C> version 1.6.5-274-gf84ad58
+2015-07-29 21:15:52.665 [6651] main/101/tarantoolctl C> log level 5
+2015-07-29 21:15:52.665 [6651] main/101/tarantoolctl I> mapping 107374184 bytes for a shared arena...
+2015-07-29 21:15:52.684 [6651] main/101/tarantoolctl I> initializing an empty data directory
+2015-07-29 21:15:52.757 [6654] snap/101/dumper I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-07-29 21:15:52.758 [6654] snap/101/dumper I> saving snapshot `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-07-29 21:15:52.765 [6654] snap/101/dumper I> done
+2015-07-29 21:15:52.766 [6651] main/101/tarantoolctl I> binary: started
+2015-07-29 21:15:52.766 [6651] main/101/tarantoolctl I> binary: bound to 127.0.0.1:7096
+2015-07-29 21:15:52.772 [6651] main/101/tarantoolctl I> ready to accept requests
+2015-07-29 21:15:52.772 [6651] main/101/box I> Run console at /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-07-29 21:15:52.772 [6651] main/101/box I> tcp_server: remove dead UNIX socket: /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-07-29 21:15:52.772 [6651] main/103/console/unix/:/home/gerold103 I> started
+2015-07-29 21:15:52.772 [6651] main/104/console/unix/:/home/gerold103 I> started
+2015-07-29 21:15:52.773 [6651] wal I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.xlog.inprogress'
+2015-07-29 21:15:52.777 [6651] main C> entering the event loop
+2015-07-29 21:15:52.785 [6651] main/105/console/unix/: I> client unix/: connected
+2015-07-29 21:15:52.787 [6651] main/105/console/unix/: I> client unix/: disconnected
+2015-07-29 21:15:55.181 [6651] main C> got signal 2 - Interrupt
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Found box.lua in /home/gerold103/sql-tarantool/tarantool-connector/test/var
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Starting instance...
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: mkdir /home/gerold103/sql-tarantool/tarantool-connector/test/var/box
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: updating a stale pid file
+2015-07-29 21:16:33.452 [6874] main/101/tarantoolctl C> version 1.6.5-274-gf84ad58
+2015-07-29 21:16:33.452 [6874] main/101/tarantoolctl C> log level 5
+2015-07-29 21:16:33.452 [6874] main/101/tarantoolctl I> mapping 107374184 bytes for a shared arena...
+2015-07-29 21:16:33.459 [6874] main/101/tarantoolctl I> initializing an empty data directory
+2015-07-29 21:16:33.492 [6877] snap/101/dumper I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-07-29 21:16:33.492 [6877] snap/101/dumper I> saving snapshot `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-07-29 21:16:33.509 [6877] snap/101/dumper I> done
+2015-07-29 21:16:33.515 [6874] main/101/tarantoolctl I> binary: started
+2015-07-29 21:16:33.519 [6874] main/101/tarantoolctl I> binary: bound to 127.0.0.1:5181
+2015-07-29 21:16:33.527 [6874] main/101/tarantoolctl I> ready to accept requests
+2015-07-29 21:16:33.527 [6874] main/101/box I> Run console at /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-07-29 21:16:33.528 [6874] main/101/box I> tcp_server: remove dead UNIX socket: /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-07-29 21:16:33.528 [6874] main/103/console/unix/:/home/gerold103 I> started
+2015-07-29 21:16:33.528 [6874] main/104/console/unix/:/home/gerold103 I> started
+2015-07-29 21:16:33.528 [6874] wal I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.xlog.inprogress'
+2015-07-29 21:16:33.531 [6874] main C> entering the event loop
+2015-07-29 21:16:33.532 [6874] main/105/console/unix/: I> client unix/: connected
+2015-07-29 21:16:33.535 [6874] main/105/console/unix/: I> client unix/: disconnected
+2015-07-29 21:16:33.732 [6874] main C> got signal 15 - Terminated
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Found box.lua in /home/gerold103/sql-tarantool/tarantool-connector/test/var
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Starting instance...
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: mkdir /home/gerold103/sql-tarantool/tarantool-connector/test/var/box
+2015-07-29 21:17:53.914 [6936] main/101/tarantoolctl C> version 1.6.5-274-gf84ad58
+2015-07-29 21:17:53.914 [6936] main/101/tarantoolctl C> log level 5
+2015-07-29 21:17:53.915 [6936] main/101/tarantoolctl I> mapping 107374184 bytes for a shared arena...
+2015-07-29 21:17:53.939 [6936] main/101/tarantoolctl I> initializing an empty data directory
+2015-07-29 21:17:53.996 [6939] snap/101/dumper I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-07-29 21:17:53.996 [6939] snap/101/dumper I> saving snapshot `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-07-29 21:17:54.010 [6939] snap/101/dumper I> done
+2015-07-29 21:17:54.011 [6936] main/101/tarantoolctl I> binary: started
+2015-07-29 21:17:54.011 [6936] main/101/tarantoolctl I> binary: bound to 127.0.0.1:7883
+2015-07-29 21:17:54.014 [6936] main/101/tarantoolctl I> ready to accept requests
+2015-07-29 21:17:54.014 [6936] main/101/box I> Run console at /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-07-29 21:17:54.015 [6936] main/101/box I> tcp_server: remove dead UNIX socket: /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-07-29 21:17:54.015 [6936] main/103/console/unix/:/home/gerold103 I> started
+2015-07-29 21:17:54.015 [6936] main/104/console/unix/:/home/gerold103 I> started
+2015-07-29 21:17:54.016 [6936] wal I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.xlog.inprogress'
+2015-07-29 21:17:54.019 [6936] main C> entering the event loop
+2015-07-29 21:17:54.020 [6936] main/105/console/unix/: I> client unix/: connected
+2015-07-29 21:17:54.021 [6936] main/105/console/unix/: I> client unix/: disconnected
+2015-07-29 21:17:54.244 [6936] main C> got signal 15 - Terminated
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Found box.lua in /home/gerold103/sql-tarantool/tarantool-connector/test/var
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Starting instance...
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: mkdir /home/gerold103/sql-tarantool/tarantool-connector/test/var/box
+2015-07-29 21:17:56.578 [6971] main/101/tarantoolctl C> version 1.6.5-274-gf84ad58
+2015-07-29 21:17:56.578 [6971] main/101/tarantoolctl C> log level 5
+2015-07-29 21:17:56.578 [6971] main/101/tarantoolctl I> mapping 107374184 bytes for a shared arena...
+2015-07-29 21:17:56.604 [6971] main/101/tarantoolctl I> initializing an empty data directory
+2015-07-29 21:17:56.665 [6974] snap/101/dumper I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-07-29 21:17:56.665 [6974] snap/101/dumper I> saving snapshot `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-07-29 21:17:56.673 [6974] snap/101/dumper I> done
+2015-07-29 21:17:56.674 [6971] main/101/tarantoolctl I> binary: started
+2015-07-29 21:17:56.675 [6971] main/101/tarantoolctl I> binary: bound to 127.0.0.1:8263
+2015-07-29 21:17:56.691 [6971] main/101/tarantoolctl I> ready to accept requests
+2015-07-29 21:17:56.691 [6971] main/101/box I> Run console at /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-07-29 21:17:56.692 [6971] main/101/box I> tcp_server: remove dead UNIX socket: /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-07-29 21:17:56.692 [6971] main/103/console/unix/:/home/gerold103 I> started
+2015-07-29 21:17:56.692 [6971] main/104/console/unix/:/home/gerold103 I> started
+2015-07-29 21:17:56.692 [6971] wal I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.xlog.inprogress'
+2015-07-29 21:17:56.695 [6971] main C> entering the event loop
+2015-07-29 21:17:56.696 [6971] main/105/console/unix/: I> client unix/: connected
+2015-07-29 21:17:56.699 [6971] main/105/console/unix/: I> client unix/: disconnected
+2015-07-29 21:17:56.910 [6971] main C> got signal 15 - Terminated
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Found box.lua in /home/gerold103/sql-tarantool/tarantool-connector/test/var
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Starting instance...
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: mkdir /home/gerold103/sql-tarantool/tarantool-connector/test/var/box
+2015-08-11 19:00:14.192 [4252] main/101/tarantoolctl C> version 1.6.5-274-gf84ad58
+2015-08-11 19:00:14.192 [4252] main/101/tarantoolctl C> log level 5
+2015-08-11 19:00:14.192 [4252] main/101/tarantoolctl I> mapping 107374184 bytes for a shared arena...
+2015-08-11 19:00:14.194 [4252] main/101/tarantoolctl I> initializing an empty data directory
+2015-08-11 19:00:14.227 [4255] snap/101/dumper I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-08-11 19:00:14.227 [4255] snap/101/dumper I> saving snapshot `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-08-11 19:00:14.250 [4255] snap/101/dumper I> done
+2015-08-11 19:00:14.251 [4252] main/101/tarantoolctl I> binary: started
+2015-08-11 19:00:14.251 [4252] main/101/tarantoolctl I> binary: bound to 127.0.0.1:8293
+2015-08-11 19:00:14.260 [4252] main/101/tarantoolctl I> ready to accept requests
+2015-08-11 19:00:14.260 [4252] main/101/box I> Run console at /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-08-11 19:00:14.260 [4252] main/101/box I> tcp_server: remove dead UNIX socket: /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-08-11 19:00:14.261 [4252] main/103/console/unix/:/home/gerold103 I> started
+2015-08-11 19:00:14.261 [4252] main/104/console/unix/:/home/gerold103 I> started
+2015-08-11 19:00:14.261 [4252] wal I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.xlog.inprogress'
+2015-08-11 19:00:14.263 [4252] main C> entering the event loop
+2015-08-11 19:00:14.264 [4252] main/105/console/unix/: I> client unix/: connected
+2015-08-11 19:00:14.268 [4252] main/105/console/unix/: I> client unix/: disconnected
+2015-08-11 19:00:14.320 [4252] main C> got signal 15 - Terminated
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Found box.lua in /home/gerold103/sql-tarantool/tarantool-connector/test/var
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Starting instance...
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: mkdir /home/gerold103/sql-tarantool/tarantool-connector/test/var/box
+2015-08-11 19:00:16.504 [4286] main/101/tarantoolctl C> version 1.6.5-274-gf84ad58
+2015-08-11 19:00:16.504 [4286] main/101/tarantoolctl C> log level 5
+2015-08-11 19:00:16.504 [4286] main/101/tarantoolctl I> mapping 107374184 bytes for a shared arena...
+2015-08-11 19:00:16.514 [4286] main/101/tarantoolctl I> initializing an empty data directory
+2015-08-11 19:00:16.554 [4289] snap/101/dumper I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-08-11 19:00:16.554 [4289] snap/101/dumper I> saving snapshot `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-08-11 19:00:16.561 [4289] snap/101/dumper I> done
+2015-08-11 19:00:16.562 [4286] main/101/tarantoolctl I> binary: started
+2015-08-11 19:00:16.562 [4286] main/101/tarantoolctl I> binary: bound to 127.0.0.1:8738
+2015-08-11 19:00:16.564 [4286] main/101/tarantoolctl I> ready to accept requests
+2015-08-11 19:00:16.564 [4286] main/101/box I> Run console at /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-08-11 19:00:16.564 [4286] main/101/box I> tcp_server: remove dead UNIX socket: /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-08-11 19:00:16.564 [4286] main/103/console/unix/:/home/gerold103 I> started
+2015-08-11 19:00:16.564 [4286] main/104/console/unix/:/home/gerold103 I> started
+2015-08-11 19:00:16.565 [4286] wal I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.xlog.inprogress'
+2015-08-11 19:00:16.567 [4286] main C> entering the event loop
+2015-08-11 19:00:16.568 [4286] main/105/console/unix/: I> client unix/: connected
+2015-08-11 19:00:16.576 [4286] main/105/console/unix/: I> client unix/: disconnected
+2015-08-11 19:00:16.619 [4286] main C> got signal 15 - Terminated
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Found box.lua in /home/gerold103/sql-tarantool/tarantool-connector/test/var
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Starting instance...
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: mkdir /home/gerold103/sql-tarantool/tarantool-connector/test/var/box
+2015-08-11 19:01:31.599 [4359] main/101/tarantoolctl C> version 1.6.5-274-gf84ad58
+2015-08-11 19:01:31.599 [4359] main/101/tarantoolctl C> log level 5
+2015-08-11 19:01:31.599 [4359] main/101/tarantoolctl I> mapping 107374184 bytes for a shared arena...
+2015-08-11 19:01:31.621 [4359] main/101/tarantoolctl I> initializing an empty data directory
+2015-08-11 19:01:31.669 [4362] snap/101/dumper I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-08-11 19:01:31.669 [4362] snap/101/dumper I> saving snapshot `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-08-11 19:01:31.674 [4362] snap/101/dumper I> done
+2015-08-11 19:01:31.674 [4359] main/101/tarantoolctl I> binary: started
+2015-08-11 19:01:31.674 [4359] main/101/tarantoolctl I> binary: bound to 127.0.0.1:6934
+2015-08-11 19:01:31.676 [4359] main/101/tarantoolctl I> ready to accept requests
+2015-08-11 19:01:31.676 [4359] main/101/box I> Run console at /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-08-11 19:01:31.676 [4359] main/101/box I> tcp_server: remove dead UNIX socket: /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-08-11 19:01:31.677 [4359] main/103/console/unix/:/home/gerold103 I> started
+2015-08-11 19:01:31.677 [4359] main/104/console/unix/:/home/gerold103 I> started
+2015-08-11 19:01:31.678 [4359] wal I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.xlog.inprogress'
+2015-08-11 19:01:31.682 [4359] main C> entering the event loop
+2015-08-11 19:01:31.684 [4359] main/105/console/unix/: I> client unix/: connected
+2015-08-11 19:01:31.686 [4359] main/105/console/unix/: I> client unix/: disconnected
+2015-08-11 19:01:31.698 [4359] main C> got signal 15 - Terminated
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Found box.lua in /home/gerold103/sql-tarantool/tarantool-connector/test/var
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Starting instance...
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: mkdir /home/gerold103/sql-tarantool/tarantool-connector/test/var/box
+2015-08-11 19:01:34.443 [4393] main/101/tarantoolctl C> version 1.6.5-274-gf84ad58
+2015-08-11 19:01:34.443 [4393] main/101/tarantoolctl C> log level 5
+2015-08-11 19:01:34.443 [4393] main/101/tarantoolctl I> mapping 107374184 bytes for a shared arena...
+2015-08-11 19:01:34.468 [4393] main/101/tarantoolctl I> initializing an empty data directory
+2015-08-11 19:01:34.520 [4396] snap/101/dumper I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-08-11 19:01:34.521 [4396] snap/101/dumper I> saving snapshot `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-08-11 19:01:34.535 [4396] snap/101/dumper I> done
+2015-08-11 19:01:34.536 [4393] main/101/tarantoolctl I> binary: started
+2015-08-11 19:01:34.536 [4393] main/101/tarantoolctl I> binary: bound to 127.0.0.1:8885
+2015-08-11 19:01:34.543 [4393] main/101/tarantoolctl I> ready to accept requests
+2015-08-11 19:01:34.543 [4393] main/101/box I> Run console at /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-08-11 19:01:34.544 [4393] main/101/box I> tcp_server: remove dead UNIX socket: /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-08-11 19:01:34.544 [4393] main/103/console/unix/:/home/gerold103 I> started
+2015-08-11 19:01:34.544 [4393] main/104/console/unix/:/home/gerold103 I> started
+2015-08-11 19:01:34.544 [4393] wal I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.xlog.inprogress'
+2015-08-11 19:01:34.546 [4393] main C> entering the event loop
+2015-08-11 19:01:34.549 [4393] main/105/console/unix/: I> client unix/: connected
+2015-08-11 19:01:34.553 [4393] main/105/console/unix/: I> client unix/: disconnected
+2015-08-11 19:01:34.567 [4393] main C> got signal 15 - Terminated
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Found box.lua in /home/gerold103/sql-tarantool/tarantool-connector/test/var
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Starting instance...
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: mkdir /home/gerold103/sql-tarantool/tarantool-connector/test/var/box
+2015-08-11 19:01:43.794 [4427] main/101/tarantoolctl C> version 1.6.5-274-gf84ad58
+2015-08-11 19:01:43.794 [4427] main/101/tarantoolctl C> log level 5
+2015-08-11 19:01:43.794 [4427] main/101/tarantoolctl I> mapping 107374184 bytes for a shared arena...
+2015-08-11 19:01:43.823 [4427] main/101/tarantoolctl I> initializing an empty data directory
+2015-08-11 19:01:43.853 [4430] snap/101/dumper I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-08-11 19:01:43.854 [4430] snap/101/dumper I> saving snapshot `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-08-11 19:01:43.880 [4430] snap/101/dumper I> done
+2015-08-11 19:01:43.881 [4427] main/101/tarantoolctl I> binary: started
+2015-08-11 19:01:43.881 [4427] main/101/tarantoolctl I> binary: bound to 127.0.0.1:8667
+2015-08-11 19:01:43.882 [4427] main/101/tarantoolctl I> ready to accept requests
+2015-08-11 19:01:43.883 [4427] main/101/box I> Run console at /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-08-11 19:01:43.883 [4427] main/101/box I> tcp_server: remove dead UNIX socket: /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-08-11 19:01:43.883 [4427] main/103/console/unix/:/home/gerold103 I> started
+2015-08-11 19:01:43.883 [4427] main/104/console/unix/:/home/gerold103 I> started
+2015-08-11 19:01:43.884 [4427] wal I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.xlog.inprogress'
+2015-08-11 19:01:43.886 [4427] main C> entering the event loop
+2015-08-11 19:01:43.887 [4427] main/105/console/unix/: I> client unix/: connected
+2015-08-11 19:01:43.891 [4427] main/105/console/unix/: I> client unix/: disconnected
+2015-08-11 19:01:43.901 [4427] main C> got signal 15 - Terminated
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Found box.lua in /home/gerold103/sql-tarantool/tarantool-connector/test/var
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Starting instance...
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: mkdir /home/gerold103/sql-tarantool/tarantool-connector/test/var/box
+2015-08-11 19:13:07.161 [4717] main/101/tarantoolctl C> version 1.6.5-274-gf84ad58
+2015-08-11 19:13:07.161 [4717] main/101/tarantoolctl C> log level 5
+2015-08-11 19:13:07.161 [4717] main/101/tarantoolctl I> mapping 107374184 bytes for a shared arena...
+2015-08-11 19:13:07.162 [4717] main/101/tarantoolctl I> initializing an empty data directory
+2015-08-11 19:13:07.192 [4720] snap/101/dumper I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-08-11 19:13:07.193 [4720] snap/101/dumper I> saving snapshot `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-08-11 19:13:07.202 [4720] snap/101/dumper I> done
+2015-08-11 19:13:07.204 [4717] main/101/tarantoolctl I> binary: started
+2015-08-11 19:13:07.206 [4717] main/101/tarantoolctl I> binary: bound to 127.0.0.1:8517
+2015-08-11 19:13:07.210 [4717] main/101/tarantoolctl I> ready to accept requests
+2015-08-11 19:13:07.210 [4717] main/101/box I> Run console at /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-08-11 19:13:07.210 [4717] main/101/box I> tcp_server: remove dead UNIX socket: /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-08-11 19:13:07.211 [4717] main/103/console/unix/:/home/gerold103 I> started
+2015-08-11 19:13:07.211 [4717] main/104/console/unix/:/home/gerold103 I> started
+2015-08-11 19:13:07.212 [4717] wal I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.xlog.inprogress'
+2015-08-11 19:13:07.214 [4717] main C> entering the event loop
+2015-08-11 19:13:07.215 [4717] main/105/console/unix/: I> client unix/: connected
+2015-08-11 19:13:07.217 [4717] main/105/console/unix/: I> client unix/: disconnected
+2015-08-11 19:13:07.395 [4717] main C> got signal 15 - Terminated
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Found box.lua in /home/gerold103/sql-tarantool/tarantool-connector/test/var
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Starting instance...
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: mkdir /home/gerold103/sql-tarantool/tarantool-connector/test/var/box
+2015-08-11 19:13:48.738 [4767] main/101/tarantoolctl C> version 1.6.5-274-gf84ad58
+2015-08-11 19:13:48.738 [4767] main/101/tarantoolctl C> log level 5
+2015-08-11 19:13:48.738 [4767] main/101/tarantoolctl I> mapping 107374184 bytes for a shared arena...
+2015-08-11 19:13:48.768 [4767] main/101/tarantoolctl I> initializing an empty data directory
+2015-08-11 19:13:48.827 [4770] snap/101/dumper I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-08-11 19:13:48.832 [4770] snap/101/dumper I> saving snapshot `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-08-11 19:13:48.856 [4770] snap/101/dumper I> done
+2015-08-11 19:13:48.857 [4767] main/101/tarantoolctl I> binary: started
+2015-08-11 19:13:48.858 [4767] main/101/tarantoolctl I> binary: bound to 127.0.0.1:8958
+2015-08-11 19:13:48.859 [4767] main/101/tarantoolctl I> ready to accept requests
+2015-08-11 19:13:48.859 [4767] main/101/box I> Run console at /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-08-11 19:13:48.859 [4767] main/101/box I> tcp_server: remove dead UNIX socket: /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-08-11 19:13:48.859 [4767] main/103/console/unix/:/home/gerold103 I> started
+2015-08-11 19:13:48.860 [4767] main/104/console/unix/:/home/gerold103 I> started
+2015-08-11 19:13:48.860 [4767] wal I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.xlog.inprogress'
+2015-08-11 19:13:48.862 [4767] main C> entering the event loop
+2015-08-11 19:13:48.863 [4767] main/105/console/unix/: I> client unix/: connected
+2015-08-11 19:13:48.865 [4767] main/105/console/unix/: I> client unix/: disconnected
+2015-08-11 19:13:49.010 [4767] main C> got signal 15 - Terminated
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Found box.lua in /home/gerold103/sql-tarantool/tarantool-connector/test/var
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Starting instance...
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: mkdir /home/gerold103/sql-tarantool/tarantool-connector/test/var/box
+2015-08-11 19:14:31.344 [4813] main/101/tarantoolctl C> version 1.6.5-274-gf84ad58
+2015-08-11 19:14:31.344 [4813] main/101/tarantoolctl C> log level 5
+2015-08-11 19:14:31.344 [4813] main/101/tarantoolctl I> mapping 107374184 bytes for a shared arena...
+2015-08-11 19:14:31.352 [4813] main/101/tarantoolctl I> initializing an empty data directory
+2015-08-11 19:14:31.407 [4816] snap/101/dumper I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-08-11 19:14:31.407 [4816] snap/101/dumper I> saving snapshot `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-08-11 19:14:31.427 [4816] snap/101/dumper I> done
+2015-08-11 19:14:31.428 [4813] main/101/tarantoolctl I> binary: started
+2015-08-11 19:14:31.428 [4813] main/101/tarantoolctl I> binary: bound to 127.0.0.1:7265
+2015-08-11 19:14:31.429 [4813] main/101/tarantoolctl I> ready to accept requests
+2015-08-11 19:14:31.430 [4813] main/101/box I> Run console at /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-08-11 19:14:31.430 [4813] main/101/box I> tcp_server: remove dead UNIX socket: /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-08-11 19:14:31.431 [4813] main/103/console/unix/:/home/gerold103 I> started
+2015-08-11 19:14:31.431 [4813] main/104/console/unix/:/home/gerold103 I> started
+2015-08-11 19:14:31.431 [4813] wal I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.xlog.inprogress'
+2015-08-11 19:14:31.437 [4813] main C> entering the event loop
+2015-08-11 19:14:31.438 [4813] main/105/console/unix/: I> client unix/: connected
+2015-08-11 19:14:31.444 [4813] main/105/console/unix/: I> client unix/: disconnected
+2015-08-11 19:14:31.638 [4813] main C> got signal 15 - Terminated
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Instance box is not found in /etc/tarantool/instances.enabled
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Found box.lua in /home/gerold103/sql-tarantool/tarantool-connector/test/var
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Starting instance...
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: mkdir /home/gerold103/sql-tarantool/tarantool-connector/test/var/box
+2015-08-11 19:15:15.583 [4908] main/101/tarantoolctl C> version 1.6.5-274-gf84ad58
+2015-08-11 19:15:15.583 [4908] main/101/tarantoolctl C> log level 5
+2015-08-11 19:15:15.583 [4908] main/101/tarantoolctl I> mapping 107374184 bytes for a shared arena...
+2015-08-11 19:15:15.616 [4908] main/101/tarantoolctl I> initializing an empty data directory
+2015-08-11 19:15:15.658 [4911] snap/101/dumper I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-08-11 19:15:15.659 [4911] snap/101/dumper I> saving snapshot `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-08-11 19:15:15.685 [4911] snap/101/dumper I> done
+2015-08-11 19:15:15.685 [4908] main/101/tarantoolctl I> binary: started
+2015-08-11 19:15:15.686 [4908] main/101/tarantoolctl I> binary: bound to 127.0.0.1:8844
+2015-08-11 19:15:15.692 [4908] main/101/tarantoolctl I> ready to accept requests
+2015-08-11 19:15:15.692 [4908] main/101/box I> Run console at /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-08-11 19:15:15.692 [4908] main/101/box I> tcp_server: remove dead UNIX socket: /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-08-11 19:15:15.692 [4908] main/103/console/unix/:/home/gerold103 I> started
+2015-08-11 19:15:15.692 [4908] main/104/console/unix/:/home/gerold103 I> started
+2015-08-11 19:15:15.693 [4908] wal I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.xlog.inprogress'
+2015-08-11 19:15:15.696 [4908] main C> entering the event loop
+2015-08-11 19:15:15.698 [4908] main/105/console/unix/: I> client unix/: connected
+2015-08-11 19:15:15.700 [4908] main/105/console/unix/: I> client unix/: disconnected
+2015-08-11 19:15:15.899 [4908] main C> got signal 15 - Terminated
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Found box.lua in /home/gerold103/sql-tarantool/tarantool-connector/test/var
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Starting instance...
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: mkdir /home/gerold103/sql-tarantool/tarantool-connector/test/var/box
+2015-08-11 19:15:23.443 [4946] main/101/tarantoolctl C> version 1.6.5-274-gf84ad58
+2015-08-11 19:15:23.443 [4946] main/101/tarantoolctl C> log level 5
+2015-08-11 19:15:23.443 [4946] main/101/tarantoolctl I> mapping 107374184 bytes for a shared arena...
+2015-08-11 19:15:23.466 [4946] main/101/tarantoolctl I> initializing an empty data directory
+2015-08-11 19:15:23.499 [4949] snap/101/dumper I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-08-11 19:15:23.500 [4949] snap/101/dumper I> saving snapshot `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-08-11 19:15:23.516 [4949] snap/101/dumper I> done
+2015-08-11 19:15:23.517 [4946] main/101/tarantoolctl I> binary: started
+2015-08-11 19:15:23.517 [4946] main/101/tarantoolctl I> binary: bound to 127.0.0.1:3476
+2015-08-11 19:15:23.524 [4946] main/101/tarantoolctl I> ready to accept requests
+2015-08-11 19:15:23.524 [4946] main/101/box I> Run console at /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-08-11 19:15:23.524 [4946] main/101/box I> tcp_server: remove dead UNIX socket: /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-08-11 19:15:23.524 [4946] main/103/console/unix/:/home/gerold103 I> started
+2015-08-11 19:15:23.524 [4946] main/104/console/unix/:/home/gerold103 I> started
+2015-08-11 19:15:23.526 [4946] wal I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.xlog.inprogress'
+2015-08-11 19:15:23.535 [4946] main C> entering the event loop
+2015-08-11 19:15:23.536 [4946] main/105/console/unix/: I> client unix/: connected
+2015-08-11 19:15:23.538 [4946] main/105/console/unix/: I> client unix/: disconnected
+2015-08-11 19:15:23.708 [4946] main C> got signal 15 - Terminated
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Found box.lua in /home/gerold103/sql-tarantool/tarantool-connector/test/var
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Starting instance...
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: mkdir /home/gerold103/sql-tarantool/tarantool-connector/test/var/box
+2015-08-11 19:15:28.394 [4980] main/101/tarantoolctl C> version 1.6.5-274-gf84ad58
+2015-08-11 19:15:28.395 [4980] main/101/tarantoolctl C> log level 5
+2015-08-11 19:15:28.395 [4980] main/101/tarantoolctl I> mapping 107374184 bytes for a shared arena...
+2015-08-11 19:15:28.399 [4980] main/101/tarantoolctl I> initializing an empty data directory
+2015-08-11 19:15:28.419 [4983] snap/101/dumper I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-08-11 19:15:28.420 [4983] snap/101/dumper I> saving snapshot `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-08-11 19:15:28.434 [4983] snap/101/dumper I> done
+2015-08-11 19:15:28.435 [4980] main/101/tarantoolctl I> binary: started
+2015-08-11 19:15:28.435 [4980] main/101/tarantoolctl I> binary: bound to 127.0.0.1:5421
+2015-08-11 19:15:28.439 [4980] main/101/tarantoolctl I> ready to accept requests
+2015-08-11 19:15:28.439 [4980] main/101/box I> Run console at /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-08-11 19:15:28.440 [4980] main/101/box I> tcp_server: remove dead UNIX socket: /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-08-11 19:15:28.440 [4980] main/103/console/unix/:/home/gerold103 I> started
+2015-08-11 19:15:28.440 [4980] main/104/console/unix/:/home/gerold103 I> started
+2015-08-11 19:15:28.441 [4980] wal I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.xlog.inprogress'
+2015-08-11 19:15:28.443 [4980] main C> entering the event loop
+2015-08-11 19:15:28.444 [4980] main/105/console/unix/: I> client unix/: connected
+2015-08-11 19:15:28.447 [4980] main/105/console/unix/: I> client unix/: disconnected
+2015-08-11 19:15:28.697 [4980] main C> got signal 15 - Terminated
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Found box.lua in /home/gerold103/sql-tarantool/tarantool-connector/test/var
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Starting instance...
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: mkdir /home/gerold103/sql-tarantool/tarantool-connector/test/var/box
+2015-08-11 19:15:44.976 [5020] main/101/tarantoolctl C> version 1.6.5-274-gf84ad58
+2015-08-11 19:15:44.976 [5020] main/101/tarantoolctl C> log level 5
+2015-08-11 19:15:44.976 [5020] main/101/tarantoolctl I> mapping 107374184 bytes for a shared arena...
+2015-08-11 19:15:45.001 [5020] main/101/tarantoolctl I> initializing an empty data directory
+2015-08-11 19:15:45.050 [5023] snap/101/dumper I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-08-11 19:15:45.050 [5023] snap/101/dumper I> saving snapshot `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-08-11 19:15:45.063 [5023] snap/101/dumper I> done
+2015-08-11 19:15:45.064 [5020] main/101/tarantoolctl I> binary: started
+2015-08-11 19:15:45.064 [5020] main/101/tarantoolctl I> binary: bound to 127.0.0.1:6714
+2015-08-11 19:15:45.065 [5020] main/101/tarantoolctl I> ready to accept requests
+2015-08-11 19:15:45.065 [5020] main/101/box I> Run console at /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-08-11 19:15:45.065 [5020] main/101/box I> tcp_server: remove dead UNIX socket: /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-08-11 19:15:45.065 [5020] main/103/console/unix/:/home/gerold103 I> started
+2015-08-11 19:15:45.065 [5020] main/104/console/unix/:/home/gerold103 I> started
+2015-08-11 19:15:45.066 [5020] wal I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.xlog.inprogress'
+2015-08-11 19:15:45.068 [5020] main C> entering the event loop
+2015-08-11 19:15:45.071 [5020] main/105/console/unix/: I> client unix/: connected
+2015-08-11 19:15:45.073 [5020] main/105/console/unix/: I> client unix/: disconnected
+2015-08-11 19:15:45.253 [5020] main C> got signal 15 - Terminated
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Found box.lua in /home/gerold103/sql-tarantool/tarantool-connector/test/var
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Starting instance...
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: mkdir /home/gerold103/sql-tarantool/tarantool-connector/test/var/box
+2015-08-11 19:19:31.236 [5178] main/101/tarantoolctl C> version 1.6.5-274-gf84ad58
+2015-08-11 19:19:31.238 [5178] main/101/tarantoolctl C> log level 5
+2015-08-11 19:19:31.238 [5178] main/101/tarantoolctl I> mapping 107374184 bytes for a shared arena...
+2015-08-11 19:19:31.268 [5178] main/101/tarantoolctl I> initializing an empty data directory
+2015-08-11 19:19:31.310 [5181] snap/101/dumper I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-08-11 19:19:31.310 [5181] snap/101/dumper I> saving snapshot `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-08-11 19:19:31.363 [5181] snap/101/dumper I> done
+2015-08-11 19:19:31.364 [5178] main/101/tarantoolctl I> binary: started
+2015-08-11 19:19:31.365 [5178] main/101/tarantoolctl I> binary: bound to 127.0.0.1:4389
+2015-08-11 19:19:31.368 [5178] main/101/tarantoolctl I> ready to accept requests
+2015-08-11 19:19:31.368 [5178] main/101/box I> Run console at /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-08-11 19:19:31.368 [5178] main/101/box I> tcp_server: remove dead UNIX socket: /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-08-11 19:19:31.373 [5178] main/103/console/unix/:/home/gerold103 I> started
+2015-08-11 19:19:31.373 [5178] main/104/console/unix/:/home/gerold103 I> started
+2015-08-11 19:19:31.379 [5178] wal I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.xlog.inprogress'
+2015-08-11 19:19:31.383 [5178] main C> entering the event loop
+2015-08-11 19:19:31.384 [5178] main/105/console/unix/: I> client unix/: connected
+2015-08-11 19:19:31.385 [5178] main/105/console/unix/: I> client unix/: disconnected
+2015-08-11 19:19:31.627 [5178] main C> got signal 15 - Terminated
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Found box.lua in /home/gerold103/sql-tarantool/tarantool-connector/test/var
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Starting instance...
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: mkdir /home/gerold103/sql-tarantool/tarantool-connector/test/var/box
+2015-08-11 19:27:53.721 [5406] main/101/tarantoolctl C> version 1.6.5-274-gf84ad58
+2015-08-11 19:27:53.722 [5406] main/101/tarantoolctl C> log level 5
+2015-08-11 19:27:53.722 [5406] main/101/tarantoolctl I> mapping 107374184 bytes for a shared arena...
+2015-08-11 19:27:53.725 [5406] main/101/tarantoolctl I> initializing an empty data directory
+2015-08-11 19:27:53.787 [5410] snap/101/dumper I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-08-11 19:27:53.787 [5410] snap/101/dumper I> saving snapshot `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-08-11 19:27:53.801 [5410] snap/101/dumper I> done
+2015-08-11 19:27:53.802 [5406] main/101/tarantoolctl I> binary: started
+2015-08-11 19:27:53.802 [5406] main/101/tarantoolctl I> binary: bound to 127.0.0.1:7022
+2015-08-11 19:27:53.804 [5406] main/101/tarantoolctl I> ready to accept requests
+2015-08-11 19:27:53.804 [5406] main/101/box I> Run console at /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-08-11 19:27:53.804 [5406] main/101/box I> tcp_server: remove dead UNIX socket: /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-08-11 19:27:53.804 [5406] main/103/console/unix/:/home/gerold103 I> started
+2015-08-11 19:27:53.804 [5406] main/104/console/unix/:/home/gerold103 I> started
+2015-08-11 19:27:53.805 [5406] wal I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.xlog.inprogress'
+2015-08-11 19:27:53.807 [5406] main C> entering the event loop
+2015-08-11 19:27:53.808 [5406] main/105/console/unix/: I> client unix/: connected
+2015-08-11 19:27:53.810 [5406] main/105/console/unix/: I> client unix/: disconnected
+2015-08-11 19:27:54.008 [5406] main C> got signal 15 - Terminated
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Found box.lua in /home/gerold103/sql-tarantool/tarantool-connector/test/var
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Starting instance...
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: mkdir /home/gerold103/sql-tarantool/tarantool-connector/test/var/box
+2015-08-11 19:28:30.591 [5516] main/101/tarantoolctl C> version 1.6.5-274-gf84ad58
+2015-08-11 19:28:30.592 [5516] main/101/tarantoolctl C> log level 5
+2015-08-11 19:28:30.592 [5516] main/101/tarantoolctl I> mapping 107374184 bytes for a shared arena...
+2015-08-11 19:28:30.611 [5516] main/101/tarantoolctl I> initializing an empty data directory
+2015-08-11 19:28:30.659 [5522] snap/101/dumper I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-08-11 19:28:30.660 [5522] snap/101/dumper I> saving snapshot `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-08-11 19:28:30.672 [5522] snap/101/dumper I> done
+2015-08-11 19:28:30.673 [5516] main/101/tarantoolctl I> binary: started
+2015-08-11 19:28:30.673 [5516] main/101/tarantoolctl I> binary: bound to 127.0.0.1:7546
+2015-08-11 19:28:30.680 [5516] main/101/tarantoolctl I> ready to accept requests
+2015-08-11 19:28:30.681 [5516] main/101/box I> Run console at /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-08-11 19:28:30.681 [5516] main/101/box I> tcp_server: remove dead UNIX socket: /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-08-11 19:28:30.682 [5516] main/103/console/unix/:/home/gerold103 I> started
+2015-08-11 19:28:30.682 [5516] main/104/console/unix/:/home/gerold103 I> started
+2015-08-11 19:28:30.682 [5516] wal I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.xlog.inprogress'
+2015-08-11 19:28:30.685 [5516] main C> entering the event loop
+2015-08-11 19:28:30.686 [5516] main/105/console/unix/: I> client unix/: connected
+2015-08-11 19:28:30.688 [5516] main/105/console/unix/: I> client unix/: disconnected
+2015-08-11 19:28:30.855 [5516] main C> got signal 15 - Terminated
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Found box.lua in /home/gerold103/sql-tarantool/tarantool-connector/test/var
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: Starting instance...
+/home/gerold103/TarantoolRepo/tarantool/extra/dist/tarantoolctl: mkdir /home/gerold103/sql-tarantool/tarantool-connector/test/var/box
+2015-08-11 19:33:48.219 [5795] main/101/tarantoolctl C> version 1.6.5-274-gf84ad58
+2015-08-11 19:33:48.220 [5795] main/101/tarantoolctl C> log level 5
+2015-08-11 19:33:48.220 [5795] main/101/tarantoolctl I> mapping 107374184 bytes for a shared arena...
+2015-08-11 19:33:48.230 [5795] main/101/tarantoolctl I> initializing an empty data directory
+2015-08-11 19:33:48.298 [5798] snap/101/dumper I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-08-11 19:33:48.298 [5798] snap/101/dumper I> saving snapshot `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.snap.inprogress'
+2015-08-11 19:33:48.316 [5798] snap/101/dumper I> done
+2015-08-11 19:33:48.317 [5795] main/101/tarantoolctl I> binary: started
+2015-08-11 19:33:48.318 [5795] main/101/tarantoolctl I> binary: bound to 127.0.0.1:9150
+2015-08-11 19:33:48.321 [5795] main/101/tarantoolctl I> ready to accept requests
+2015-08-11 19:33:48.321 [5795] main/101/box I> Run console at /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-08-11 19:33:48.321 [5795] main/101/box I> tcp_server: remove dead UNIX socket: /home/gerold103/sql-tarantool/tarantool-connector/test/var/box.control
+2015-08-11 19:33:48.321 [5795] main/103/console/unix/:/home/gerold103 I> started
+2015-08-11 19:33:48.321 [5795] main/104/console/unix/:/home/gerold103 I> started
+2015-08-11 19:33:48.321 [5795] wal I> creating `/home/gerold103/sql-tarantool/tarantool-connector/test/var/box/00000000000000000000.xlog.inprogress'
+2015-08-11 19:33:48.324 [5795] main C> entering the event loop
+2015-08-11 19:33:48.331 [5795] main/105/console/unix/: I> client unix/: connected
+2015-08-11 19:33:48.336 [5795] main/105/console/unix/: I> client unix/: disconnected
+2015-08-11 19:33:48.502 [5795] main C> got signal 15 - Terminated

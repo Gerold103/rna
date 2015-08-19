@@ -120,7 +120,7 @@ const MValue &TupleObj::operator[](int id) const
 TupleObj TupleObj::operator+(const TupleObj &right) const
 {
 	TupleObj res(values);
-	res.values.insert(res.values.begin(), right.values.begin(), right.values.end());
+	res.values.insert(res.values.end(), right.values.begin(), right.values.end());
 	return res;
 }
 
@@ -222,6 +222,11 @@ bool SpaceObject::PushName(const std::string &str)
 	return true;
 }
 
+void SpaceObject::SetNames(const std::vector<std::string> &_names)
+{
+	names = _names;
+}
+
 //~~~~~~~~ S t a t i c   m e t h o d s ~~~~~~~~
 
 SpaceObject SpaceObject::CartesianProduct(const SpaceObject &left, const SpaceObject &right)
@@ -232,6 +237,8 @@ SpaceObject SpaceObject::CartesianProduct(const SpaceObject &left, const SpaceOb
 			res.PushBack(left[i] + right[j]);
 		}
 	}
+	res.names.insert(res.names.end(), left.names.begin(), left.names.end());
+	res.names.insert(res.names.end(), right.names.begin(), right.names.end());
 	return res;
 }
 

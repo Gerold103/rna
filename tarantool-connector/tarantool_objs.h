@@ -116,6 +116,8 @@ public:
 
 	bool PushName(const std::string &str);
 
+	void SetNames(const std::vector<std::string> &_names);
+
 	//~~~~~~~~ S t a t i c   m e t h o d s ~~~~~~~~
 
 	static SpaceObject CartesianProduct(const SpaceObject &left, const SpaceObject &right);

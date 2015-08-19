@@ -10,6 +10,8 @@ private:
 	SelectStatement *statement;
 
 	std::map<std::string, int> aliases; //alias and its number in tuple
+	std::map<std::string, std::string> table_aliases;
+	void init_aliases(const TableRef *from_table);
 
 	SpaceObject MakeOneTableInTarantool();
 	std::vector<SQLCondition> GetIndexConditions(const Expr *where) const;

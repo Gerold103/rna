@@ -79,8 +79,6 @@ struct SelectStatement : SQLStatement {
 	SelectStatement* union_select;
 	OrderDescription* order;
 	LimitDescription* limit;
-
-	
 };
 
 std::ostream &operator<<(std::ostream &stream, const SelectStatement &ob);

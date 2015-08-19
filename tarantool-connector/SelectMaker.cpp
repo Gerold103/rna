@@ -2,6 +2,26 @@
 
 //~~~~~~~~~~~~~~~~~~~~~~~~ S E L E C T   M A K E R ~~~~~~~~~~~~~~~~~~~~~~~~
 
+void SelectMaker::init_aliases(const TableRef *from_table)
+{
+	if (from_table == NULL) return;
+	if (from_table->alias.length() > 0) {
+		table_aliases.insert(std::make_pair(from_table->name->GetName(), from_table->alias));
+		LogFL(DEBUG) << "SelectMaker::init_aliases(): name = " << from_table->name->GetName() << ", alias = " << from_table->alias << "\n";
+	}
+	if (from_table->list != NULL) {
+		for (size_t i = 0, size = from_table->list->size(); i < size; ++i) {
+			this->init_aliases(from_table->list->at(i));
+		}
+	}
+	this->init_aliases(from_table->prev_join);
+	if (from_table->join != NULL) {
+		this->init_aliases(from_table->join->left);
+		this->init_aliases(from_table->join->right);
+	}
+	this->init_aliases(from_table->next_join);
+}
+
 SelectMaker::SelectMaker(Session &ses_, TarantoolInfo &tinfo_, SelectStatement *_statement) : SQLMaker(ses_, tinfo_), statement(_statement) {
 	Logger::LogObject(DEBUG, *statement);
 
@@ -20,6 +40,7 @@ SelectMaker::SelectMaker(Session &ses_, TarantoolInfo &tinfo_, SelectStatement *
 			}
 		}
 	}
+	this->init_aliases(statement->from_table);
 }
 
 #define _op_result(op) CalculateFromTupleAndExpr(expr->expr, tuple, original_tuple, tinfo, space_id, aliases) op CalculateFromTupleAndExpr(expr->expr2, tuple, original_tuple, tinfo, space_id, aliases)
@@ -319,6 +340,76 @@ SpaceObject SelectMaker::MakeOneTable()
 
 SpaceObject SelectMaker::MakeJoinTables()
 {
+	if (statement->from_table->prev_join == NULL) {
+		//it is first join in statement
+		JoinDefinition *cur_join = statement->from_table->join;
+		if (cur_join->left->type != kTableName) {
+			LogFL(DEBUG) << "SelectMaker::MakeJoinTables(): error\n";
+			return SpaceObject();
+		}
+		if (cur_join->right->type != kTableName) {
+			LogFL(DEBUG) << "SelectMaker::MakeJoinTables(): error\n";
+			return SpaceObject();
+		}
+		std::string left_space = cur_join->left->name->GetName();
+		std::string right_space = cur_join->right->name->GetName();
+		if (tinfo->SpaceBy(left_space) == nullptr) {
+			last_error = "SelectMaker::MakeJoinTables(): space with name = " + left_space + " was not found";
+			LogFL(DEBUG) << last_error << "\n";
+			return SpaceObject();
+		}
+		if (tinfo->SpaceBy(right_space) == nullptr) {
+			last_error = "SelectMaker::MakeJoinTables(): space with name = " + right_space + " was not found";
+			LogFL(DEBUG) << last_error << "\n";
+			return SpaceObject();
+		}
+		int left_id = tinfo->SpaceBy(left_space)->ID();
+		int right_id = tinfo->SpaceBy(right_space)->ID();
+		LogFL(DEBUG) << "SelectMaker::MakeJoinTables(): left = " << left_space << ": " << left_id << ", right = " << right_space << ": " << right_id << "\n";
+	
+		int left_index = 0, left_offset = 0, left_limit = MSG_START_RECS_COUNT;
+		tp_iterator_type left_iterator = TP_ITERATOR_ALL;
+		std::vector<MValue> left_keys;
+
+		int right_index = 0, right_offset = 0, right_limit = MSG_START_RECS_COUNT;
+		tp_iterator_type right_iterator = TP_ITERATOR_ALL;
+		std::vector<MValue> right_keys;
+
+		SpaceObject left_part = NextSpacePart(left_id, left_index, left_offset, left_limit, left_iterator, left_keys);
+		SpaceObject right_part = NextSpacePart(right_id, right_index, right_offset, right_limit, right_iterator, right_keys);
+		if (left_part.Size() == 0) return right_part;
+		if (right_part.Size() == 0) return left_part;
+
+		std::vector<std::string> left_names = tinfo->SpaceBy(left_id)->ColumnNames();
+		std::vector<std::string> right_names = tinfo->SpaceBy(right_id)->ColumnNames();
+
+		SpaceObject res;
+		std::vector<std::string> all_names;
+		all_names.insert(all_names.end(), left_names.begin(), left_names.end());
+		all_names.insert(all_names.end(), right_names.begin(), right_names.end());
+		res.SetNames(all_names);
+
+		do {
+			left_part.SetNames(left_names);
+			do {
+				right_part.SetNames(right_names);
+				LogFL(DEBUG) << "left.size = " << left_part.Size() << ", right.size = " << right_part.Size() << "\n";
+				SpaceObject product = SpaceObject::CartesianProduct(left_part, right_part);
+				LogFL(DEBUG) << "product.size = " << product.Size() << "\n";
+				res.PushBack(product);
+				right_offset += MSG_START_RECS_COUNT;
+				right_part = NextSpacePart(right_id, right_index, right_offset, right_limit, right_iterator, right_keys);
+			} while (right_part.Size());
+
+			left_offset += MSG_START_RECS_COUNT;
+			left_part = NextSpacePart(left_id, left_index, left_offset, left_limit, left_iterator, left_keys);
+			right_offset = 0;
+			right_part = NextSpacePart(right_id, right_index, 0, right_limit, right_iterator, right_keys);
+		} while (left_part.Size());
+
+		return res;
+	}
+	
 	return SpaceObject();
 }
 
@@ -361,10 +452,9 @@ SpaceObject SelectMaker::MakeSelect() {
 	switch(from_table->GetType()) {
 		case TableRefType::kTableName: {
 			return this->MakeOneTableInTarantool();
-			return MakeOneTable();
 		}
 		case TableRefType::kTableJoin: {
-			return MakeJoinTables();
+			return this->MakeJoinTables();
 		}
 		default:
 			last_error = "SelectMaker::MakeSelect(): default from_table type";

@@ -350,7 +350,11 @@ std::ostream &operator<<(std::ostream &stream, const MValueVector &ob)
 	stream << "[";
 	for (size_t i = 0; i < size; ++i) {
 		stream << ob[i];
-		if (i != size - 1) stream << ", ";
+		if (i != size - 1) {
+			stream << ", ";
+			tp_type tp = ob[i + 1].GetType();
+			if ((tp == TP_ARRAY) || (tp == TP_MAP)) stream << "\n";
+		}
 	}
 	stream << "]";
 	return stream;
@@ -362,7 +366,12 @@ std::ostream &operator<<(std::ostream &stream, const MValueMap &ob)
 	stream << "(";
 	for (auto it = ob.begin(); it != ob.end(); ++it, ++i) {
 		stream << "{" << it->first << " : " << it->second << "}";
-		if (i != size - 1) stream << ", ";
+		if (i != size - 1) {
+			stream << ", ";
+			auto it2 = it;
+			++it2;
+			if ((it2->second.GetType() == TP_MAP) || (it2->second.GetType() == TP_ARRAY)) stream << "\n";
+		}
 	}
 	stream << ")";
 	return stream;

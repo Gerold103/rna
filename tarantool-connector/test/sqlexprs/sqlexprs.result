@@ -1,0 +1,29 @@
+[ TEST  ]~~~~~~~~ C r e a t e   t a b l e   t e s t s ~~~~~~~~
+[ TEST  ]test n = 0 accepted: 1
+[ TEST  ]test n = 1 accepted: 1
+[ TEST  ]test n = 2 accepted: 1
+[ TEST  ]test n = 3 accepted: 1
+[ TEST  ]~~~~~~~~ I n s e r t   i n t o   t e s t s ~~~~~~~~
+[ TEST  ]test n = 0 accepted: 1
+[ TEST  ]test n = 1 accepted: 1
+[ TEST  ]test n = 2 accepted: 1
+[ TEST  ]test n = 3 accepted: 1
+[ TEST  ]test n = 4 accepted: 1
+[ TEST  ]test n = 5 accepted: 1
+[ TEST  ]test n = 6 accepted: 1
+[ TEST  ]test n = 7 accepted: 1
+[ TEST  ]test n = 8 accepted: 1
+[ TEST  ]test n = 9 accepted: 1
+[ TEST  ]test n = 10 accepted: 1
+[ TEST  ]test n = 11 accepted: 1
+[ TEST  ]test n = 12 accepted: 1
+[ TEST  ]test n = 13 accepted: 1
+[ TEST  ]test n = 14 accepted: 1
+[ TEST  ]~~~~~~~~ S e l e c t   f r o m   t e s t s ~~~~~~~~
+[ TEST  ]test n = 0 accepted: 1
+[ TEST  ]test n = 1 accepted: 1
+[ TEST  ]~~~~~~~~ D r o p   t a b l e   t e s t s ~~~~~~~~
+[ TEST  ]test n = 0 accepted: 1
+[ TEST  ]test n = 1 accepted: 1
+[ TEST  ]test n = 2 accepted: 1
+[ TEST  ]test n = 3 accepted: 1
