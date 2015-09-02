@@ -26,6 +26,8 @@ typedef enum {
 	kTableCrossProduct
 } TableRefType;
 
+typedef std::vector<const JoinDefinition *> JoinVector;
+
 std::string TableRefTypeToString(TableRefType tp);
 
 struct TableName {
@@ -51,31 +53,14 @@ struct TableName {
  * @brief Holds reference to tables. Can be either table names or a select statement.
  */
 struct TableRef : public ASTNode {
-	TableRef(TableRefType type) :
-		ASTNode(ASTNode::CATALOG_OBJECT),
-		type(type),
-		name(NULL),
-		select(NULL),
-		list(NULL),
-		prev_join(NULL),
-		join(NULL),
-		next_join(NULL)
-		{}
+	TableRef(TableRefType type);
 		
 	virtual ~TableRef();
 
 	TableRefType type;
 
-	bool SetSchema(const char *s) {
-		if (s == NULL) return false;
-		else schema = s;
-		return true;
-	}
-	bool SetAlias(const char *s) {
-		if (s == NULL) return false;
-		else alias = s;
-		return true;
-	}
+	bool SetSchema(const char *s);
+	bool SetAlias(const char *s);
 
 	std::string schema;
 	TableName* name;
@@ -87,16 +72,9 @@ struct TableRef : public ASTNode {
 	JoinDefinition* join;
 	TableRef* next_join;
 
+	bool hasSchema();
 
-	/**
-	 * Convenience accessor methods
-	 */
-	inline bool hasSchema() { return !schema.empty(); }
-
-	inline std::string getName() {
-		if (!alias.empty()) return alias;
-		else return std::string(*name);
-	}
+	std::string getName();
 
 	TableRefType GetType() const;
 };
@@ -120,17 +98,9 @@ std::string JoinTypeToString(JoinType tp);
  * @brief Definition of a join table
  */
 struct JoinDefinition {
-	JoinDefinition() :
-		left(NULL),
-		right(NULL),
-		condition(NULL),
-		type(kJoinInner) {}
+	JoinDefinition();
 
-	virtual ~JoinDefinition() {
-		delete left;
-		delete right;
-		delete condition;
-	}
+	virtual ~JoinDefinition();
 
 	TableRef* left;
 	TableRef* right;

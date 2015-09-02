@@ -38,7 +38,35 @@ const std::string &TableName::GetName() const { return name; }
 
 const std::string &TableName::GetDatabase() const { return database; }
 
+std::ostream &operator<<(std::ostream &stream, const TableName &ob)
+{
+	stream << "TableName: " << std::endl;
+	stream << "database: " << ob.database << ", name: " << ob.name << std::endl;
+	return stream;
+}
+
 //~~~~~~~~~~~~~~~~~~~~~~~~ T A B L E   R E F ~~~~~~~~~~~~~~~~~~~~~~~~
+
+TableRef::TableRef(TableRefType type)
+	: ASTNode(ASTNode::CATALOG_OBJECT), type(type), name(NULL), select(NULL), list(NULL), prev_join(NULL), join(NULL), next_join(NULL) { }
+
+bool TableRef::SetSchema(const char *s) {
+	if (s == NULL) return false;
+	else schema = s;
+	return true;
+}
+bool TableRef::SetAlias(const char *s) {
+	if (s == NULL) return false;
+	else alias = s;
+	return true;
+}
+
+bool TableRef::hasSchema() { return !schema.empty(); }
+
+std::string TableRef::getName() {
+	if (!alias.empty()) return alias;
+	else return std::string(*name);
+}
 
 TableRefType TableRef::GetType() const
 {
@@ -73,6 +101,16 @@ std::string TableRefTypeToString(TableRefType tp)
 	}
 }
 
+//~~~~~~~~~~~~~~~~~~~~~~~~ J O I N   D E F I N I T I O N ~~~~~~~~~~~~~~~~~~~~~~~~
+
+JoinDefinition::JoinDefinition() : left(NULL), right(NULL), condition(NULL), type(kJoinInner) { }
+
+JoinDefinition::~JoinDefinition() {
+	delete left;
+	delete right;
+	delete condition;
+}
+
 std::string JoinTypeToString(JoinType tp)
 {
 	switch(tp)
@@ -88,13 +126,6 @@ std::string JoinTypeToString(JoinType tp)
 		default:
 			return "#undef#";
 	}
-}
-
-std::ostream &operator<<(std::ostream &stream, const TableName &ob)
-{
-	stream << "TableName: " << std::endl;
-	stream << "database: " << ob.database << ", name: " << ob.name << std::endl;
-	return stream;
 }
 
 std::ostream &operator<<(std::ostream &stream, const JoinDefinition &ob)

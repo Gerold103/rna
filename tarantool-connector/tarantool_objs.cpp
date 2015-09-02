@@ -1,5 +1,53 @@
 #include "tarantool_objs.h"
 
+TColumn::TColumn(const std::string &name_, const std::string &space_, const std::string &alias_, const MValue &val_)
+	: name(name_), space(space_), alias(alias_), value(val_) { }
+
+TColumn::TColumn(const MValue &val) : value(val) { }
+
+bool TColumn::EqualCol(const TColumn &right) const
+{
+	return (name == right.name) && (space == right.space) && ((alias == right.alias) || (alias.length() == 0) || (right.alias.length() == 0));
+}
+
+bool TColumn::Equal(const TColumn &right) const
+{
+	bool r;
+	try {
+		r = (value == right.value);
+	} catch(...) { return false; }
+	return (this->EqualCol(right)) && r;
+}
+
+void TColumn::SetNames(const TColumn &col)
+{
+	name = col.name;
+	space = col.space;
+	alias = col.alias;
+}
+
+bool TColumn::Empty() const
+{
+	return (name.length() == 0) && (space.length() == 0) && (alias.length() == 0) && (value.GetType() == TP_DEFAULT);
+}
+
+std::ostream &operator<<(std::ostream &stream, const TColumn &col)
+{
+	if (col.space.length()) stream << col.space << ".";
+	stream << col.name;
+	if (col.alias.length()) stream << " as " << col.alias;
+	return stream;
+}
+
+std::ostream &operator<<(std::ostream &stream, const std::vector<TColumn> &col)
+{
+	for (size_t i = 0, size = col.size(); i < size; ++i) {
+		stream << col[i];
+		if (i < size - 1) stream << ", ";
+	}
+	return stream;
+}
+
 //~~~~~~~~~~~~~~~~~~~~~~~~ T A R A N T O O L   O B J E C T ~~~~~~~~~~~~~~~~~~~~~~~~
 
 TarantoolObject::TarantoolObject(TarantoolObjType tp) : type(tp) { }
@@ -16,40 +64,16 @@ TarantoolObject::~TarantoolObject() { }
 
 TupleObj::TupleObj() : TarantoolObject(TUPLE_OBJ) { }
 
-TupleObj::TupleObj(const MValueVector &_values) : TarantoolObject(TUPLE_OBJ), values(_values) { }
+TupleObj::TupleObj(const std::vector<TColumn> &values_) : TarantoolObject(TUPLE_OBJ), values(values_) { }
 
-TupleObj::TupleObj(const MValue &source) : TarantoolObject(TUPLE_OBJ)
+TupleObj::TupleObj(const TColumn &value) : TarantoolObject(TUPLE_OBJ)
 {
-	switch(source.GetType()) {
-		case TP_ARRAY: {
-			values = source.GetArray();
-			return;
-		}
-		case TP_MAP: {
-			error = "TupleObj::TupleObj(): MValue type is map";
-			LogFL(DEBUG) << error << "\n";
-			return;
-		}
-		case TP_EXT: {
-			error = "TupleObj::TupleObj(): MValue type is ext";
-			LogFL(DEBUG) << error << "\n";
-			return;
-		}
-		case TP_DEFAULT: {
-			error = "TupleObj::TupleObj(): MValue type is default";
-			LogFL(DEBUG) << error << "\n";
-			return;
-		}
-		default: {
-			values.push_back(source);
-			return;
-		}
-	}
+	values.push_back(value);
 }
 
 //~~~~~~~~ G e t   M e t h o d s ~~~~~~~~
 
-const MValueVector &TupleObj::GetValues() const
+const std::vector<TColumn> &TupleObj::GetValues() const
 {
 	return values;
 }
@@ -59,16 +83,78 @@ size_t TupleObj::Size() const
 	return values.size();
 }
 
-MValue TupleObj::ToMValue() const
+TColumn TupleObj::GetValue(const TColumn &col) const
 {
-	return MValue(values);
+	for (size_t i = 0, size = values.size(); i < size; ++i) {
+		if (values[i].EqualCol(col)) {
+			return values[i];
+		}
+	}
+	return TColumn();
+}
+
+TColumn TupleObj::GetValue(const std::string &name) const
+{
+	int res = -1;
+	for (size_t i = 0, size = values.size(); i < size; ++i) {
+		if ((values[i].name == name) || (values[i].alias == name)) {
+			if (res > 0) {
+				LogFL(DEBUG) << "TupleObj::GetValue(): several TColumns with this name = " << name << "\n";
+				return TColumn();
+			}
+			res = i;
+		}
+	}
+	if (res < 0) return TColumn();
+	return values[res];
+}
+
+TColumn TupleObj::GetValue(const std::string &name, const std::string &space)
+{
+	int res = -1;
+	for (size_t i = 0, size = values.size(); i < size; ++i) {
+		if ((values[i].name == name) && (values[i].space == space)) {
+			if (res > 0) {
+				LogFL(DEBUG) << "TupleObj::GetValue(): several TColumns with this name = " << name << " and space = " << space << "\n";
+				return TColumn();
+			}
+			res = i;
+		}
+	}
+	if (res < 0) return TColumn();
+	return values[res];
+}
+
+MValueVector TupleObj::GetMValues() const
+{
+	MValueVector res;
+	for (size_t i = 0, size = values.size(); i < size; ++i) {
+		res.push_back(values[i].value);
+	}
+	return res;
 }
 
 //~~~~~~~~ S e t   m e t h o d s ~~~~~~~~
 
-void TupleObj::PushBack(const MValue &val)
+void TupleObj::PushBack(const TColumn &val)
 {
 	values.push_back(val);
+}
+
+void TupleObj::SetNames(const std::vector<TColumn> &_names)
+{
+	if (_names.size() != values.size()) {
+		LogFL(DEBUG) << "TupleObj::SetNames(): sizes of names are different\n";
+		throw std::string("TupleObj::SetNames(): sizes of names are different");
+	}
+	for (size_t i = 0, size = values.size(); i < size; ++i) {
+		values[i].SetNames(_names[i]);
+	}
+}
+
+void TupleObj::Clear()
+{
+	values.clear();
 }
 
 //~~~~~~~~ F a b r i c a l   m e t h o d s ~~~~~~~~
@@ -83,7 +169,7 @@ TupleObj TupleObj::FromMSGPack(const char **data)
 	uint32_t tuple_len = mp_decode_array(&tuple);	
 	TupleObj res;
 	for (size_t i = 0; i < tuple_len; ++i) {
-		res.PushBack(MValue::FromMSGPack(&tuple));
+		res.PushBack(TColumn(MValue::FromMSGPack(&tuple)));
 	}
 	*data = tuple;
 	return res;
@@ -104,14 +190,20 @@ TupleObj TupleObj::FromMSGPack(const DataStructure &data)
 	uint32_t tuple_len = mp_decode_array(&tuple);	
 	TupleObj res;
 	for (size_t i = 0; i < tuple_len; ++i) {
-		res.PushBack(MValue::FromMSGPack(&tuple));
+		res.PushBack(TColumn(MValue::FromMSGPack(&tuple)));
 	}
 	return res;
 }
 
 //~~~~~~~~ O p e r a t o r s ~~~~~~~~
 
-const MValue &TupleObj::operator[](int id) const
+const TColumn &TupleObj::operator[](int id) const
+{
+	if ((id < 0) || (id >= static_cast<int>(values.size()))) throw std::string("TupleObj::operator[]: index out of range, i = ") + std::to_string(id);
+	return values[id];
+}
+
+TColumn &TupleObj::operator[](int id)
 {
 	if ((id < 0) || (id >= static_cast<int>(values.size()))) throw std::string("TupleObj::operator[]: index out of range, i = ") + std::to_string(id);
 	return values[id];
@@ -128,10 +220,7 @@ bool TupleObj::operator==(const TupleObj &ob)
 {
 	if (this->Size() != ob.Size()) return false;
 	for (size_t i = 0, size = ob.Size(); i < size; ++i) {
-		try {
-			if (values[i] != ob[i]) return false;
-		}
-		catch(...) { return false; }
+		if (values[i].Equal(ob[i])) return false;
 	}
 	return true;
 }
@@ -151,19 +240,6 @@ SpaceObject::SpaceObject() : TarantoolObject(SPACE_OBJ) { }
 
 SpaceObject::SpaceObject(const std::vector<TupleObj> &_tuples) : TarantoolObject(SPACE_OBJ), tuples(_tuples) { }
 
-SpaceObject::SpaceObject(const MValue &source) : TarantoolObject(SPACE_OBJ)
-{
-	if (source.GetType() != TP_ARRAY) {
-		error = "SpaceObject::SpaceObject(): type of MValue is not array";
-		LogFL(DEBUG) << error << "\n";
-		return;
-	}
-	const MValueVector &vec = source.GetArray();
-	for (size_t i = 0, size = vec.size(); i < size; ++i) {
-		tuples.push_back(TupleObj(vec[i]));
-	}
-}
-
 //~~~~~~~~ G e t   M e t h o d s ~~~~~~~~
 
 const std::vector<TupleObj> &SpaceObject::GetTuples() const
@@ -171,7 +247,7 @@ const std::vector<TupleObj> &SpaceObject::GetTuples() const
 	return tuples;
 }
 
-const std::vector<std::string> &SpaceObject::GetNames() const
+const std::vector<TColumn> &SpaceObject::GetNames() const
 {
 	return names;
 }
@@ -181,50 +257,49 @@ size_t SpaceObject::Size() const
 	return tuples.size();
 }
 
-size_t SpaceObject::NamesCount() const
+size_t SpaceObject::ColumnsCount() const
 {
-	return names.size();
-}
-
-MValue SpaceObject::ToMValue() const
-{
-	MValueVector res;
-	for (size_t i = 0, size = tuples.size(); i < size; ++i) {
-		res.push_back(tuples[i].ToMValue());
-	}
-	return MValue(res);
+	if (names.size()) return names.size();
+	if (tuples.size()) return tuples[0].Size();
+	return 0;
 }
 
 //~~~~~~~~ S e t   m e t h o d s ~~~~~~~~
 
 void SpaceObject::PushBack(const TupleObj &val)
 {
+	if ((tuples.size()) && (tuples[0].Size() != val.Size())) {
+		LogFL(DEBUG) << "SpaceObject::PushBack(): sizes of tuples are different\n";
+		throw std::string("SpaceObject::PushBack(): sizes of tuples are different"); 
+	}
 	tuples.push_back(val);
 }
 
 void SpaceObject::PushBack(const SpaceObject &right)
 {
+	if (names.size() != right.names.size()) {
+		LogFL(DEBUG) << "SpaceObject::PushBack(): names size in SpaceObjects are different\n";
+		throw std::string("SpaceObject::PushBack(): names size in SpaceObjects are different");
+	}
+	for (size_t i = 0, size = names.size(); i < size; ++i) {
+		if (!names[i].EqualCol(right.names[i])) {
+			LogFL(DEBUG) << "SpaceObject::PushBack(): names in SpaceObjects are different\n";
+			throw std::string("SpaceObject::PushBack(): names in SpaceObjects are different");
+		}
+	}
 	tuples.insert(tuples.end(), right.tuples.begin(), right.tuples.end());
 }
 
-bool SpaceObject::PushName(const std::string &str)
+void SpaceObject::SetNames(const std::vector<TColumn> &_names)
 {
-	error.clear();
-	if (tuples.size() == 0) {
-		error = "SpaceObject::PushName(): there are no tuples, so name \"" + str + "\" can't be pushed";
-		return false;
+	if ((tuples.size()) && (tuples[0].Size() != _names.size())) {
+		LogFL(DEBUG) << "SpaceObject::SetNames(): size of tuples and size of names are different\n";
+		throw std::string("SpaceObject::SetNames(): size of tuples and size of names are different");
 	}
-	if (names.size() >= tuples[0].Size()) {
-		error = "SpaceObject::PushName(): names count can't be bigger than objects in one tuple. names.size() = " + std::to_string(names.size());
-		return false;
-	}
-	names.push_back(str);
-	return true;
-}
-
-void SpaceObject::SetNames(const std::vector<std::string> &_names)
-{
 	names = _names;
+	for (size_t i = 0, size = tuples.size(); i < size; ++i) {
+		tuples[i].SetNames(names);
+	}
 }
 
 //~~~~~~~~ S t a t i c   m e t h o d s ~~~~~~~~
@@ -234,7 +309,7 @@ SpaceObject SpaceObject::CartesianProduct(const SpaceObject &left, const SpaceOb
 	SpaceObject res;
 	for (size_t i = 0, size = left.Size(); i < size; ++i) {
 		for (size_t j = 0, size2 = right.Size(); j < size2; ++j) {
-			res.PushBack(left[i] + right[j]);
+			res.tuples.push_back(left[i] + right[j]);
 		}
 	}
 	res.names.insert(res.names.end(), left.names.begin(), left.names.end());
@@ -254,7 +329,7 @@ SpaceObject SpaceObject::FromMSGPack(const char **data)
 	SpaceObject res;
 	uint32_t size = mp_decode_array(&tuple);
 	for (uint32_t i = 0; i < size; ++i) {
-		res.PushBack(TupleObj::FromMSGPack(&tuple));
+		res.tuples.push_back(TupleObj::FromMSGPack(&tuple));
 	}
 	*data = tuple;
 	return res;
@@ -275,7 +350,7 @@ SpaceObject SpaceObject::FromMSGPack(const DataStructure &data)
 	SpaceObject res;
 	uint32_t size = mp_decode_array(&tuple);
 	for (uint32_t i = 0; i < size; ++i) {
-		res.PushBack(TupleObj::FromMSGPack(&tuple));
+		res.tuples.push_back(TupleObj::FromMSGPack(&tuple));
 	}
 	return res;
 }
@@ -288,22 +363,16 @@ const TupleObj &SpaceObject::operator[](int id) const
 	return tuples[id];
 }
 
-bool SpaceObject::operator==(const SpaceObject &ob)
+bool SpaceObject::operator==(const SpaceObject &ob) const
 {
-	if (this->Size() != ob.Size()) return false;
-	SpaceObject tmp(ob);
-	bool res = true;
-	for (int i = static_cast<int>(this->Size()) - 1; i >= 0; --i) {
-		for (int j = static_cast<int>(tmp.Size()) - 1; j >= 0; --j) {
-			if (tuples[i] == tmp[j]) {
-				tmp.Remove(j);
-				break;
-			}
-			if (j == 0) res = false;
-		}
-		if (!res) return false;
+	if (names.size() != ob.names.size()) return false;
+	if (tuples.size() != ob.tuples.size()) return false;
+	for (size_t i = 0, size = names.size(); i < size; ++i) {
+		if (!(names[i].EqualCol(ob.names[i]))) return false;
 	}
-	if (tmp.Size()) return false;
+	for (size_t i = 0, size = tuples.size(); i < size; ++i) {
+		if (!(tuples[i] == ob.tuples[i])) return false;
+	}
 	return true;
 }
 
@@ -328,7 +397,7 @@ std::string TarantoolObjTypeToString(TarantoolObjType tp)
 
 std::ostream &operator<<(std::ostream &stream, const TupleObj &ob)
 {
-	stream << ob.GetValues();
+	stream << ob.GetMValues();
 	return stream;
 }
 
@@ -351,7 +420,7 @@ std::ostream &operator<<(std::ostream &stream, const TarantoolObject &ob)
 std::ostream &operator<<(std::ostream &stream, const SpaceObject &ob)
 {
 	stream << "|  ";
-	for (int i = 0, size = ob.NamesCount(); i < size; ++i) {
+	for (int i = 0, size = ob.ColumnsCount(); i < size; ++i) {
 		stream << ob.GetNames()[i];
 		if (i < size - 1) stream << "  |  ";
 	} 

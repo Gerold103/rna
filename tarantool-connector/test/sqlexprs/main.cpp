@@ -45,9 +45,10 @@ void test(Session &ses, TarantoolInfo &tinfo)
 
 	MValue res;
 
-	MakeQuery(ses, tinfo, "SELECT name3, t1.dig1, t2.bar, t1.bar FROM tester AS t1 JOIN tester2 AS t2 ON (t1.bar = t2.bar);");
-
-	//MakeQuery("CREATE TABLE users (id INT, name TEXT, surname TEXT, salary INT, PRIMARY KEY (id, salary), UNIQUE(id), INDEX(name, surname), INDEX(name, salary));", port, address);
+	MakeQuery(ses, tinfo, "SELECT (t1.bar + bar2) as tbar, tester.id, t2.id, name4, t1.dig1, t3.id, name6 FROM tester AS t1 JOIN tester2 AS t2 ON (tbar >= 400) JOIN tester3 as t3;");
+	//MakeQuery(ses, tinfo, "SELECT * FROM tester JOIN tester2 WHERE tester.bar = tester2.bar2");
+	//MakeSelect(ses, tinfo, "SELECT id as i_al, tester.name1, t1.name2, (t1.name1 + t1.name2) as nmnm FROM tester as t1 WHERE (t1.name1 != '456') and (bar > 50) and (i_al > 2) and (nmnm != '123')");
+	//MakeQuery(ses, tinfo, "CREATE TABLE tester3 (id INT, name5 TEXT, name6 TEXT, dig5 INT, dig6 INT, dig1 INT, dig2 INT, PRIMARY KEY (id, name5), UNIQUE(id), INDEX(name5, name6), INDEX(dig5, dig6), INDEX(dig1, dig2));");
 
 	//schm = TarantoolSchema(ses);
 

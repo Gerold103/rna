@@ -32,4 +32,6 @@ void hexDump(char *desc, void *addr, int len);
 
 MValue MakeQuery(Session &ses, TarantoolInfo &tinfo, const std::string &sql_query);
 
+SpaceObject MakeSelect(Session &ses, TarantoolInfo &tinfo, const std::string &sql_query);
+
 #endif

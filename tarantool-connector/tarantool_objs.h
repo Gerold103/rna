@@ -7,11 +7,30 @@
 #include "logger.h"
 #include "datastructure.h"
 
+
 enum TarantoolObjType {
 	SPACE_OBJ,
 	INDEX_OBJ,
 	TUPLE_OBJ
 };
+
+struct TColumn {
+public:
+	std::string name;
+	std::string space;
+	std::string alias;
+	MValue value;
+
+	TColumn(const std::string &name_ = std::string(""), const std::string &space_ = std::string(""), const std::string &alias_ = std::string(""), const MValue &val_ = MValue());
+	TColumn(const MValue &val);
+	bool EqualCol(const TColumn &right) const;
+	bool Equal(const TColumn &right) const;
+	void SetNames(const TColumn &col);
+	bool Empty() const;
+};
+
+std::ostream &operator<<(std::ostream &stream, const TColumn &col);
+std::ostream &operator<<(std::ostream &stream, const std::vector<TColumn> &col);
 
 //~~~~~~~~~~~~~~~~~~~~~~~~ T A R A N T O O L   O B J E C T ~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -42,26 +61,31 @@ public:
 
 class TupleObj : public TarantoolObject {
 private:
-	MValueVector values;
+	std::vector<TColumn> values;
 
 public:
 	//~~~~~~~~ C o n s t r u c t o r s ~~~~~~~~
 
 	TupleObj();
 
-	TupleObj(const MValueVector &_values);
+	TupleObj(const std::vector<TColumn> &values_);
 
-	TupleObj(const MValue &source);
+	TupleObj(const TColumn &value);
 
 	//~~~~~~~~ G e t   M e t h o d s ~~~~~~~~
 
-	const MValueVector &GetValues() const;
+	const std::vector<TColumn> &GetValues() const;
 	size_t Size() const;
-	MValue ToMValue() const;
+	TColumn GetValue(const TColumn &col) const; //get tcolumn with value from tcolumn with only name
+	TColumn GetValue(const std::string &name) const;
+	TColumn GetValue(const std::string &name, const std::string &space);
+	MValueVector GetMValues() const;
 
 	//~~~~~~~~ S e t   m e t h o d s ~~~~~~~~
 
-	void PushBack(const MValue &val);
+	void PushBack(const TColumn &val);
+	void SetNames(const std::vector<TColumn> &_names);
+	void Clear();
 
 	//~~~~~~~~ F a b r i c a l   m e t h o d s ~~~~~~~~
 
@@ -70,7 +94,8 @@ public:
 
 	//~~~~~~~~ O p e r a t o r s ~~~~~~~~
 
-	const MValue &operator[](int id) const;
+	const TColumn &operator[](int id) const;
+	TColumn &operator[](int id);
 
 	TupleObj operator+(const TupleObj &right) const;
 
@@ -87,7 +112,7 @@ class SpaceObject : public TarantoolObject {
 private:
 	std::vector<TupleObj> tuples;
 
-	std::vector<std::string> names;
+	std::vector<TColumn> names;
 
 public:
 	//~~~~~~~~ C o n s t r u c t o r s ~~~~~~~~
@@ -96,27 +121,21 @@ public:
 
 	SpaceObject(const std::vector<TupleObj> &_tuples);
 
-	SpaceObject(const MValue &source);
-
 	//~~~~~~~~ G e t   M e t h o d s ~~~~~~~~
 
 	const std::vector<TupleObj> &GetTuples() const;
-	const std::vector<std::string> &GetNames() const;
+	const std::vector<TColumn> &GetNames() const;
 
 	size_t Size() const;
 
-	size_t NamesCount() const;
-
-	MValue ToMValue() const;
+	size_t ColumnsCount() const;
 
 	//~~~~~~~~ S e t   m e t h o d s ~~~~~~~~
 
 	void PushBack(const TupleObj &val);
 	void PushBack(const SpaceObject &right);
 
-	bool PushName(const std::string &str);
-
-	void SetNames(const std::vector<std::string> &_names);
+	void SetNames(const std::vector<TColumn> &_names);
 
 	//~~~~~~~~ S t a t i c   m e t h o d s ~~~~~~~~
 
@@ -130,7 +149,7 @@ public:
 	//~~~~~~~~ O p e r a t o r s ~~~~~~~~
 
 	const TupleObj &operator[](int id) const;
-	bool operator==(const SpaceObject &ob);
+	bool operator==(const SpaceObject &ob) const;
 
 	//~~~~~~~~ O t h e r ~~~~~~~~
 

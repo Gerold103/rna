@@ -132,11 +132,11 @@ const std::vector<std::shared_ptr<TarantoolIndexInfo> > TarantoolSpaceInfo::Indi
 	return infos;
 }
 
-std::vector<std::string> TarantoolSpaceInfo::ColumnNames() const
+std::vector<TColumn> TarantoolSpaceInfo::ColumnNames() const
 {
-	std::vector<std::string> res;
+	std::vector<TColumn> res;
 	for (size_t i = 0, size = space_parts.size(); i < size; ++i) {
-		res.push_back(space_parts[i].name);
+		res.push_back(TColumn(space_parts[i].name, this->Name()));
 	}
 	return res;
 }

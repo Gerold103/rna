@@ -26,6 +26,8 @@ typedef enum {
 	kTableCrossProduct
 } TableRefType;
 
+typedef std::vector<const JoinDefinition *> JoinVector;
+
 std::string TableRefTypeToString(TableRefType tp);
 
 struct TableName {

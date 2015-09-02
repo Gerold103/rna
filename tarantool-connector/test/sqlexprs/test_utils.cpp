@@ -68,9 +68,9 @@ MValue MakeQuery(Session &ses, TarantoolInfo &tinfo, const std::string &sql_quer
 			case StatementType::kStmtSelect: {
 				LogFL(DEBUG) << "main(): statement type is kStmtSelect\n";
 				SelectMaker maker(ses, tinfo, dynamic_cast<SelectStatement *>(statement));
-				MValue tmp = maker.MakeSelect().ToMValue();
+				SpaceObject tmp = maker.MakeSelect();
 				LogFL(DEBUG) << "main(): MakeSelect result = " << tmp << "\n";
-				if (tmp.GetType() == TP_ARRAY) LogFL(DEBUG) << "size of result = " << tmp.GetArray().size() << "\n";
+				LogFL(DEBUG) << "size of result = " << tmp.Size() << "\n";
 				return tmp;
 			}
 			case StatementType::kStmtCreate: {
@@ -97,6 +97,34 @@ MValue MakeQuery(Session &ses, TarantoolInfo &tinfo, const std::string &sql_quer
 			default:
 				LogFL(DEBUG) << "main(): statement type unknown\n";
 				return MValue(false);
+		}
+	}
+}
+
+SpaceObject MakeSelect(Session &ses, TarantoolInfo &tinfo, const std::string &sql_query)
+{
+	std::shared_ptr<SQLStatementList> statement_list(SQLParser::parseSQLString(sql_query));
+	if (statement_list->isValid == false) {
+		LogFL(DEBUG) << statement_list->parser_msg << "\n";
+		std::cout << statement_list->parser_msg << std::endl;
+		return SpaceObject();
+	}
+
+	for (size_t i = 0, size = statement_list->numStatements(); i < size; ++i) {
+		SQLStatement *statement = statement_list->getStatement(i);
+
+		switch(statement->type()) {
+			case StatementType::kStmtSelect: {
+				LogFL(DEBUG) << "MakeSelect(): statement type is kStmtSelect\n";
+				SelectMaker maker(ses, tinfo, dynamic_cast<SelectStatement *>(statement));
+				SpaceObject tmp = maker.MakeSelect();
+				LogFL(DEBUG) << "MakeSelect(): MakeSelect result = " << tmp << "\n";
+				LogFL(DEBUG) << "size of result = " << tmp.Size() << "\n";
+				return tmp;
+			}
+			default:
+				LogFL(DEBUG) << "MakeSelect(): statement type not select\n";
+				return SpaceObject();
 		}
 	}
 }

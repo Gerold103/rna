@@ -93,7 +93,7 @@ const std::string &Expr::GetRealName() const
 
 std::string Expr::ToString() const
 {
-	if (alias.length() > 0) return alias;
+	//if (alias.length() > 0) return alias;
 	switch(GetType()) {
 		case ExprType::kExprLiteralFloat: {
 			return std::to_string(GetFloat());

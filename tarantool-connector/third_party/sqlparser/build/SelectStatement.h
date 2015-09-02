@@ -25,14 +25,12 @@ typedef enum {
 
 std::string OrderTypeToString(OrderType tp);
 
+//~~~~~~~~~~~~~~~~~~~~~~~~ O R D E R   D E S C R I P T I O N ~~~~~~~~~~~~~~~~~~~~~~~~
+
 struct OrderDescription {
-	OrderDescription(OrderType type, Expr* expr) :
-		type(type),
-		expr(expr) {}
+	OrderDescription(OrderType type, Expr* expr);
 		
-	virtual ~OrderDescription() {
-		delete expr;
-	}
+	virtual ~OrderDescription();
 
 	OrderType type;
 	Expr* expr;	
@@ -40,16 +38,12 @@ struct OrderDescription {
 
 std::ostream &operator<<(std::ostream &stream, const OrderDescription &ob);
 
-/**
- * @struct LimitDescription
- * @brief Description of the limit clause within a select statement
- */
+//~~~~~~~~~~~~~~~~~~~~~~~~ L I M I T   D E S C R I P T I O N ~~~~~~~~~~~~~~~~~~~~~~~~
+
 const int64_t kNoLimit = -1;
 const int64_t kNoOffset = -1;
 struct LimitDescription {
-	LimitDescription(int64_t limit, int64_t offset) :
-		limit(limit),
-		offset(offset) {}
+	LimitDescription(int64_t limit, int64_t offset);
 
 	int64_t limit;
 	int64_t offset;	
@@ -61,54 +55,20 @@ std::ostream &operator<<(std::ostream &stream, const LimitDescription &ob);
  * @struct GroupByDescription
  */
 struct GroupByDescription {
-	GroupByDescription() : 
-		columns(NULL),
-		having(NULL) {}
+	GroupByDescription();
 
-	~GroupByDescription() {
-		if (columns != NULL) {
-			for(size_t i = 0, size = columns->size(); i < size; ++i) {
-				delete columns->at(i);
-			}
-		}
-		delete columns;
-		delete having;
-	}
+	~GroupByDescription();
 
 	std::vector<Expr*>* columns;
 	Expr* having;
 };
 
-/**
- * @struct SelectStatement
- * @brief Representation of a full select statement.
- * 
- * TODO: add union_order and union_limit
- */
-struct SelectStatement : SQLStatement {
-	SelectStatement() : 
-		SQLStatement(kStmtSelect),
-		from_table(NULL),
-		select_list(NULL),
-		where_clause(NULL),
-		group_by(NULL),
-		union_select(NULL),
-		order(NULL),
-		limit(NULL) {};
+//~~~~~~~~~~~~~~~~~~~~~~~~ S E L E C T   S T A T E M E N T ~~~~~~~~~~~~~~~~~~~~~~~~
 
-	virtual ~SelectStatement() {
-		delete from_table;
-		if (select_list != NULL) {
-			for (size_t i = 0, size = select_list->size(); i < size; ++i) {
-				delete select_list->at(i);
-			}
-		}
-		delete select_list;
-		delete where_clause;
-		delete group_by;
-		delete order;
-		delete limit;
-	}
+struct SelectStatement : SQLStatement {
+	SelectStatement();
+
+	virtual ~SelectStatement();
 
 	TableRef* from_table;
 	bool select_distinct;
@@ -119,8 +79,6 @@ struct SelectStatement : SQLStatement {
 	SelectStatement* union_select;
 	OrderDescription* order;
 	LimitDescription* limit;
-
-	
 };
 
 std::ostream &operator<<(std::ostream &stream, const SelectStatement &ob);

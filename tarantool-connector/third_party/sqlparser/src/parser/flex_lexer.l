@@ -187,8 +187,10 @@ TO				TOKEN(TO)
 	return SQL_FLOATVAL;
 }
 
-[0-9]+	{
+[0-9]+ |
+"-"[0-9]+		{
 	yylval->ival = atol(yytext);
+	std::cout << yylval->ival << std::endl;
 	return SQL_INTVAL;
 }
 

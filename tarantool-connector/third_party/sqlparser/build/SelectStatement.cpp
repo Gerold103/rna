@@ -15,6 +15,14 @@ std::string OrderTypeToString(OrderType tp)
 	}
 }
 
+//~~~~~~~~~~~~~~~~~~~~~~~~ O R D E R   D E S C R I P T I O N ~~~~~~~~~~~~~~~~~~~~~~~~
+
+OrderDescription::OrderDescription(OrderType type, Expr* expr) : type(type), expr(expr) {}
+	
+OrderDescription::~OrderDescription() {
+	delete expr;
+}
+
 std::ostream &operator<<(std::ostream &stream, const OrderDescription &ob)
 {
 	stream << "OrderDescription: " << std::endl;
@@ -23,12 +31,48 @@ std::ostream &operator<<(std::ostream &stream, const OrderDescription &ob)
 	return stream;
 }
 
+//~~~~~~~~~~~~~~~~~~~~~~~~ L I M I T   D E S C R I P T I O N ~~~~~~~~~~~~~~~~~~~~~~~~
+
+LimitDescription::LimitDescription(int64_t limit, int64_t offset) : limit(limit), offset(offset) {}
+
 std::ostream &operator<<(std::ostream &stream, const LimitDescription &ob)
 {
 	stream << "LimitDescription: " << std::endl;
 	stream << "limit: " << ob.limit << std::endl;
 	stream << "offset: " << ob.offset << std::endl;
 	return stream;
+}
+
+//~~~~~~~~~~~~~~~~~~~~~~~~ G R O U P   B Y   D E S C R I P T I O N ~~~~~~~~~~~~~~~~~~~~~~~~
+
+GroupByDescription::GroupByDescription() : columns(NULL), having(NULL) {}
+
+GroupByDescription::~GroupByDescription() {
+	if (columns != NULL) {
+		for(size_t i = 0, size = columns->size(); i < size; ++i) {
+			delete columns->at(i);
+		}
+	}
+	delete columns;
+	delete having;
+}
+
+//~~~~~~~~~~~~~~~~~~~~~~~~ S E L E C T   S T A T E M E N T ~~~~~~~~~~~~~~~~~~~~~~~~
+
+SelectStatement::SelectStatement() : SQLStatement(kStmtSelect), from_table(NULL), select_list(NULL), where_clause(NULL), group_by(NULL), union_select(NULL), order(NULL), limit(NULL) {};
+
+SelectStatement::~SelectStatement() {
+	delete from_table;
+	if (select_list != NULL) {
+		for (size_t i = 0, size = select_list->size(); i < size; ++i) {
+			delete select_list->at(i);
+		}
+	}
+	delete select_list;
+	delete where_clause;
+	delete group_by;
+	delete order;
+	delete limit;
 }
 
 std::ostream &operator<<(std::ostream &stream, const SelectStatement &ob)

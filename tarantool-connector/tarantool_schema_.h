@@ -8,6 +8,7 @@
 #include "utils.h"
 #include "tp_wrap.h"
 #include "logger.h"
+#include "tarantool_objs.h"
 
 #define TUPLE_LEN 6
 #define FIRST_PACK_PART_SIZE 5
@@ -101,7 +102,7 @@ public:
 
 	const std::vector<std::shared_ptr<TarantoolIndexInfo> > Indices() const;
 
-	std::vector<std::string> ColumnNames() const;
+	std::vector<TColumn> ColumnNames() const;
 
 	friend class TarantoolInfo;
 };

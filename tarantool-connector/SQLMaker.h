@@ -10,6 +10,7 @@
 #include "logger.h"
 
 #include "SQLParser.h"
+#include "Table.h"
 extern "C" {
 	#include "session.h"
 	#include "tp.h"
