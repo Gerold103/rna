@@ -40,12 +40,6 @@ void test_insert_into(Session &ses, TarantoolInfo &tinfo)
 		(4, 'Georgiy', 'Georgiev', 0)
 	*/
 
-	/*
-		(0, 'Ivan Ivanov', 'C++', 2004)
-		(3, 'Petr Petrov', 'Book3', 2013)
-		(1, 'Nikolay Nikolayev', 'Book1', 1995)
-	*/
-
 	sql_queries.push_back("INSERT INTO books VALUES (0, 1, 'C++', 'Straustrup', 2004)");
 	results.push_back(MValue(true));
 
