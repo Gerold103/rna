@@ -92,12 +92,51 @@ void test_select_from(Session &ses, TarantoolInfo &tinfo)
 		results.push_back(tuples);
 	}
 
+	sql_queries.push_back("SELECT b.id as BookID, (users.name + ' ' + u.surname) as UserName, books.name as BookName, year FrOm users as u join books b ON (b.user_id = u.id) WHERE year >= 1995");
+	{
+		SpaceObject tuples;
+		std::vector<TColumn> names;
+		names.push_back(TColumn("id", "books", "BookID"));
+		names.push_back(TColumn("((users.name + ' ') + u.surname)", "", "UserName"));
+		names.push_back(TColumn("name", "books", "BookName"));
+		names.push_back(TColumn("year", "books"));
+		tuples.SetNames(names);
+		TupleObj tmp;
+
+		tmp.PushBack(TColumn("id", "books", "BookID", MValue(0)));
+		tmp.PushBack(TColumn("((users.name + ' ') + u.surname)", "", "UserName", MValue("Ivan Ivanov")));
+		tmp.PushBack(TColumn("name", "books", "BookName", MValue("C++")));
+		tmp.PushBack(TColumn("year", "books", "", MValue(2004)));
+		tuples.PushBack(tmp);
+		tmp.Clear();
+
+		tmp.PushBack(TColumn("id", "books", "BookID", MValue(3)));
+		tmp.PushBack(TColumn("((users.name + ' ') + u.surname)", "", "UserName", MValue("Petr Petrov")));
+		tmp.PushBack(TColumn("name", "books", "BookName", MValue("Book3")));
+		tmp.PushBack(TColumn("year", "books", "", MValue(2013)));
+		tuples.PushBack(tmp);
+		tmp.Clear();
+
+		tmp.PushBack(TColumn("id", "books", "BookID", MValue(1)));
+		tmp.PushBack(TColumn("((users.name + ' ') + u.surname)", "", "UserName", MValue("Nikolay Nikolayev")));
+		tmp.PushBack(TColumn("name", "books", "BookName", MValue("Book1")));
+		tmp.PushBack(TColumn("year", "books", "", MValue(1995)));
+		tuples.PushBack(tmp);
+		tmp.Clear();
+
+		results.push_back(tuples);
+	}
+
 	for (size_t i = 0, size1 = sql_queries.size(), size2 = results.size(); (i < size1) && (i < size2); ++i) {
 		try {
 			res = MakeSelect(ses, tinfo, sql_queries[i]);
-			Logger::Log(TEST) << "test n = " << i << " accepted: " << (SpaceObject(res) == SpaceObject(results[i])) << "\n";
+			bool t = (SpaceObject(res) == SpaceObject(results[i]));
+			Logger::Log(TEST) << "test n = " << i << " accepted: " << t << "\n";
+			if (!t) {
+				Logger::Log(TEST) << "result: " << res << ";\nmust be: " << results[i] << "\n";
+			}
 		}
-		catch(const std::string &mes) { Logger::Log(TEST) << "error on test " << i << ", sql_query = '" << sql_queries[i] << "\n"; }
+		catch(const std::string &mes) { Logger::Log(TEST) << "error on test " << i << ", sql_query = '" << sql_queries[i] << ", res = " << res << "\n must be = " << results[i] << "\n"; }
 		catch(...) { Logger::Log(TEST) << "unknown error on test " << i << "\n"; }
 	}
 }

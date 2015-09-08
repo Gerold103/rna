@@ -46,12 +46,12 @@ public:
 struct SQLCondition {
 public:
 	tp_iterator_type type;
-	std::string column;
-	MValue value;
+	TColumn column;
 
-	SQLCondition(const std::string column_, const MValue &value_, tp_iterator_type type_ = TP_ITERATOR_EQ);
 	SQLCondition();
-	SQLCondition(const Expr *condition);
 };
+
+std::ostream &operator<<(std::ostream &stream, const SQLCondition &ob);
+std::ostream &operator<<(std::ostream &stream, const std::vector<SQLCondition> &ob);
 
 #endif

@@ -46,284 +46,106 @@ SelectMaker::SelectMaker(Session &ses_, TarantoolInfo &tinfo_, SelectStatement *
 	this->init_aliases(statement->from_table, getted);
 }
 
-#define _op_result(op) CalculateFromTupleAndExpr(expr->expr, tuple, original_tuple, tinfo, space_id, aliases) op CalculateFromTupleAndExpr(expr->expr2, tuple, original_tuple, tinfo, space_id, aliases)
+//while only EQ
 
-MValue CalculateFromTupleAndExpr(Expr *expr, const TupleObj &tuple, const TupleObj &original_tuple, const TarantoolInfo *tinfo, int space_id, const std::map<std::string, int> &aliases = std::map<std::string, int>())
+TColumn GetColumnFromExpr(const TupleObj &reduced, const TupleObj &original, const Expr *expr, const TarantoolInfo *tinfo, const std::map<std::string, std::string> &aliases)
 {
-	if (expr == NULL) return MValue();
-	switch(expr->GetType()) {
-		case ExprType::kExprLiteralFloat: return MValue(expr->GetFloat());
-		case ExprType::kExprLiteralString: return MValue(expr->GetRealName());
-		case ExprType::kExprLiteralInt: return MValue(expr->GetInt());
-		case ExprType::kExprStar: return MValue();
-		case ExprType::kExprPlaceholder: return MValue();
-		case ExprType::kExprColumnRef: {
-			int num = tinfo->SpaceBy(space_id)->ColumnNumber(expr->GetRealName());
-			if (num == -1) {
-				auto tmp = aliases.find(expr->GetRealName());
-				if (tmp == aliases.end()) {
-					LogFL(DEBUG) << "CalculateFromTupleAndExpr(): column with name \"" << expr->GetRealName() << "\" was not found\n";
-					return MValue();
-				}
-				return tuple[tmp->second];
-			}
-			return original_tuple[num];
+	TColumn res;
+	switch (expr->type) {
+		case ExprType::kExprLiteralFloat: {
+			res.value.SetValue(expr->GetFloat());
+			return res;
 		}
-		case ExprType::kExprOperator: {
-			switch(expr->GetOperator()) {
-				case Expr::AND: 		return _op_result(&&);
-				case Expr::OR: 			return _op_result(||);
-				case Expr::NOT_EQUALS: 	return _op_result(!=);
-				case Expr::GREATER_EQ: 	return _op_result(>=);
-				case Expr::LESS_EQ: 	return _op_result(<=);
-				case Expr::SIMPLE_OP: {
-					switch(expr->GetOperatorChar()) {
-						case '=': return _op_result(==);
-						case '+': return _op_result(+);
-						case '-': return _op_result(-);
-						case '*': return _op_result(*);
-						case '/': return _op_result(/);
-						case '%': return _op_result(%);
-						case '>': return _op_result(>);
-						case '<': return _op_result(<);
-						default: {
-							LogFL(DEBUG) << "CalculateFromTupleAndExpr(): operator char is undefined and equal = '" << expr->GetOperatorChar() << "'\n";
-							return MValue();
-						}
-					}
-				}
-				default: {
-					LogFL(DEBUG) << "CalculateFromTupleAndExpr(): expr type is undefided and equal = " << Expr::OperatorTypeToString(expr->GetOperator()) << ".\n";
-					Logger::LogObject(DEBUG, *expr);
-					return MValue();
-				}
+		case ExprType::kExprLiteralString: {
+			res.value.SetValue(expr->GetString());
+			return res;
+		}
+		case ExprType::kExprLiteralInt: {
+			res.value.SetValue(expr->GetInt());
+			return res;
+		}
+		default: break;
+	}
+	if (expr->type != kExprColumnRef) return TColumn();
+	if (expr->alias.length()) res.alias = expr->alias;
+	if (expr->name.length() == 0) return TColumn();
+	if (expr->table.length()) {
+		std::string _table;
+		if (tinfo->SpaceBy(expr->table) == nullptr) {
+			//mybe it is alias
+			auto it = aliases.find(expr->table);
+			if ((it == aliases.end()) || (tinfo->SpaceBy(it->second) == nullptr)) {
+				return TColumn();
+			}
+			_table = it->second;
+		} else _table = expr->table;
+		res.space = _table;
+		if (tinfo->SpaceBy(_table)->ColumnBy(expr->name) == nullptr) {
+			return TColumn();
+		}
+		res.name = expr->name;
+	} else {
+		TColumn tmp = reduced.GetValue(expr->name);
+		if (tmp.Empty()) {
+			tmp = original.GetValue(expr->name);
+			if (tmp.Empty()) {
+				LogFL(DEBUG) << "CalculateMValue(): column was not found in both tuples original and reduced, name = " << (expr->name) << "\n";
+				return TColumn();
 			}
 		}
-		case ExprType::kExprFunctionRef: {
-			switch(expr->GetOperator()) {
-				case Expr::SUBSTRING: {
-					switch(expr->GetArgumentsNumber()) {
-						case 2: {
-							Expr *first = expr->expr;
-							Expr *second = expr->expr2;
-							MValue left, right;
-							switch(first->GetType()) {
-								case ExprType::kExprLiteralString: left = MValue(first->GetRealName()); break;
-								case ExprType::kExprColumnRef: left = tuple[tinfo->SpaceBy(space_id)->ColumnNumber(first->GetRealName())]; break;
-								default: {
-									LogFL(DEBUG) << "CalculateFromTupleAndExpr(): first argument of function SUBSTRING has incorrect type\n";
-									return MValue();
-								}
-							}
-							switch(second->GetType()) {
-								case ExprType::kExprLiteralInt: right = MValue(second->GetInt()); break;
-								case ExprType::kExprColumnRef: right = tuple[tinfo->SpaceBy(space_id)->ColumnNumber(second->GetRealName())]; break;
-								default: {
-									LogFL(DEBUG) << "CalculateFromTupleAndExpr(): second argument of function SUBSTRING has incorrect type\n";
-									return MValue();
-								}
-							}
-							if (left.GetType() != TP_STR) {
-								LogFL(DEBUG) << "CalculateFromTupleAndExpr(): first argument of function SUBSTRING must have string type, but type is " << Convert::ToString(left.GetType()) << "\n";
-								return MValue();
-							}
-							switch(right.GetType()) {
-								case TP_INT: {
-									if (right.GetInt() >= left.GetStr().length()) return MValue(std::string());
-									return MValue(left.GetStr().substr(right.GetInt() - 1));
-								}
-								case TP_UINT: {
-									if (right.GetUint() >= left.GetStr().length()) return MValue(std::string());
-									return MValue(left.GetStr().substr(static_cast<int>(right.GetUint()) - 1));
-								}
-								default: {
-									LogFL(DEBUG) << "CalculateFromTupleAndExpr(): type fo second argument of SUBSTRING must be int or uint, but type is " << Convert::ToString(right.GetType()) << "\n";
-									return MValue();
-								}
-							}
-						}
-						default: {
-							LogFL(DEBUG) << "CalculateFromTupleAndExpr(): this number of arguments while is not implemented\n";
-							return MValue();
-						}
-					}
-				}
-				default: {
-					LogFL(DEBUG) << "CalculateFromTupleAndExpr(): another functions while are not implemented\n";
-					return MValue();
-				}
-			}
-		}
-		default: {
-			LogFL(DEBUG) << "CalculateFromTupleAndExpr(): undefined type of Expr\n";
-			return MValue();
+		res.name = tmp.name;
+		res.space = tmp.space;
+	}
+	TColumn tmp = reduced.GetValue(res);
+	if (tmp.Empty()) {
+		tmp = original.GetValue(res);
+		if (tmp.Empty()) {
+			return TColumn();
 		}
 	}
+	res.value = tmp.value;
+	return res;
 }
 
-#undef _op_result
-// #define _op_result(op) \
-// 					{ MValue left = CalculateFromTupleAndExpr(expr->expr, tuple, original_tuple, tinfo, space_id, strict_conditions, aliases); \
-// 					MValue right = CalculateFromTupleAndExpr(expr->expr2, tuple, original_tuple, tinfo, space_id, strict_conditions, aliases); \
-// 					if ((left.GetType() == TP_DEFAULT) || (right.GetType() == TP_DEFAULT)) return MValue(true); \
-// 					return left op right; } \
-
-
-// MValue CalculateFromTupleAndExpr(Expr *expr, const TupleObj &tuple, const TupleObj &original_tuple, const TarantoolInfo *tinfo, int space_id, bool strict_conditions, const std::map<std::string, int> &aliases = std::map<std::string, int>())
-// {
-// 	if (strict_conditions) return CalculateFromTupleAndExpr(expr, tuple, original_tuple, tinfo, space_id, aliases);
-
-// 	if (expr == NULL) return MValue();
-// 	switch(expr->GetType()) {
-// 		case ExprType::kExprLiteralFloat: return MValue(expr->GetFloat());
-// 		case ExprType::kExprLiteralString: return MValue(expr->GetRealName());
-// 		case ExprType::kExprLiteralInt: return MValue(expr->GetInt());
-// 		case ExprType::kExprStar: return MValue();
-// 		case ExprType::kExprPlaceholder: return MValue();
-// 		case ExprType::kExprColumnRef: {
-// 			int num = tinfo->SpaceBy(space_id)->ColumnNumber(expr->GetRealName());
-// 			if (num == -1) {
-// 				auto tmp = aliases.find(expr->GetRealName());
-// 				if (tmp == aliases.end()) {
-// 					LogFL(DEBUG) << "CalculateFromTupleAndExpr(): column with name \"" << expr->GetRealName() << "\" was not found\n";
-// 					return MValue();
-// 				}
-// 				return tuple[tmp->second];
-// 			}
-// 			return original_tuple[num];
-// 		}
-// 		case ExprType::kExprOperator: {
-// 			switch(expr->GetOperator()) {
-// 				case Expr::AND: 		_op_result(&&)
-// 				case Expr::OR: 			_op_result(||)
-// 				case Expr::NOT_EQUALS:  _op_result(!=)
-// 				case Expr::GREATER_EQ: 	_op_result(>=)
-// 				case Expr::LESS_EQ: 	_op_result(<=)
-// 				case Expr::SIMPLE_OP: {
-// 					switch(expr->GetOperatorChar()) {
-// 						case '=': _op_result(==);
-// 						case '+': _op_result(+);
-// 						case '-': _op_result(-);
-// 						case '*': _op_result(*);
-// 						case '/': _op_result(/);
-// 						case '%': _op_result(%);
-// 						case '>': _op_result(>);
-// 						case '<': _op_result(<);
-// 						default: {
-// 							LogFL(DEBUG) << "CalculateFromTupleAndExpr(): operator char is undefined and equal = '" << expr->GetOperatorChar() << "'\n";
-// 							return MValue();
-// 						}
-// 					}
-// 				}
-// 				default: {
-// 					LogFL(DEBUG) << "CalculateFromTupleAndExpr(): expr type is undefided and equal = " << Expr::OperatorTypeToString(expr->GetOperator()) << ".\n";
-// 					Logger::LogObject(DEBUG, *expr);
-// 					return MValue();
-// 				}
-// 			}
-// 		}
-// 		case ExprType::kExprFunctionRef: {
-// 			switch(expr->GetOperator()) {
-// 				case Expr::SUBSTRING: {
-// 					switch(expr->GetArgumentsNumber()) {
-// 						case 2: {
-// 							Expr *first = expr->expr;
-// 							Expr *second = expr->expr2;
-// 							MValue left, right;
-// 							switch(first->GetType()) {
-// 								case ExprType::kExprLiteralString: left = MValue(first->GetRealName()); break;
-// 								case ExprType::kExprColumnRef: left = tuple[tinfo->SpaceBy(space_id)->ColumnNumber(first->GetRealName())]; break;
-// 								default: {
-// 									LogFL(DEBUG) << "CalculateFromTupleAndExpr(): first argument of function SUBSTRING has incorrect type\n";
-// 									return MValue();
-// 								}
-// 							}
-// 							switch(second->GetType()) {
-// 								case ExprType::kExprLiteralInt: right = MValue(second->GetInt()); break;
-// 								case ExprType::kExprColumnRef: right = tuple[tinfo->SpaceBy(space_id)->ColumnNumber(second->GetRealName())]; break;
-// 								default: {
-// 									LogFL(DEBUG) << "CalculateFromTupleAndExpr(): second argument of function SUBSTRING has incorrect type\n";
-// 									return MValue();
-// 								}
-// 							}
-// 							if (left.GetType() != TP_STR) {
-// 								LogFL(DEBUG) << "CalculateFromTupleAndExpr(): first argument of function SUBSTRING must have string type, but type is " << Convert::ToString(left.GetType()) << "\n";
-// 								return MValue();
-// 							}
-// 							switch(right.GetType()) {
-// 								case TP_INT: {
-// 									if (right.GetInt() >= left.GetStr().length()) return MValue(std::string());
-// 									return MValue(left.GetStr().substr(right.GetInt() - 1));
-// 								}
-// 								case TP_UINT: {
-// 									if (right.GetUint() >= left.GetStr().length()) return MValue(std::string());
-// 									return MValue(left.GetStr().substr(static_cast<int>(right.GetUint()) - 1));
-// 								}
-// 								default: {
-// 									LogFL(DEBUG) << "CalculateFromTupleAndExpr(): type fo second argument of SUBSTRING must be int or uint, but type is " << Convert::ToString(right.GetType()) << "\n";
-// 									return MValue();
-// 								}
-// 							}
-// 						}
-// 						default: {
-// 							LogFL(DEBUG) << "CalculateFromTupleAndExpr(): this number of arguments while is not implemented\n";
-// 							return MValue();
-// 						}
-// 					}
-// 				}
-// 				default: {
-// 					LogFL(DEBUG) << "CalculateFromTupleAndExpr(): another functions while are not implemented\n";
-// 					return MValue();
-// 				}
-// 			}
-// 		}
-// 		default: {
-// 			LogFL(DEBUG) << "CalculateFromTupleAndExpr(): undefined type of Expr\n";
-// 			return MValue();
-// 		}
-// 	}
-// }
-
-// #undef _op_result
-
-//while only EQ
-std::vector<SQLCondition> SelectMaker::GetIndexConditions(const Expr *where) const
+std::vector<SQLCondition> SelectMaker::GetIndexConditions(const TupleObj &reduced, const TupleObj &original, const Expr *where, const TarantoolInfo *tinfo, const std::map<std::string, std::string> &aliases) const
 {
 	std::vector<SQLCondition> res;
 	if (where == NULL) return res;
-
 	switch(where->type) {
-		case ExprType::kExprOperator: {
+		case kExprOperator: {
 			switch(where->op_type) {
-				case Expr::AND: {
-					auto left = this->GetIndexConditions(where->expr);
-					auto right = this->GetIndexConditions(where->expr2);
-					res.insert(res.end(), left.begin(), left.end());
-					res.insert(res.end(), right.begin(), right.end());
-					return res;
-				}
 				case Expr::SIMPLE_OP: {
-					switch(where->op_char) {
-						case '=': /*case '>': case '<':*/ {
-							SQLCondition tmp(where);
+					switch (where->op_char) {
+						case '=': {
+							SQLCondition tmp;
 							tmp.type = Convert::ToIteratorType(where->op_char);
+
+							TColumn left = GetColumnFromExpr(reduced, original, where->expr, tinfo, aliases);
+							TColumn right = GetColumnFromExpr(reduced, original, where->expr2, tinfo, aliases);
+							if (left.Empty() || right.Empty()) return res;
+
+							if ((left.value.GetType() != TP_DEFAULT) == (right.value.GetType() != TP_DEFAULT)) return res;
+							if (left.value.GetType() != TP_DEFAULT) std::swap(left, right);
+							tmp.column = left;
+							tmp.column.value = right.value;
 							res.push_back(tmp);
 							return res;
 						}
 						default: return res;
 					}
+					break;
 				}
-				/*case Expr::LESS_EQ: case Expr::GREATER_EQ: {
-					SQLCondition tmp(where);
-					tmp.type = ToIteratorType(where->op_type);
-					res.push_back(tmp);
+				case Expr::AND: {
+					auto left = this->GetIndexConditions(reduced, original, where->expr, tinfo, aliases);
+					auto right = this->GetIndexConditions(reduced, original, where->expr2, tinfo, aliases);
+					res.insert(res.end(), left.begin(), left.end());
+					res.insert(res.end(), right.begin(), right.end());
 					return res;
-				}*/
-				default: throw std::string("SelectMaker::GetIndexConditions(): this op type is not supported now");
+				}
+				default: return res;
 			}
-			break;
 		}
-		default: throw std::string("SelectMaker::GetIndexConditions(): this where type is not supported now");
+		default: return res;
 	}
 }
 
@@ -336,71 +158,6 @@ JoinVector SelectMaker::MakeJoinVector(const TableRef *table) const
 	res.push_back(table->join);
 	return res;
 }
-
-// SpaceObject SelectMaker::MakeOneTable()
-// {
-// 	last_error.clear();
-// 	SpaceObject res;
-// 	size_t limit = MSG_START_RECS_COUNT;
-// 	size_t offset = 0, index = 0;
-
-// 	TableRef *from_table = statement->from_table;
-// 	std::string name = from_table->getName();
-// 	int space_id = tinfo->SpaceBy(name)->ID();
-// 	LogFL(DEBUG) << "SelectMaker::MakeOneTableInTarantool(): table name = " << name << ", id = " << space_id << "\n";
-
-// 	//~~~~~~~~ M a k i n g   r e q u e s t ~~~~~~~~
-
-// 	//check on EQ
-
-// 	std::vector<SQLCondition> cols_and_vals;
-// 	try {
-// 		cols_and_vals = this->GetIndexConditions(statement->where_clause);
-// 	} catch(const std::string &tmp) {
-// 		LogFL(DEBUG) << "SelectMaker::MakeOneTableInTarantool(): error while getting SQLConditions: " << tmp << " and this query will be executed via full scan\n";
-// 		return this->MakeOneTable();
-// 	}
-
-// 	//~~~~~~~~ S e l e c t   b e s t   i n d e x ~~~~~~~~
-
-// 	std::vector<std::string> select_columns;
-// 	for (size_t i = 0, size = cols_and_vals.size(); i < size; ++i) select_columns.push_back(cols_and_vals[i].column);
-
-// 	auto index_format = tinfo->SpaceBy(space_id)->Indices();
-
-// 	if (index_format.size() < 2) {
-// 		LogFL(DEBUG) << "SelectMaker::MakeOneTableInTarantool(): indices count = " << index_format.size() << " and Select will be executed via full scan\n";
-// 		return this->MakeOneTableSimple();
-// 	}
-
-// 	int best_index_id = 0;
-// 	int max_first_cols = 0;
-// 	std::string best_index_name;
-// 	for (size_t i = 0, size = index_format.size(); i < size; ++i) {
-// 		//TODO: remove indices doubles
-// 		const std::vector<SpacePart> &index_parts = index_format[i]->Parts();
-
-// 		for (size_t j = 0, size_j = index_parts.size(); j < size_j; ++j) {
-// 			if (std::find(select_columns.begin(), select_columns.end(), index_parts[j].name) != select_columns.end()) {
-// 				if ((j + 1) > max_first_cols) {
-// 					max_first_cols = j + 1;
-// 					best_index_name = index_format[i]->Name();
-// 				}
-// 			} else break;
-// 		}
-// 	}
-// 	best_index_id = tinfo->SpaceBy(space_id)->IndexBy(best_index_name)->ID();
-// 	LogFL(DEBUG) << "SelectMaker::MakeOneTableInTarantool(): best_index_name = " << best_index_name << ", best_index_id = " << best_index_id << "\n";
-// 	MValueVector keys;
-// 	for (int i = 0; i < max_first_cols; ++i) {
-// 		keys.push_back(cols_and_vals[i].value);
-// 	}
-// 	LogFL(DEBUG) << "SelectMaker::MakeOneTableInTarantool(): keys = " << keys << "\n";
-
-// 	//~~~~~~~~ P a r s i n g   f i r s t   a n s w e r ~~~~~~~~
-
-// 	return this->MakeOneTable();
-// }
 
 #undef _op_result
 #define _op_result(_op_) MValue left = CalculateMValue(expr->expr, reduced, original, tinfo, strict, aliases); \
@@ -758,20 +515,81 @@ SpaceObject SelectMaker::MakeOneTableSimple()
 	TableRef *from_table = statement->from_table;
 
 	std::string name = from_table->name->GetName();
+	std::vector<std::string> spaces;
+	spaces.push_back(name);
 	int space_id = tinfo->SpaceBy(name)->ID();
 	LogFL(DEBUG) << "SelectMaker::MakeOneTable(): table name = " << name << ", id = " << space_id << "\n";
 
 	//~~~~~~~~ P a r s i n g   f i r s t   a n s w e r ~~~~~~~~
 
-	SpaceObject next_tuples = NextSpacePart(space_id, index, offset, limit);
+	std::vector<TColumn> reduced_names;
+	if ((statement->select_list->size()) && (statement->select_list->at(0)->type != kExprStar))
+		for (size_t i = 0, size = statement->select_list->size(); i < size; ++i) {
+			reduced_names.push_back(GetReducedName(tinfo->SpaceBy(name)->ColumnNames(), statement->select_list->at(i), tinfo, spaces, table_aliases));
+		}
+	else reduced_names = tinfo->SpaceBy(name)->ColumnNames();
+	std::vector<SQLCondition> cols_and_vals = GetIndexConditions(TupleObj(reduced_names), TupleObj(tinfo->SpaceBy(name)->ColumnNames()), statement->where_clause, tinfo, table_aliases);
+	int best_index = 0;
+	MValueVector keys;
+	// try {
+	// 	std::vector<std::string> select_columns;
+	// 	for (size_t i = 0, size = cols_and_vals.size(); i < size; ++i) {
+	// 		select_columns.push_back(cols_and_vals[i].column.name);
+	// 	}
+	// 	auto index_format = tinfo->SpaceBy(space_id)->Indices();
+	// 	if (index_format.size() < 2) {
+	// 		throw std::string("indices count < 2");
+	// 	}
+	// 	int max_first_cols = 0;
+	// 	std::vector<int> col_nums;
+	// 	std::string best_index_name;
+	// 	for (size_t i = 0, size = index_format.size(); i < size; ++i) {
+	// 		//TODO: remove indices doubles
+	// 		const std::vector<SpacePart> &index_parts = index_format[i]->Parts();
+	// 		for (size_t j = 0, size_j = index_parts.size(); j < size_j; ++j) {
+	// 			for (size_t k = 0, sizek = select_columns.size(); k < sizek; ++k) {
+	// 				if (select_columns[k] == index_parts[j].name) {
+	// 					if ((j + 1) > max_first_cols) {
+	// 						if (best_index_name != index_format[i]->Name()) col_nums.clear();
+	// 						max_first_cols = j + 1;
+	// 						best_index_name = index_format[i]->Name();
+	// 						col_nums.push_back(k);
+	// 					}
+	// 					break;
+	// 				}
+	// 			}
+	// 			if (std::find(select_columns.begin(), select_columns.end(), index_parts[j].name) != select_columns.end()) {
+	// 				if ((j + 1) > max_first_cols) {
+	// 					max_first_cols = j + 1;
+	// 					best_index_name = index_format[i]->Name();
+	// 				}
+	// 			} else break;
+	// 		}
+	// 	}
+	// 	if (best_index_name.length()) {
+	// 		best_index = tinfo->SpaceBy(space_id)->IndexBy(best_index_name)->ID();
+	// 	}
+	// 	LogFL(DEBUG) << "SelectMaker::MakeOneTableInTarantool(): best_index_name = " << best_index_name << ", best_index_id = " << best_index << "\n";
+	// 	for (size_t i = 0, size = col_nums.size(); i < size; ++i) {
+	// 		keys.push_back(cols_and_vals[i].column.value);
+	// 	}
+	// 	LogFL(DEBUG) << "SelectMaker::MakeOneTableInTarantool(): keys = " << keys << "\n";
+	// } catch(const std::string &tmp) {
+	// 	LogFL(DEBUG) << "SelectMaker::MakeOneTableInTarantool(): error while getting SQLConditions: " << tmp << " and this query will be executed via full scan\n";
+	// }
+
+	SpaceObject next_tuples;
+	if (keys.size()) {
+		next_tuples = NextSpacePart(space_id, best_index, offset, limit, TP_ITERATOR_EQ, keys);
+	} else {
+		next_tuples = NextSpacePart(space_id, best_index, offset, limit);
+	}
 	next_tuples.SetNames(tinfo->SpaceBy(name)->ColumnNames());
+
 	if (next_tuples.Size() == 0) {
 		LogFL(DEBUG) << "SelectMaker::MakeOneTable(): response is empty\n";
 		return res;
 	}
-
-	std::vector<std::string> spaces;
-	spaces.push_back(name);
 
 	//~~~~~~~~ P a r s i n g   n e x t   t u p l e s ~~~~~~~~
 
@@ -808,18 +626,15 @@ SpaceObject SelectMaker::MakeOneTableSimple()
 		if (res.Size() == 0) res = processed_tuples;
 		else res.PushBack(processed_tuples);
 		offset += MSG_START_RECS_COUNT;
-		next_tuples = NextSpacePart(space_id, index, offset, limit);
+		if (keys.size()) {
+			next_tuples = NextSpacePart(space_id, best_index, offset, limit, TP_ITERATOR_EQ, keys);
+		} else {
+			next_tuples = NextSpacePart(space_id, best_index, offset, limit);
+		}
 		next_tuples.SetNames(tinfo->SpaceBy(name)->ColumnNames());
 	}
 
 	return res;
-}
-
-SpaceObject SelectMaker::MakeJoinIteration(const TableRef *table)
-{
-	if (table->prev_join == NULL) {
-		SpaceObject res = this->MakeJoinTables(table, false);
-	}
 }
 
 void CheckConditions(const Expr *condition, SpaceObject &reduced, SpaceObject &original, const TarantoolInfo *tinfo, bool strict, const std::map<std::string, std::string> &aliases)
@@ -840,92 +655,6 @@ void CheckConditions(const Expr *condition, SpaceObject &reduced, SpaceObject &o
 			} catch(const std::string &m) { LogFL(DEBUG) << "CheckConditions(): error, message = " << m << "\n"; return; }
 		}
 	}
-}
-
-SpaceObject SelectMaker::MakeJoinTables(const TableRef *table, bool strict)
-{
-	JoinDefinition *cur_join = table->join;
-	if (cur_join->left->type != kTableName) {
-		LogFL(DEBUG) << "SelectMaker::MakeJoinTables(): left must be table name\n";
-		return SpaceObject();
-	}
-	if (cur_join->right->type != kTableName) {
-		LogFL(DEBUG) << "SelectMaker::MakeJoinTables(): right must be table name\n";
-		return SpaceObject();
-	}
-	if (cur_join->left->alias.length()) table_aliases.insert(std::make_pair(cur_join->left->alias, cur_join->left->name->GetName()));
-	if (cur_join->right->alias.length()) table_aliases.insert(std::make_pair(cur_join->right->alias, cur_join->right->name->GetName()));
-	std::string left_space = cur_join->left->name->GetName();
-	std::string right_space = cur_join->right->name->GetName();
-	if (tinfo->SpaceBy(left_space) == nullptr) {
-		last_error = "SelectMaker::MakeJoinTables(): space with name = " + left_space + " was not found\n";
-		LogFL(DEBUG) << last_error << "\n";
-		return SpaceObject();
-	}
-	if (tinfo->SpaceBy(right_space) == nullptr) {
-		last_error = "SelectMaker::MakeJoinTables(): space with name = " + right_space + " was not found\n";
-		LogFL(DEBUG) << last_error << "\n";
-		return SpaceObject();
-	}
-
-	int left_id = tinfo->SpaceBy(left_space)->ID();
-	int right_id = tinfo->SpaceBy(right_space)->ID();
-
-	int left_index = 0, left_offset = 0, left_limit = MSG_START_RECS_COUNT;
-	tp_iterator_type left_iterator = TP_ITERATOR_ALL;
-	std::vector<MValue> left_keys;
-
-	int right_index = 0, right_offset = 0, right_limit = MSG_START_RECS_COUNT;
-	tp_iterator_type right_iterator = TP_ITERATOR_ALL;
-	std::vector<MValue> right_keys;
-
-	SpaceObject left_part = NextSpacePart(left_id, left_index, left_offset, left_limit, left_iterator, left_keys);
-	left_part.SetNames(tinfo->SpaceBy(left_space)->ColumnNames());
-	SpaceObject right_part = NextSpacePart(right_id, right_index, right_offset, right_limit, right_iterator, right_keys);
-	right_part.SetNames(tinfo->SpaceBy(right_space)->ColumnNames());
-	if ((left_part.Size() == 0) || (right_part.Size() == 0)) {
-		LogFL(DEBUG) << "SelectMaker::MakeJoinTables(): one part is empty\n";
-		return SpaceObject();
-	}
-	std::vector<std::string> spaces;
-	spaces.push_back(left_space);
-	spaces.push_back(right_space);
-
-	SpaceObject res;
-
-	do {
-		do {
-			SpaceObject next_tuples = SpaceObject::CartesianProduct(left_part, right_part);
-			
-
-			SpaceObject processed_tuples;
-			if (statement->select_list != NULL) {
-				if (statement->select_list->at(0)->GetType() == ExprType::kExprStar)
-					processed_tuples = next_tuples;
-				else
-					processed_tuples = ReduceTuples(next_tuples, *(statement->select_list), tinfo, spaces, table_aliases, strict);
-			}
-
-			CheckConditions(cur_join->condition, processed_tuples, next_tuples, tinfo, strict, table_aliases);
-			CheckConditions(statement->where_clause, processed_tuples, next_tuples, tinfo, strict, table_aliases);
-
-			if (res.Size() == 0) res = processed_tuples;
-			else res.PushBack(processed_tuples);
-
-			right_offset += MSG_START_RECS_COUNT;
-			right_part = NextSpacePart(right_id, right_index, right_offset, right_limit, right_iterator, right_keys);
-			right_part.SetNames(tinfo->SpaceBy(right_space)->ColumnNames());
-		} while (right_part.Size());
-
-		left_offset += MSG_START_RECS_COUNT;
-		left_part = NextSpacePart(left_id, left_index, left_offset, left_limit, left_iterator, left_keys);
-		left_part.SetNames(tinfo->SpaceBy(left_space)->ColumnNames());
-		right_offset = 0;
-		right_part = NextSpacePart(right_id, right_index, 0, right_limit, right_iterator, right_keys);
-		right_part.SetNames(tinfo->SpaceBy(right_space)->ColumnNames());
-	} while (left_part.Size());
-
-	return res;	
 }
 
 struct SpaceProperties {
@@ -1009,7 +738,6 @@ SpaceObject SelectMaker::MakeJoinTables()
 		temporary_reduceds.push_back(tmp);
 	}
 	for (size_t i = 1, size = space_props.size(); i < size; ++i) {
-		std::cout << i << std::endl;
 		SpaceObject tmp_orig = SpaceObject::CartesianProduct(temporary_originals[i - 1], space_props[i].cur_part);
 		SpaceObject tmp_red = ReduceTuples(tmp_orig, *(statement->select_list), tinfo, first_spaces[i], table_aliases, false);
 		CheckConditions(joins[i - 1]->condition, tmp_red, tmp_orig, tinfo, true, table_aliases);

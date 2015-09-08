@@ -122,7 +122,7 @@ const TarantoolIndexInfo *TarantoolSpaceInfo::IndexBy(int number) const
 
 const TarantoolIndexInfo *TarantoolSpaceInfo::IndexBy(const std::string &name_) const
 {
-	auto it = indices_and_names.find(name);
+	auto it = indices_and_names.find(name_);
 	if (it == indices_and_names.end()) return nullptr;
 	return it->second;
 }

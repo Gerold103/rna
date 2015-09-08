@@ -15,7 +15,9 @@ bool TColumn::Equal(const TColumn &right) const
 	bool r;
 	try {
 		r = (value == right.value);
-	} catch(...) { return false; }
+	} catch(...) { 
+		return false;
+	}
 	return (this->EqualCol(right)) && r;
 }
 
@@ -216,11 +218,13 @@ TupleObj TupleObj::operator+(const TupleObj &right) const
 	return res;
 }
 
-bool TupleObj::operator==(const TupleObj &ob)
+bool TupleObj::operator==(const TupleObj &ob) const
 {
 	if (this->Size() != ob.Size()) return false;
 	for (size_t i = 0, size = ob.Size(); i < size; ++i) {
-		if (values[i].Equal(ob[i])) return false;
+		if (!values[i].Equal(ob[i])) {
+			return false;
+		}
 	}
 	return true;
 }
@@ -262,6 +266,16 @@ size_t SpaceObject::ColumnsCount() const
 	if (names.size()) return names.size();
 	if (tuples.size()) return tuples[0].Size();
 	return 0;
+}
+
+int SpaceObject::FindTuple(const TupleObj &tuple) const
+{
+	for (int i = 0, size = static_cast<int>(tuples.size()); i < size; ++i) {
+		if (tuples[i] == tuple) {
+			return i;
+		}
+	}
+	return -1;
 }
 
 //~~~~~~~~ S e t   m e t h o d s ~~~~~~~~
@@ -368,18 +382,27 @@ bool SpaceObject::operator==(const SpaceObject &ob) const
 	if (names.size() != ob.names.size()) return false;
 	if (tuples.size() != ob.tuples.size()) return false;
 	for (size_t i = 0, size = names.size(); i < size; ++i) {
-		if (!(names[i].EqualCol(ob.names[i]))) return false;
+		if (!(names[i].EqualCol(ob.names[i]))) {
+			return false;
+		}
 	}
+	SpaceObject copy(ob);
 	for (size_t i = 0, size = tuples.size(); i < size; ++i) {
-		if (!(tuples[i] == ob.tuples[i])) return false;
+		int t = copy.FindTuple(tuples[i]);
+		if (t == -1) {
+			std::cout << "error on i = " << i << ", tuples[i] = " << tuples[i] << std::endl;
+			return false;
+		}
+		copy.Remove(t);
 	}
-	return true;
+	return copy.Size() == 0;
 }
 
 //~~~~~~~~ O t h e r ~~~~~~~~
 
 void SpaceObject::Remove(int id)
 {
+	if ((id < 0) || (id >= tuples.size())) return;
 	tuples.erase(tuples.begin() + id);
 }
 

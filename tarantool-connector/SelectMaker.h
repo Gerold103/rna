@@ -15,13 +15,11 @@ private:
 	void init_aliases(const TableRef *from_table, std::vector<const TableRef *> &getted);
 
 	SpaceObject MakeOneTableInTarantool();
-	std::vector<SQLCondition> GetIndexConditions(const Expr *where) const;
+	std::vector<SQLCondition> GetIndexConditions(const TupleObj &reduced, const TupleObj &original, const Expr *where, const TarantoolInfo *tinfo, const std::map<std::string, std::string> &aliases) const;
 	JoinVector MakeJoinVector(const TableRef *table) const;
 
 	SpaceObject MakeOneTableSimple();
 	SpaceObject MakeJoinTables();
-	SpaceObject MakeJoinTables(const TableRef *table, bool strict);
-	SpaceObject MakeJoinIteration(const TableRef *table);
 	SpaceObject NextSpacePart(size_t space_id, size_t index, size_t offset, size_t limit, tp_iterator_type iterator = TP_ITERATOR_ALL, const std::vector<MValue> &keys = std::vector<MValue>());
 
 public:

@@ -2566,13 +2566,12 @@ YY_RULE_SETUP
 #line 191 "flex_lexer.l"
 {
 	yylval->ival = atol(yytext);
-	std::cout << yylval->ival << std::endl;
 	return SQL_INTVAL;
 }
 	YY_BREAK
 case 127:
 YY_RULE_SETUP
-#line 197 "flex_lexer.l"
+#line 196 "flex_lexer.l"
 {
 	// Crop the leading and trailing quote char
 	yylval->sval = hsql::substr(yytext, 1, strlen(yytext)-1);
@@ -2581,7 +2580,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 128:
 YY_RULE_SETUP
-#line 203 "flex_lexer.l"
+#line 202 "flex_lexer.l"
 {
 	yylval->sval = strdup(yytext);
 	return SQL_IDENTIFIER;
@@ -2589,7 +2588,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 129:
 YY_RULE_SETUP
-#line 209 "flex_lexer.l"
+#line 208 "flex_lexer.l"
 {
 	// Crop the leading and trailing quote char
 	yylval->sval = hsql::substr(yytext, 1, strlen(yytext)-1);
@@ -2598,15 +2597,15 @@ YY_RULE_SETUP
 	YY_BREAK
 case 130:
 YY_RULE_SETUP
-#line 215 "flex_lexer.l"
+#line 214 "flex_lexer.l"
 { fprintf(stderr, "[SQL-Lexer-Error] Unknown Character: %c\n", yytext[0]); return 0; }
 	YY_BREAK
 case 131:
 YY_RULE_SETUP
-#line 218 "flex_lexer.l"
+#line 217 "flex_lexer.l"
 ECHO;
 	YY_BREAK
-#line 2610 "flex_lexer.cpp"
+#line 2609 "flex_lexer.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(COMMENT):
 	yyterminate();
@@ -3747,7 +3746,7 @@ void hsql_free (void * ptr , yyscan_t yyscanner)
 
 #define YYTABLES_NAME "yytables"
 
-#line 217 "flex_lexer.l"
+#line 216 "flex_lexer.l"
 
 
 /***************************

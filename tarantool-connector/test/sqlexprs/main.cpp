@@ -45,9 +45,9 @@ void test(Session &ses, TarantoolInfo &tinfo)
 
 	MValue res;
 
-	MakeQuery(ses, tinfo, "SELECT (t1.bar + bar2) as tbar, tester.id, t2.id, name4, t1.dig1, t3.id, name6 FROM tester AS t1 JOIN tester2 AS t2 ON (tbar >= 400) JOIN tester3 as t3;");
+	//MakeQuery(ses, tinfo, "SELECT (t1.bar + bar2) as tbar, tester.id, t2.id, name4, t1.dig1, t3.id, name6 FROM tester AS t1 JOIN tester2 AS t2 ON (tbar >= 400) JOIN tester3 as t3;");
 	//MakeQuery(ses, tinfo, "SELECT * FROM tester JOIN tester2 WHERE tester.bar = tester2.bar2");
-	//MakeSelect(ses, tinfo, "SELECT id as i_al, tester.name1, t1.name2, (t1.name1 + t1.name2) as nmnm FROM tester as t1 WHERE (t1.name1 != '456') and (bar > 50) and (i_al > 2) and (nmnm != '123')");
+	//MakeSelect(ses, tinfo, "SELECT id as i_al, tester.name1, t1.name2, (t1.name1 + t1.name2) as nmnm FROM tester as t1 WHERE dig1 = 61 AND name1 = 'str61' AND name2 = 'str62'");
 	//MakeQuery(ses, tinfo, "CREATE TABLE tester3 (id INT, name5 TEXT, name6 TEXT, dig5 INT, dig6 INT, dig1 INT, dig2 INT, PRIMARY KEY (id, name5), UNIQUE(id), INDEX(name5, name6), INDEX(dig5, dig6), INDEX(dig1, dig2));");
 
 	//schm = TarantoolSchema(ses);
@@ -78,14 +78,14 @@ int main()
 	DataStructure greet(128);
 	ses.Receive(greet);
 
-	TarantoolInfo info(ses);
+	TarantoolInfo tinfo(ses);
 
-	test(ses, info);
+	test(ses, tinfo);
 
-	// test_create_table(ses, tinfo);
-	// test_insert_into(ses, tinfo);
-	// test_select_from(ses, tinfo);
-	// test_drop_table(ses, tinfo);
+	test_create_table(ses, tinfo);
+	test_insert_into(ses, tinfo);
+	test_select_from(ses, tinfo);
+	test_drop_table(ses, tinfo);
 /*
 	std::string sql_query;
 

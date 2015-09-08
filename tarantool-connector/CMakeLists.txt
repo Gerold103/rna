@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.8)
 project(sqlconn)
 
 set(BUILD_DIR build)
-set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-ggdb -std=c++11")
+set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} " -std=c++11")
 
 add_subdirectory (third_party/logger)
 add_subdirectory (third_party/tarantool-c)

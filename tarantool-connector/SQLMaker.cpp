@@ -38,36 +38,19 @@ SQLMaker::~SQLMaker() { }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~ S Q L   C O N D I T I O N ~~~~~~~~~~~~~~~~~~~~~~~~
 
-SQLCondition::SQLCondition(const std::string column_, const MValue &value_, tp_iterator_type type_) : type(type_), column(column_), value(value_) { }
-
 SQLCondition::SQLCondition() { }
 
-SQLCondition::SQLCondition(const Expr *condition)
+std::ostream &operator<<(std::ostream &stream, const SQLCondition &ob)
 {
-	MValue value_;
-	std::string column_;
-	switch(condition->expr->type) {
-		case ExprType::kExprColumnRef: {
-			column_ = condition->expr->GetString();
-			break;
-		}
-		default: return;
+	stream << ob.column << ": " << ob.column.value;
+	return stream;
+}
+
+std::ostream &operator<<(std::ostream &stream, const std::vector<SQLCondition> &ob)
+{
+	for (int i = 0, size = static_cast<int>(ob.size()); i < size; ++i) {
+		stream << ob[i];
+		if (i < size - 1) stream << "; ";
 	}
-	switch(condition->expr2->type) {
-		case ExprType::kExprLiteralFloat: {
-			value_.SetValue(condition->expr2->GetFloat());
-			break;
-		}
-		case ExprType::kExprLiteralString: {
-			value_.SetValue(condition->expr2->GetString());
-			break;
-		}
-		case ExprType::kExprLiteralInt: {
-			value_.SetValue(condition->expr2->GetInt());
-			break;
-		}
-		default: return;
-	}
-	value = value_;
-	column = column_;
+	return stream;
 }

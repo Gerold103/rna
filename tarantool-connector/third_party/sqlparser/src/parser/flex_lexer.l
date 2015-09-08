@@ -190,7 +190,6 @@ TO				TOKEN(TO)
 [0-9]+ |
 "-"[0-9]+		{
 	yylval->ival = atol(yytext);
-	std::cout << yylval->ival << std::endl;
 	return SQL_INTVAL;
 }
 

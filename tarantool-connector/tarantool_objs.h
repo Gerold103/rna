@@ -99,7 +99,7 @@ public:
 
 	TupleObj operator+(const TupleObj &right) const;
 
-	bool operator==(const TupleObj &ob);
+	bool operator==(const TupleObj &ob) const;
 
 	//~~~~~~~~ O t h e r ~~~~~~~~
 
@@ -129,6 +129,8 @@ public:
 	size_t Size() const;
 
 	size_t ColumnsCount() const;
+
+	int FindTuple(const TupleObj &tuple) const;
 
 	//~~~~~~~~ S e t   m e t h o d s ~~~~~~~~
 
